@@ -1,0 +1,52 @@
+﻿using System;
+using System.Linq;
+using Escolar.Messages;
+using Escolar.States;
+using Escolar.Transitions;
+using Paralect.Machine.Processes;
+
+namespace Escolar.Aggregates
+{
+    public class AggregateSession : IAggregateSession, IDisposable
+    {
+        private readonly ITransitionStore _store;
+
+        public AggregateSession(ITransitionStore store)
+        {
+            _store = store;
+        }
+
+        public TAggregate Load<TAggregate>(Guid id) 
+            where TAggregate : class
+        {
+            var genericArgs = typeof (TAggregate).GetGenericArguments();
+            var stateType = genericArgs[0];
+            var state = (IState) Activator.CreateInstance(stateType);
+
+            var transitions = _store.GetById(id);
+            
+            var stateMetadata = new StateMetadata()
+            {
+                EntityId = transitions.Last().EntityId,
+                Version = transitions.Last().Version,
+            };
+
+            var stateEnvelope = new StateEnvelope(state, stateMetadata);
+
+            var stateSpooler = new StateSpooler()
+
+
+            return null;
+        }
+
+        public void SaveChanges()
+        {
+            
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

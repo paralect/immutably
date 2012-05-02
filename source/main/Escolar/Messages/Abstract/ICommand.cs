@@ -5,4 +5,6 @@ namespace Escolar.Messages
     public interface ICommand : IMessage
     {
     }
+
+
 }

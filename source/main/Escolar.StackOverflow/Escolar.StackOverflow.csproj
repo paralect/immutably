@@ -40,46 +40,50 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Comment_ChangeContentCommand.cs" />
-    <Compile Include="Events\User_DeletedEvent.cs" />
-    <Compile Include="Events\User_UserCreatedEvent.cs" />
-    <Compile Include="Events\User_AboutChangedEvent.cs" />
-    <Compile Include="Events\Site_DeletedEvent.cs" />
-    <Compile Include="Events\Site_CreatedEvent.cs" />
-    <Compile Include="Events\Site_NameChangedEvent.cs" />
-    <Compile Include="Events\Site_DescriptionChangedEvent.cs" />
-    <Compile Include="Events\Post_DeletedEvent.cs" />
-    <Compile Include="Events\Post_QuestionCreatedEvent.cs" />
-    <Compile Include="Events\Post_AnswerCreatedEvent.cs" />
-    <Compile Include="Commands\Post_ChangeContentCommand.cs" />
-    <Compile Include="Events\Post_TitleChangedEvent.cs" />
-    <Compile Include="Events\Post_TagsChangedEvent.cs" />
-    <Compile Include="Events\Comment_CreatedEvent.cs" />
-    <Compile Include="Events\Comment_ContentChangedEvent.cs" />
-    <Compile Include="Commands\Comment_CreateCommand.cs" />
-    <Compile Include="Commands\Comment_DeleteCommand.cs" />
-    <Compile Include="Events\Comment_DeletedEvent.cs" />
-    <Compile Include="Events\Post_ContentChangedEvent.cs" />
-    <Compile Include="Commands\Post_ChangeTagsCommand.cs" />
-    <Compile Include="Commands\Post_ChangeTitleCommand.cs" />
-    <Compile Include="Commands\Post_CreateAnswerCommand.cs" />
-    <Compile Include="Commands\Post_CreateQuestionCommand.cs" />
-    <Compile Include="Commands\Post_DeleteCommand.cs" />
-    <Compile Include="Commands\Site_ChangeDescriptionCommand.cs" />
-    <Compile Include="Commands\Site_ChangeNameCommand.cs" />
-    <Compile Include="Commands\Site_CreateCommand.cs" />
-    <Compile Include="Commands\Site_DeleteCommand.cs" />
-    <Compile Include="Commands\User_ChangeAboutCommand.cs" />
-    <Compile Include="Commands\User_CreateCommand.cs" />
-    <Compile Include="Commands\User_DeleteCommand.cs" />
-    <Compile Include="Domain\Comment.cs" />
-    <Compile Include="Domain\Post.cs" />
-    <Compile Include="Domain\Site.cs" />
-    <Compile Include="Domain\User.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Comment_ChangeContentCommand.cs" />
+    <Compile Include="Contexts\Transactions\Events\User_DeletedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\User_UserCreatedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\User_AboutChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Site_DeletedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Site_CreatedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Site_NameChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Site_DescriptionChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_DeletedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_QuestionCreatedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_AnswerCreatedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_ChangeContentCommand.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_TitleChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_TagsChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Comment_CreatedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Comment_ContentChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Comment_CreateCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Comment_DeleteCommand.cs" />
+    <Compile Include="Contexts\Transactions\Events\Comment_DeletedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Events\Post_ContentChangedEvent.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_ChangeTagsCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_ChangeTitleCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_CreateAnswerCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_CreateQuestionCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Post_DeleteCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Site_ChangeDescriptionCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Site_ChangeNameCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Site_CreateCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\Site_DeleteCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\User_ChangeAboutCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\User_CreateCommand.cs" />
+    <Compile Include="Contexts\Transactions\Commands\User_DeleteCommand.cs" />
+    <Compile Include="Contexts\Transactions\Domain\Comment.cs" />
+    <Compile Include="Contexts\Transactions\Domain\Post.cs" />
+    <Compile Include="Contexts\Transactions\Domain\Site.cs" />
+    <Compile Include="Contexts\Transactions\Domain\User.cs" />
+    <Compile Include="Contexts\Transactions\Handlers\SiteCommandHandler.cs" />
     <Compile Include="Enums\PostType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Contexts\Analytics\Documents\" />
+    <Folder Include="Contexts\Analytics\Handlers\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Escolar\Escolar.csproj">
       <Project>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</Project>

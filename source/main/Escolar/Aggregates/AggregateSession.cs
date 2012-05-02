@@ -9,28 +9,27 @@ namespace Escolar.Aggregates
 {
     public class AggregateSession : IAggregateSession
     {
+        private readonly IFactory _factory;
         private readonly ITransitionStore _store;
+        private readonly IAggregateHelper _aggregateHelper;
 
-        public AggregateSession(ITransitionStore store)
+        public AggregateSession(IFactory factory, ITransitionStore store)
         {
+            _factory = factory;
+            _aggregateHelper = _factory.CreateAggregateHelper();
             _store = store;
         }
 
         public TAggregate Load<TAggregate>(Guid id) 
             where TAggregate : IAggregate
         {
-            var genericArgs = typeof (TAggregate).GetGenericArguments();
-            var stateType = genericArgs[0];
-            var state = (IState) Activator.CreateInstance(stateType);
-
             var transitions = _store.GetById(id);
-            var stateMetadata = new StateMetadata(transitions.Last().EntityId, transitions.Last().Version);s
-            var stateEnvelope = new StateEnvelope(state, stateMetadata);
 
-            var stateSpooler = new StateSpooler(stateEnvelope);
+            var stateEnvelope = _aggregateHelper.CreateInitialStateEnvelope(typeof (TAggregate), id);
+            var stateSpooler = _factory.CreateStateSpooler(stateEnvelope);
             var result = stateSpooler.Spool(transitions.SelectMany(t => t.EventEnvelopes));
 
-            var aggregate = Activator.CreateInstance<TAggregate>();
+            var aggregate = (TAggregate) _factory.CreateAggregate(typeof(TAggregate));
             aggregate.Initialize(result);
 
             return aggregate;
@@ -40,6 +39,8 @@ namespace Escolar.Aggregates
         {
             
         }
+
+
 
         public void Dispose()
         {

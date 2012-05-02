@@ -5,7 +5,7 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.States
 {
-    public class StateSpooler
+    public class StateSpooler : IStateSpooler
     {
         private readonly IState _state;
 

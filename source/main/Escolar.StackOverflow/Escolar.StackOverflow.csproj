@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E07BB67B-7074-4AA3-BB87-481CBA4C1C88}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Escolar.StackOverflow</RootNamespace>
+    <AssemblyName>Escolar.StackOverflow</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\Comment_ChangeContentCommand.cs" />
+    <Compile Include="Events\User_DeletedEvent.cs" />
+    <Compile Include="Events\User_UserCreatedEvent.cs" />
+    <Compile Include="Events\User_AboutChangedEvent.cs" />
+    <Compile Include="Events\Site_DeletedEvent.cs" />
+    <Compile Include="Events\Site_CreatedEvent.cs" />
+    <Compile Include="Events\Site_NameChangedEvent.cs" />
+    <Compile Include="Events\Site_DescriptionChangedEvent.cs" />
+    <Compile Include="Events\Post_DeletedEvent.cs" />
+    <Compile Include="Events\Post_QuestionCreatedEvent.cs" />
+    <Compile Include="Events\Post_AnswerCreatedEvent.cs" />
+    <Compile Include="Commands\Post_ChangeContentCommand.cs" />
+    <Compile Include="Events\Post_TitleChangedEvent.cs" />
+    <Compile Include="Events\Post_TagsChangedEvent.cs" />
+    <Compile Include="Events\Comment_CreatedEvent.cs" />
+    <Compile Include="Events\Comment_ContentChangedEvent.cs" />
+    <Compile Include="Commands\Comment_CreateCommand.cs" />
+    <Compile Include="Commands\Comment_DeleteCommand.cs" />
+    <Compile Include="Events\Comment_DeletedEvent.cs" />
+    <Compile Include="Events\Post_ContentChangedEvent.cs" />
+    <Compile Include="Commands\Post_ChangeTagsCommand.cs" />
+    <Compile Include="Commands\Post_ChangeTitleCommand.cs" />
+    <Compile Include="Commands\Post_CreateAnswerCommand.cs" />
+    <Compile Include="Commands\Post_CreateQuestionCommand.cs" />
+    <Compile Include="Commands\Post_DeleteCommand.cs" />
+    <Compile Include="Commands\Site_ChangeDescriptionCommand.cs" />
+    <Compile Include="Commands\Site_ChangeNameCommand.cs" />
+    <Compile Include="Commands\Site_CreateCommand.cs" />
+    <Compile Include="Commands\Site_DeleteCommand.cs" />
+    <Compile Include="Commands\User_ChangeAboutCommand.cs" />
+    <Compile Include="Commands\User_CreateCommand.cs" />
+    <Compile Include="Commands\User_DeleteCommand.cs" />
+    <Compile Include="Domain\Comment.cs" />
+    <Compile Include="Domain\Post.cs" />
+    <Compile Include="Domain\Site.cs" />
+    <Compile Include="Domain\User.cs" />
+    <Compile Include="Enums\PostType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Escolar\Escolar.csproj">
+      <Project>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</Project>
+      <Name>Escolar</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

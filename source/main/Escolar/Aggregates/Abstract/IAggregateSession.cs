@@ -1,11 +1,12 @@
 using System;
+using Escolar.Aggregates;
 
-namespace Escolar
+namespace Escolar.Aggregates
 {
-    public interface IAggregateSession
+    public interface IAggregateSession : IDisposable
     {
         TAggregate Load<TAggregate>(Guid id)
-            where TAggregate : class;
+            where TAggregate : IAggregate;
 
         void SaveChanges();
     }

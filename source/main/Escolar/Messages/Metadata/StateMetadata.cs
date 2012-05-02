@@ -7,5 +7,11 @@ namespace Escolar.Messages
     {
         public int Version { get; set; }
         public Guid EntityId { get; set; }
+
+        public StateMetadata(Guid entityId, int version)
+        {
+            EntityId = entityId;
+            Version = version;
+        }
     }
 }

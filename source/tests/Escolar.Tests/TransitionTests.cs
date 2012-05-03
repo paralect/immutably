@@ -32,7 +32,8 @@ namespace Escolar.Tests
             using (var session = store.OpenSession())
             {
                 var result = session.LoadTransitions(evnt.Id);
-                session.SaveChanges();
+
+                Assert.That(((SimpleEvent)result[0].EventEnvelopes[0].Event).Year, Is.EqualTo(54545));
             }
 
         }

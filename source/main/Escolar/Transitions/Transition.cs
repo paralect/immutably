@@ -32,11 +32,20 @@ namespace Escolar.Transitions
             get { return _entityId; }
         }
 
-        public Transition(List<IEventEnvelope> eventEnvelopes)
+        public Transition(List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _eventEnvelopes = eventEnvelopes;
             _version = eventEnvelopes.Last().Metadata.SenderVersion;
             _entityId = eventEnvelopes.Last().Metadata.SenderId;
+
+            if (validate)
+            {
+                foreach (var eventEnvelope in eventEnvelopes)
+                {
+                    if (eventEnvelope.Metadata.SenderId != _entityId)
+                        throw new Exception("Invalid transition, because events are for different streams");
+                }
+            }
         }
 
         public Transition(params IEventEnvelope[] eventEnvelope) : this(eventEnvelope.ToList())

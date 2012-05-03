@@ -6,14 +6,19 @@ namespace Escolar.Transitions
 {
     public interface ITransitionStore
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        IList<ITransition> GetById(Guid id);
+        ITransitionSession OpenSession();
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
+    public interface ITransitionSession : IDisposable
+    {
+        IList<ITransition> LoadTransitions(Guid streamId);
+
+        void Append(IList<IEventEnvelope> transitions);
+        void Append(params IEventEnvelope[] eventEnvelope);
+
         void Append(IList<ITransition> transitions);
+        void Append(params ITransition[] transitions);
+
+        void SaveChanges();
     }
 }

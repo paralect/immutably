@@ -49,6 +49,7 @@
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
     <Compile Include="EventStore\InMemoryEventStore.cs" />
     <Compile Include="DefaultFactory.cs" />
+    <Compile Include="Extensions\EventsExtensions.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
     <Compile Include="Messages\Abstract\IEvent.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="States\StateSpooler.cs" />
     <Compile Include="Transitions\Abstract\ITransition.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStore.cs" />
+    <Compile Include="Transitions\InMemoryTransitionRepository.cs" />
+    <Compile Include="Transitions\InMemoryTransitionSession.cs" />
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemoryTransitionStore.cs" />
   </ItemGroup>

@@ -23,6 +23,7 @@ namespace Escolar.Aggregates
         public TAggregate Load<TAggregate>(Guid id) 
             where TAggregate : IAggregate
         {
+            /*
             var transitions = _store.GetById(id);
 
             var stateEnvelope = _aggregateHelper.CreateInitialStateEnvelope(typeof (TAggregate), id);
@@ -33,6 +34,9 @@ namespace Escolar.Aggregates
             aggregate.Initialize(result);
 
             return aggregate;
+             * */
+
+            throw new NotImplementedException();
         }
 
         public void SaveChanges()

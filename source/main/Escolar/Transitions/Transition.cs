@@ -38,5 +38,10 @@ namespace Escolar.Transitions
             _version = eventEnvelopes.Last().Metadata.SenderVersion;
             _entityId = eventEnvelopes.Last().Metadata.SenderId;
         }
+
+        public Transition(params IEventEnvelope[] eventEnvelope) : this(eventEnvelope.ToList())
+        {
+        }
+
     }
 }

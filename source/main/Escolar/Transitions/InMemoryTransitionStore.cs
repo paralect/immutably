@@ -9,10 +9,11 @@ namespace Escolar.Transitions
 {
     public class InMemoryTransitionStore : ITransitionStore
     {
+        private readonly ITransitionStore _store;
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
         private readonly List<ITransition> _transitions = new List<ITransition>();
 
-        public IList<ITransition> GetById(Guid id)
+        internal IList<ITransition> GetById(Guid id)
         {
             _lock.EnterReadLock();
 
@@ -28,7 +29,7 @@ namespace Escolar.Transitions
             }            
         }
 
-        public void Append(IList<ITransition> transitions)
+        internal void Append(IList<ITransition> transitions)
         {
             _lock.EnterWriteLock();
 
@@ -40,6 +41,11 @@ namespace Escolar.Transitions
             {
                 _lock.ExitWriteLock();
             }
+        }
+
+        public ITransitionSession OpenSession()
+        {
+            return new InMemoryTransitionSession(this);
         }
     }
 }

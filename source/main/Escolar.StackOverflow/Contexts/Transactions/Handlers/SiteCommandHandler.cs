@@ -13,7 +13,7 @@ namespace Escolar.StackOverflow.Contexts.Transactions.Handlers
 
         public void Handle(Site_CreateCommand command)
         {
-            var store = new AggregateStore();
+            /*var store = new AggregateStore();
 
             using(var session = store.OpenSession())
             {
@@ -25,7 +25,9 @@ namespace Escolar.StackOverflow.Contexts.Transactions.Handlers
 
             var site = new Site(null, null);
             site.Create(command);
+            */
 
+            throw new NotImplementedException();
         }
 
         public void Handle(Site_ChangeNameCommand command)

@@ -1,5 +1,5 @@
 ﻿using System;
-using Escolar.Aggregates.Abstract;
+using Escolar.Aggregates;
 using Escolar.Messages;
 using Escolar.StackOverflow.Commands;
 using Escolar.StackOverflow.Events;

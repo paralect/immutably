@@ -1,4 +1,6 @@
-namespace Escolar
+using Escolar.Aggregates;
+
+namespace Escolar.Aggregates
 {
     public interface IAggregateStore
     {

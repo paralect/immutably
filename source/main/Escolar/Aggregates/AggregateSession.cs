@@ -16,8 +16,8 @@ namespace Escolar.Aggregates
         public AggregateSession(IFactory factory, ITransitionStore store)
         {
             _factory = factory;
-            _aggregateHelper = _factory.CreateAggregateHelper();
             _store = store;
+            _aggregateHelper = _factory.CreateAggregateHelper();
         }
 
         public TAggregate Load<TAggregate>(Guid id) 
@@ -40,11 +40,9 @@ namespace Escolar.Aggregates
             
         }
 
-
-
         public void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

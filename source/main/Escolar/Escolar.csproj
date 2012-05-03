@@ -48,7 +48,7 @@
     <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
     <Compile Include="EventStore\InMemoryEventStore.cs" />
-    <Compile Include="Factory.cs" />
+    <Compile Include="DefaultFactory.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
     <Compile Include="Messages\Abstract\IEvent.cs" />

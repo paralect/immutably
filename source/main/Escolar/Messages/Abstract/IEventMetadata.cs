@@ -14,6 +14,8 @@ namespace Escolar.Messages
         /// Emitting party should increment version and next event should have version incremented by one.
         /// Can be used to preserve ordering of messages inside Aggregate boundary.
         /// </summary>
-        Int32 SenderVersion { get; set; }        
+        Int32 StreamSequence { get; set; }
+
+        Int32 TransitionSequence { get; set; }
     }
 }

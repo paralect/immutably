@@ -35,7 +35,7 @@ namespace Escolar.States
             foreach (var evnt in events)
             {
                 var id = evnt.Metadata.SenderId;
-                var version = evnt.Metadata.SenderVersion;
+                var version = evnt.Metadata.StreamSequence;
 
                 if (_id == Guid.Empty)
                     throw new NullReferenceException("Id of state cannot be null");

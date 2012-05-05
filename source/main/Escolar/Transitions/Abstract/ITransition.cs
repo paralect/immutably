@@ -13,7 +13,9 @@ namespace Escolar.Transitions
     public interface ITransition
     {
         Guid StreamId { get; }
+
         int Version { get; }
+
         IList<IEventEnvelope> EventEnvelopes { get; }
     }
 }

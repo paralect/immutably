@@ -79,6 +79,7 @@
     <Compile Include="States\StateRepository.cs" />
     <Compile Include="States\StateSpooler.cs" />
     <Compile Include="Transitions\Abstract\ITransition.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionBuilder.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStore.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStoreReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />

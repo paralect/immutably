@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Escolar.Messages;
 
 namespace Escolar.Transitions
 {
@@ -16,6 +17,13 @@ namespace Escolar.Transitions
 
         public void Write(ITransition transition)
         {
+            _repository.Append(transition);
+        }
+
+        public void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder)
+        {
+            var transition = new Transition(_streamId, streamSequence);
+            transitionBuilder(transition);
             _repository.Append(transition);
         }
 

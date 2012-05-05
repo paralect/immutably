@@ -12,7 +12,7 @@ namespace Escolar.Transitions
     /// </summary>  
     public interface ITransition
     {
-        Guid EntityId { get; }
+        Guid StreamId { get; }
         int Version { get; }
         IList<IEventEnvelope> EventEnvelopes { get; }
     }

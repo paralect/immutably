@@ -15,11 +15,11 @@ namespace Escolar.StackOverflow.Contexts.Transactions.Handlers
         {
             /*var store = new AggregateStore();
 
-            using(var session = store.OpenSession())
+            using(var session = store.OpenStream())
             {
                 var site2 = session.GetById<Site>(Guid.Empty);
                 site2.Create(command);
-                session.SaveChanges();
+                session.SaveTransition();
             }
 
 

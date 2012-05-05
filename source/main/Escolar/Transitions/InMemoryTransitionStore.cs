@@ -9,7 +9,6 @@ namespace Escolar.Transitions
 {
     public class InMemoryTransitionStore : ITransitionStore
     {
-        private readonly ITransitionStore _store;
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
         private readonly List<ITransition> _transitions = new List<ITransition>();
 
@@ -20,7 +19,7 @@ namespace Escolar.Transitions
             try
             {
                 return _transitions
-                    .Where(e => e.EntityId == id)
+                    .Where(e => e.StreamId == id)
                     .ToList();
             }
             finally
@@ -43,9 +42,19 @@ namespace Escolar.Transitions
             }
         }
 
-        public ITransitionSession OpenSession()
+        public ITransitionStreamReader CreateStreamReader(Guid streamId)
         {
-            return new InMemoryTransitionSession(this);
+            return new InMemoryTransitionStreamReader(new InMemoryTransitionRepository(this), streamId);
+        }
+
+        public ITransitionStreamWriter CreateStreamWriter(Guid streamId)
+        {
+            return new InMemoryTransitionStreamWriter(new InMemoryTransitionRepository(this), streamId);
+        }
+
+        public ITransitionStoreReader CreateStoreReader()
+        {
+            throw new NotImplementedException();
         }
     }
 }

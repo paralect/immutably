@@ -15,7 +15,7 @@ namespace Escolar.Transitions
     {
         private readonly List<IEventEnvelope> _eventEnvelopes;
         private readonly Int32 _version;
-        private readonly Guid _entityId;
+        private readonly Guid _streamId;
 
         public IList<IEventEnvelope> EventEnvelopes
         {
@@ -27,22 +27,22 @@ namespace Escolar.Transitions
             get { return _version; }
         }
 
-        public Guid EntityId
+        public Guid StreamId
         {
-            get { return _entityId; }
+            get { return _streamId; }
         }
 
         public Transition(List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _eventEnvelopes = eventEnvelopes;
             _version = eventEnvelopes.Last().Metadata.SenderVersion;
-            _entityId = eventEnvelopes.Last().Metadata.SenderId;
+            _streamId = eventEnvelopes.Last().Metadata.SenderId;
 
             if (validate)
             {
                 foreach (var eventEnvelope in eventEnvelopes)
                 {
-                    if (eventEnvelope.Metadata.SenderId != _entityId)
+                    if (eventEnvelope.Metadata.SenderId != _streamId)
                         throw new Exception("Invalid transition, because events are for different streams");
                 }
             }

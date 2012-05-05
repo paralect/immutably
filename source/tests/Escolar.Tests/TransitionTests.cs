@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Escolar.Messages;
 using Escolar.Transitions;
 using NUnit.Framework;
@@ -22,19 +23,28 @@ namespace Escolar.Tests
 
             var envelope = evnt.ToEnvelope(evnt.Id);
 
-            using (var session = store.OpenSession())
+            using (var writer = store.CreateStreamWriter(evnt.Id))
             {
-                session.Append(envelope);
-                session.SaveChanges();
+                writer.Write(new Transition(envelope));
+                writer.Write(new Transition(envelope));
+                writer.Write(new Transition(envelope));
             }
 
-
-            using (var session = store.OpenSession())
+            using (var reader = store.CreateStreamReader(evnt.Id))
             {
-                var result = session.LoadTransitions(evnt.Id);
+                foreach(var transition in reader.Read())
+                {
+                    
+                }
+            }
+
+/*            using (var session = store.OpenStream(evnt.Id))
+            {
+                var result = session.LoadTransitions();
 
                 Assert.That(((SimpleEvent)result[0].EventEnvelopes[0].Event).Year, Is.EqualTo(54545));
             }
+ * */
 
         }
     }

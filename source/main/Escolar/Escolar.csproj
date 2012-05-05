@@ -80,8 +80,12 @@
     <Compile Include="States\StateSpooler.cs" />
     <Compile Include="Transitions\Abstract\ITransition.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStore.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionStoreReader.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionStreamWriter.cs" />
     <Compile Include="Transitions\InMemoryTransitionRepository.cs" />
-    <Compile Include="Transitions\InMemoryTransitionSession.cs" />
+    <Compile Include="Transitions\InMemoryTransitionStreamReader.cs" />
+    <Compile Include="Transitions\InMemoryTransitionStreamWriter.cs" />
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemoryTransitionStore.cs" />
   </ItemGroup>

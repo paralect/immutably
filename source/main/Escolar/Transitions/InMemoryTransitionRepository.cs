@@ -6,12 +6,10 @@ namespace Escolar.Transitions
     public class InMemoryTransitionRepository
     {
         private readonly InMemoryTransitionStore _store;
-        private readonly InMemoryTransitionSession _session;
 
-        public InMemoryTransitionRepository(InMemoryTransitionStore store, InMemoryTransitionSession session)
+        public InMemoryTransitionRepository(InMemoryTransitionStore store)
         {
             _store = store;
-            _session = session;
         }
 
         public IList<ITransition> GetById(Guid id)

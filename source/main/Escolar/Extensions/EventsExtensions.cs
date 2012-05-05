@@ -5,12 +5,12 @@ namespace Escolar
 {
     public static class EventsExtensions
     {
-        public static IEventEnvelope ToEnvelope(this IEvent evnt, Guid entityId)
+        public static IEventEnvelope ToEnvelope(this IEvent evnt, Guid entityId, Int32 version)
         {
             var eventMetadata = new EventMetadata()
             {
                 SenderId = entityId,
-                SenderVersion = 1
+                SenderVersion = version
             };
 
             return new EventEnvelope(evnt, eventMetadata);

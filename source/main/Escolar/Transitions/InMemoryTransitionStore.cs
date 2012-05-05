@@ -7,9 +7,19 @@ using Escolar.Transitions;
 
 namespace Escolar.Transitions
 {
+    public struct TransitionId
+    {
+        public Guid StreamId { get; set; }
+        public Int32 Version { get; set; }
+    }
+
     public class InMemoryTransitionStore : ITransitionStore
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+
+        private readonly Dictionary<TransitionId, ITransition> _indexByTransactionId = new Dictionary<TransitionId, ITransition>();
+        private readonly Dictionary<Guid, List<ITransition>>   _indexByStreamId = new Dictionary<Guid, List<ITransition>>();
+
         private readonly List<ITransition> _transitions = new List<ITransition>();
 
         internal IList<ITransition> GetById(Guid id)
@@ -18,9 +28,7 @@ namespace Escolar.Transitions
 
             try
             {
-                return _transitions
-                    .Where(e => e.StreamId == id)
-                    .ToList();
+                return _indexByStreamId[id];
             }
             finally
             {
@@ -28,13 +36,28 @@ namespace Escolar.Transitions
             }            
         }
 
-        internal void Append(IList<ITransition> transitions)
+        internal void Append(ITransition transition)
         {
             _lock.EnterWriteLock();
 
             try
             {
-                _transitions.AddRange(transitions);
+                var key = new TransitionId()
+                {
+                    StreamId = transition.StreamId,
+                    Version = transition.Version
+                };
+
+                if (_indexByTransactionId.ContainsKey(key))
+                    throw new Exception(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.Version));
+
+                List<ITransition> stream;
+                if (!_indexByStreamId.TryGetValue(transition.StreamId, out stream))
+                    _indexByStreamId[transition.StreamId] = stream = new List<ITransition>();
+
+                stream.Add(transition);
+                _indexByTransactionId[key] = transition;
+                _transitions.Add(transition);
             }
             finally
             {

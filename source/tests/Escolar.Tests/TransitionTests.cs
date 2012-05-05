@@ -14,6 +14,7 @@ namespace Escolar.Tests
         {
             var store = new InMemoryTransitionStore();
 
+
             var evnt = new SimpleEvent()
             {
                 Id = Guid.NewGuid(),
@@ -21,20 +22,21 @@ namespace Escolar.Tests
                 Name = "Lenin"
             };
 
-            var envelope = evnt.ToEnvelope(evnt.Id);
+
+            var envelope = evnt.ToEnvelope(evnt.Id, 1);
 
             using (var writer = store.CreateStreamWriter(evnt.Id))
             {
-                writer.Write(new Transition(envelope));
-                writer.Write(new Transition(envelope));
-                writer.Write(new Transition(envelope));
+                writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 1)));
+                writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 3)));
+                writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 4)));
             }
 
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
                 foreach(var transition in reader.Read())
                 {
-                    
+
                 }
             }
 

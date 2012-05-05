@@ -17,9 +17,9 @@ namespace Escolar.Transitions
             return _store.GetById(id);
         }
 
-        public void Append(IList<ITransition> transitions)
+        public void Append(ITransition transition)
         {
-            _store.Append(transitions);
+            _store.Append(transition);
         }        
     }
 }

@@ -14,14 +14,9 @@ namespace Escolar.Transitions
             _streamId = streamId;
         }
 
-        public void Write(IList<ITransition> transitions)
+        public void Write(ITransition transition)
         {
-            _repository.Append(transitions);
-        }
-
-        public void Write(params ITransition[] transitions)
-        {
-            _repository.Append(transitions);
+            _repository.Append(transition);
         }
 
         public void Dispose()

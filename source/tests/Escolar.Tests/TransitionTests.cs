@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Escolar.Messages;
 using Escolar.Transitions;
@@ -9,6 +10,45 @@ namespace Escolar.Tests
     [TestFixture]
     public class TransitionTests
     {
+        public void can_write_and_read_single_transition()
+        {
+            var store = new InMemoryTransitionStore();
+
+            var evnt = new SimpleEvent()
+            {
+                Id = Guid.NewGuid(),
+                Year = 54545,
+                Name = "Lenin"
+            };
+
+            // Writing
+            using (var writer = store.CreateStreamWriter(evnt.Id))
+            {
+                writer.Write(1, builder => builder
+                    .AddEvent(evnt)
+                );
+            }
+
+            // Reading
+            List<ITransition> transitions = null;
+            using (var reader = store.CreateStreamReader(evnt.Id))
+            {
+                transitions = reader.Read().ToList();
+            }
+
+            // Checking
+            Assert.That(transitions.Count, Is.EqualTo(1));
+            Assert.That(transitions[0].EventEnvelopes.Count, Is.EqualTo(1));
+            Assert.That(transitions[0].Events.Count, Is.EqualTo(1));
+
+            var stored = (SimpleEvent)transitions[0].EventEnvelopes[0].Event;
+            Assert.That(stored.Year, Is.EqualTo(evnt.Year));
+
+            var stored2 = (SimpleEvent)transitions[0].Events[0];
+            Assert.That(stored2.Year, Is.EqualTo(evnt.Year));
+
+        }
+
         [Test]
         public void simple_test()
         {

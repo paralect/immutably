@@ -14,8 +14,12 @@ namespace Escolar.Transitions
     {
         Guid StreamId { get; }
 
-        int Version { get; }
+        Int32 StreamSequence { get; }
+
+        Int32 TransitionSequence { get; }
 
         IList<IEventEnvelope> EventEnvelopes { get; }
+
+        IList<IEvent> Events { get; }
     }
 }

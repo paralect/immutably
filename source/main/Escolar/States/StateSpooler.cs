@@ -15,7 +15,7 @@ namespace Escolar.States
         private readonly Guid _id;
 
         /// <summary>
-        /// Version of Aggregate Root.
+        /// StreamSequence of Aggregate Root.
         /// Can be used to support commutativity of events.
         /// </summary>
         private readonly Int32 _version;

@@ -14,19 +14,52 @@ namespace Escolar.Transitions
     public class Transition : ITransition, ITransitionBuilder
     {
         private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
-        private readonly Int32 _version;
+        private readonly List<IEvent> _events = new List<IEvent>();
+
+
+        /// <summary>
+        /// Stream ID
+        /// </summary>
         private readonly Guid _streamId;
+
+        /// <summary>
+        /// Stream sequence for this transition 
+        /// </summary>
         private readonly int _streamSequence;
+
+        /// <summary>
+        /// Next transition sequence for event (unique only inside this transition)
+        /// </summary>
         private int _transitionSequence = 1;
+
 
         public IList<IEventEnvelope> EventEnvelopes
         {
-            get { return _eventEnvelopes; }
+            get
+            {
+                return _eventEnvelopes.AsReadOnly();
+            }
         }
 
-        public int Version
+        public IList<IEvent> Events
         {
-            get { return _version; }
+            get 
+            { 
+                return _eventEnvelopes
+                    .Select(envelope => envelope.Event)
+                    .ToList()
+                    .AsReadOnly(); 
+            }
+        }
+
+        public int StreamSequence
+        {
+            get { return _streamSequence; }
+        }
+
+        public int TransitionSequence
+        {
+            get { return _transitionSequence; }
         }
 
         public Guid StreamId
@@ -43,7 +76,7 @@ namespace Escolar.Transitions
         public Transition(List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _eventEnvelopes = eventEnvelopes;
-            _version = eventEnvelopes.Last().Metadata.StreamSequence;
+            _streamSequence = eventEnvelopes.Last().Metadata.StreamSequence;
             _streamId = eventEnvelopes.Last().Metadata.SenderId;
 
             if (validate)

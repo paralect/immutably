@@ -10,7 +10,7 @@ namespace Escolar.Transitions
     public struct TransitionId
     {
         public Guid StreamId { get; set; }
-        public Int32 Version { get; set; }
+        public Int32 StreamSequence { get; set; }
     }
 
     public class InMemoryTransitionStore : ITransitionStore
@@ -45,11 +45,11 @@ namespace Escolar.Transitions
                 var key = new TransitionId()
                 {
                     StreamId = transition.StreamId,
-                    Version = transition.Version
+                    StreamSequence = transition.StreamSequence
                 };
 
                 if (_indexByTransactionId.ContainsKey(key))
-                    throw new Exception(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.Version));
+                    throw new Exception(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.StreamSequence));
 
                 List<ITransition> stream;
                 if (!_indexByStreamId.TryGetValue(transition.StreamId, out stream))

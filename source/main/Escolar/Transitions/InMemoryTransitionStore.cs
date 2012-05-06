@@ -49,7 +49,7 @@ namespace Escolar.Transitions
                 };
 
                 if (_indexByTransactionId.ContainsKey(key))
-                    throw new Exception(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.StreamSequence));
+                    throw new TransitionAlreadyExistException(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.StreamSequence));
 
                 List<ITransition> stream;
                 if (!_indexByStreamId.TryGetValue(transition.StreamId, out stream))

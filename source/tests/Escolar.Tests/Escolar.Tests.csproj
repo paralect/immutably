@@ -51,8 +51,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecMy.cs" />
+    <Compile Include="Specs\when_one_transition_with_one_event_is_written.cs" />
     <Compile Include="Specs\when_one_transition_with_two_events_is_written.cs" />
-    <Compile Include="Specs\when_transition_is_written.cs" />
+    <Compile Include="Specs\InMemoryTransitionStoreContext.cs" />
+    <Compile Include="Specs\when_two_transitions_with_duplicate_stream_sequence_are_written.cs" />
     <Compile Include="Specs\when_two_transitions_with_one_event_is_written.cs" />
     <Compile Include="TransitionTests.cs" />
   </ItemGroup>
@@ -62,9 +64,7 @@
       <Name>Escolar</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Specs\InMemoryTransitionStore\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

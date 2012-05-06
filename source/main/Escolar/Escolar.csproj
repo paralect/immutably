@@ -84,6 +84,7 @@
     <Compile Include="Transitions\Abstract\ITransitionStoreReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamWriter.cs" />
+    <Compile Include="Transitions\Exceptions\TransitionAlreadyExistException.cs" />
     <Compile Include="Transitions\InMemoryTransitionRepository.cs" />
     <Compile Include="Transitions\InMemoryTransitionStreamReader.cs" />
     <Compile Include="Transitions\InMemoryTransitionStreamWriter.cs" />

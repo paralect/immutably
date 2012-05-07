@@ -30,12 +30,15 @@ namespace Escolar.States
         /// <summary>
         /// Replay specified events to restore state of IState.
         /// </summary>
-        public IState Spool(IEnumerable<IEventEnvelope> events)
+        public IStateEnvelope Spool(IEnumerable<IEventEnvelope> events)
         {
+            Int32 lastEventVersion = 0;
+
             foreach (var evnt in events)
             {
                 var id = evnt.Metadata.SenderId;
                 var version = evnt.Metadata.StreamSequence;
+                lastEventVersion = version;
 
                 if (_id == Guid.Empty)
                     throw new NullReferenceException("Id of state cannot be null");
@@ -49,7 +52,10 @@ namespace Escolar.States
                 _state.Apply(evnt.Event);
             }
 
-            return _state;
+            var stateMetadata = new StateMetadata(_id, lastEventVersion);
+            var stateEnvelope = new StateEnvelope(_state, stateMetadata);
+
+            return stateEnvelope;
         }         
     }
 }

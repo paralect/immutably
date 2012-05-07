@@ -9,6 +9,6 @@ namespace Escolar.States
         /// <summary>
         /// Replay specified events to restore state of IState.
         /// </summary>
-        IState Spool(IEnumerable<IEventEnvelope> events);
+        IStateEnvelope Spool(IEnumerable<IEventEnvelope> events);
     }
 }

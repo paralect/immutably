@@ -4,6 +4,6 @@ namespace Escolar.Aggregates
 {
     public interface IAggregate
     {
-        void Initialize(IState state);
+        void Initialize(IStateEnvelope state);
     }
 }

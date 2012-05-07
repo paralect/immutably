@@ -9,7 +9,7 @@ namespace Escolar.Aggregates
         /// </summary>
         protected TState _state;
 
-        public void Initialize(IState state)
+        public void Initialize(IStateEnvelope state)
         {
             _state = (TState) state;
         }

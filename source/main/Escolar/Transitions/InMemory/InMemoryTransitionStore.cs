@@ -164,7 +164,7 @@ namespace Escolar.Transitions
             }
         }
 
-        public ITransitionStreamReader CreateStreamReader(Guid streamId)
+        public ITransitionStreamReader CreateStreamReader(Guid streamId, Int32 fromSequence = 0)
         {
             return new InMemoryTransitionStreamReader(this, streamId);
         }

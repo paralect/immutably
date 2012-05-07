@@ -9,34 +9,32 @@ namespace Escolar.Aggregates
 {
     public class AggregateSession : IAggregateSession
     {
-        private readonly IFactory _factory;
-        private readonly ITransitionStore _store;
-        private readonly IAggregateHelper _aggregateHelper;
+        private readonly IAggregateStore _store;
 
-        public AggregateSession(IFactory factory, ITransitionStore store)
+        public AggregateSession(IAggregateStore store)
         {
-            _factory = factory;
             _store = store;
-            _aggregateHelper = _factory.CreateAggregateHelper();
         }
 
-        public TAggregate Load<TAggregate>(Guid id) 
+        public TAggregate Load<TAggregate>(Guid aggregateId) 
             where TAggregate : IAggregate
         {
-            /*
-            var transitions = _store.GetById(id);
+            // Here we can load state from snapshot store, but we are starting from initial state.
+            var initialStateEnvelope = _store.CreateInitialStateEnvelope(typeof(TAggregate), aggregateId);
 
-            var stateEnvelope = _aggregateHelper.CreateInitialStateEnvelope(typeof (TAggregate), id);
-            var stateSpooler = _factory.CreateStateSpooler(stateEnvelope);
-            var result = stateSpooler.Spool(transitions.SelectMany(t => t.EventEnvelopes));
+            // Spooler will "spool" our events based on initial state of spooler 
+            // (that in our case is just newly created state)
+            var spooler = new StateSpooler(initialStateEnvelope);
 
-            var aggregate = (TAggregate) _factory.CreateAggregate(typeof(TAggregate));
-            aggregate.Initialize(result);
+            // Reading transitions and "spooling" of events to receive final state
+            IStateEnvelope finalStateEnvelope = null;
+            using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
+            {
+                finalStateEnvelope = spooler.Spool(reader.Read().SelectMany(t => t.EventEnvelopes));
+            }
 
-            return aggregate;
-             * */
-
-            throw new NotImplementedException();
+            // Create aggregate, initialized with final state that we just "spooled"
+            return (TAggregate) _store.CreateAggregate(typeof(TAggregate), finalStateEnvelope);
         }
 
         public void SaveChanges()

@@ -1,3 +1,4 @@
+using System;
 using Paralect.Machine.Processes;
 
 namespace Escolar.Messages

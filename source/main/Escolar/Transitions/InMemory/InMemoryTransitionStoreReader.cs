@@ -31,7 +31,7 @@ namespace Escolar.Transitions
 
         public void Dispose()
         {
-
+            // nothing to dispose
         }
     }
 }

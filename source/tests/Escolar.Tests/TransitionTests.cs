@@ -61,7 +61,7 @@ namespace Escolar.Tests
                 Name = "Lenin"
             };
 
-            var envelope = evnt.ToEnvelope(evnt.Id, 1);
+//            var envelope = evnt.ToEnvelope(evnt.Id, 1);
 
             using (var writer = store.CreateStreamWriter(evnt.Id))
             {

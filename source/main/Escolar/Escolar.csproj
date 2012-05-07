@@ -47,9 +47,7 @@
     <Compile Include="Aggregates\Abstract\Aggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
-    <Compile Include="EventStore\InMemoryEventStore.cs" />
     <Compile Include="DefaultFactory.cs" />
-    <Compile Include="Extensions\EventsExtensions.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
     <Compile Include="Messages\Abstract\IEvent.cs" />
@@ -73,7 +71,6 @@
     <Compile Include="Messages\Metadata\MessageMetadata.cs" />
     <Compile Include="Messages\Metadata\StateMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventStore\Abstract\IEventStore.cs" />
     <Compile Include="States\IStateSpooler.cs" />
     <Compile Include="States\StateHelper.cs" />
     <Compile Include="States\StateRepository.cs" />

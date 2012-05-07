@@ -9,5 +9,7 @@ namespace Escolar.Transitions
         ITransitionStreamWriter CreateStreamWriter(Guid streamId);
 
         ITransitionStoreReader CreateStoreReader();
+
+        ITransitionRepository CreateTransitionRepository();
     }
 }

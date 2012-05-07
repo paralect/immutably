@@ -8,7 +8,7 @@ namespace Escolar.Tests.Specs
         Because of = () =>
         {
             WriteTransition(evnt.Id, 5, evnt);
-            transitions = ReadAllTransitions();
+            transitions = LoadAllStreamTransitions();
         };
 
         It should_contain_one_transition = () =>

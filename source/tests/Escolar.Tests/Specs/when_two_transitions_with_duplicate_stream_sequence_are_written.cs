@@ -13,11 +13,11 @@ namespace Escolar.Tests.Specs
         {
             WriteTransition(evnt.Id, 3, evnt);
             exception = Catch.Exception(() => WriteTransition(evnt.Id, 3, evnt));
-            transitions = ReadAllTransitions();
+            transitions = LoadAllStreamTransitions();
         };
 
         It should_fail = () =>
-            exception.ShouldBeOfType<TransitionAlreadyExistException>();
+            exception.ShouldBeOfType<TransitionAlreadyExistsException>();
 
         It should_contain_one_transition = () =>
             transitions.Count.ShouldEqual(1);

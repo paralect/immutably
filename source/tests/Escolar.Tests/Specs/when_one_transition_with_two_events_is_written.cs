@@ -15,7 +15,7 @@ namespace Escolar.Tests.Specs
                 );
             }
 
-            transitions = ReadAllTransitions();
+            transitions = LoadAllStreamTransitions();
         };
 
         It should_contain_one_transition = () =>

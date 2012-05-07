@@ -9,7 +9,7 @@ namespace Escolar.Tests.Specs
         {
             WriteTransition(evnt.Id, 1, evnt);
             WriteTransition(evnt.Id, 2, evnt);
-            transitions = ReadAllTransitions();
+            transitions = LoadAllStreamTransitions();
         };
 
         It should_contain_two_transition = () =>

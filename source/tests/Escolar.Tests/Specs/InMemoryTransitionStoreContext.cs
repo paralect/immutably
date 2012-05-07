@@ -25,23 +25,20 @@ namespace Escolar.Tests.Specs
             store = new InMemoryTransitionStore();
         };
 
-        public static List<ITransition> ReadAllTransitions()
+        public static List<ITransition> LoadAllStreamTransitions()
         {
-            List<ITransition> list = null;
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
-                list = reader.Read().ToList();
+                return reader.Read().ToList();
             }
-
-            return list;
         }
 
-        public static void WriteTransition(Guid streamId, Int32 streamSequence, IEvent evntt)
+        public static void WriteTransition(Guid streamId, Int32 streamSequence, IEvent newEvent)
         {
             using (var writer = store.CreateStreamWriter(streamId))
             {
                 writer.Write(streamSequence, builder => builder
-                    .AddEvent(evntt)
+                    .AddEvent(newEvent)
                 );
             }            
         }

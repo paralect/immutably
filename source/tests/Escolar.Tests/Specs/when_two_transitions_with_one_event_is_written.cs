@@ -44,11 +44,5 @@ namespace Escolar.Tests.Specs
             transitions[0].StreamSequence.ShouldEqual(1);
             transitions[1].StreamSequence.ShouldEqual(2);
         };
-
-        It should_have_increased_transition_sequence = () =>
-        {
-            transitions[0].TransitionSequence.ShouldEqual(2);
-            transitions[1].TransitionSequence.ShouldEqual(2);
-        };
     }
 }

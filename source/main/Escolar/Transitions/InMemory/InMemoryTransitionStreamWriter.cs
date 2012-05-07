@@ -22,9 +22,9 @@ namespace Escolar.Transitions
 
         public void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder)
         {
-            var transition = new Transition(_streamId, streamSequence);
+            var transition = new TransitionBuilder(_streamId, streamSequence, DateTime.UtcNow);
             transitionBuilder(transition);
-            _repository.Append(transition);
+            _repository.Append(transition.Build());
         }
 
         public void Dispose()

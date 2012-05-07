@@ -80,16 +80,18 @@
     <Compile Include="States\StateSpooler.cs" />
     <Compile Include="Transitions\Abstract\ITransition.cs" />
     <Compile Include="Transitions\Abstract\ITransitionBuilder.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionRepository.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStore.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStoreReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamWriter.cs" />
     <Compile Include="Transitions\Exceptions\TransitionAlreadyExistException.cs" />
-    <Compile Include="Transitions\InMemoryTransitionRepository.cs" />
-    <Compile Include="Transitions\InMemoryTransitionStreamReader.cs" />
-    <Compile Include="Transitions\InMemoryTransitionStreamWriter.cs" />
+    <Compile Include="Transitions\InMemory\InMemoryTransitionRepository.cs" />
+    <Compile Include="Transitions\InMemory\InMemoryTransitionStreamReader.cs" />
+    <Compile Include="Transitions\InMemory\InMemoryTransitionStreamWriter.cs" />
     <Compile Include="Transitions\Transition.cs" />
-    <Compile Include="Transitions\InMemoryTransitionStore.cs" />
+    <Compile Include="Transitions\InMemory\InMemoryTransitionStore.cs" />
+    <Compile Include="Transitions\TransitionBuilder.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

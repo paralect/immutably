@@ -65,9 +65,11 @@ namespace Escolar.Tests
 
             using (var writer = store.CreateStreamWriter(evnt.Id))
             {
+/*
                 writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 1)));
                 writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 3)));
                 writer.Write(new Transition(evnt.ToEnvelope(evnt.Id, 4)));
+*/
 
                 writer.Write(5, builder => builder
                     .AddEvent(evnt)
@@ -111,11 +113,11 @@ namespace Escolar.Tests
 
             var envelope = new EventEnvelope(evnt, metadata);
 
-            var transition = new Transition(envelope);
+            //var transition = new Transition(envelope);
 
             // or:
 
-            var transitionAnother = new Transition(
+/*            var transitionAnother = new Transition(
                 new EventEnvelope(
                     new SimpleEvent()
                     {
@@ -129,7 +131,7 @@ namespace Escolar.Tests
                         StreamSequence = 1
                     }
                 )
-            );
+            );*/
 
         }
     }

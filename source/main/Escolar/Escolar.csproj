@@ -88,6 +88,7 @@
     <Compile Include="Transitions\InMemory\InMemoryTransitionStreamReader.cs" />
     <Compile Include="Transitions\DefaultTransitionStreamWriter.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStoreFactory.cs" />
+    <Compile Include="Transitions\TransitionStreamReaderValidatorDecorator.cs" />
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStore.cs" />
     <Compile Include="Transitions\TransitionBuilder.cs" />

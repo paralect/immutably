@@ -31,11 +31,11 @@ namespace Escolar.Tests
         }
     }
 
-    public class Agg : IAggregate
+/*    public class Agg : IAggregate
     {
-        public void Initialize(IStateEnvelope state)
+        public void Initialize(IStateEnvelope stateEnvelope)
         {
             
         }
-    }
+    }*/
 }

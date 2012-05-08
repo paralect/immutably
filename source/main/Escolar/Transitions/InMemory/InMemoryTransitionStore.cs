@@ -166,7 +166,10 @@ namespace Escolar.Transitions
 
         public ITransitionStreamReader CreateStreamReader(Guid streamId, Int32 fromSequence = 0)
         {
-            return new InMemoryTransitionStreamReader(this, streamId);
+            return new TransitionStreamReaderValidatorDecorator(
+                new InMemoryTransitionStreamReader(this, streamId),
+                streamId
+            );
         }
 
         public ITransitionStreamWriter CreateStreamWriter(Guid streamId)

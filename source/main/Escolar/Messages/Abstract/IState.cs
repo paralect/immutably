@@ -9,9 +9,5 @@ namespace Paralect.Machine.Processes
     /// </summary>
     public interface IState
     {
-        /// <summary>
-        /// Apply specified event to transite to another state
-        /// </summary>
-        void Apply(IEvent events);
     }
 }

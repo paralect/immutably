@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Escolar.Aggregates;
 using Escolar.Messages;
 using Paralect.Machine.Processes;
 
@@ -7,6 +8,7 @@ namespace Escolar.States
 {
     public class StateSpooler : IStateSpooler
     {
+        private readonly IAggregate _aggregate;
         private readonly IState _state;
 
         /// <summary>
@@ -20,8 +22,9 @@ namespace Escolar.States
         /// </summary>
         private readonly Int32 _version;
 
-        public StateSpooler(IStateEnvelope initialStateEnvelope)
+        public StateSpooler(IAggregate aggregate, IStateEnvelope initialStateEnvelope)
         {
+            _aggregate = aggregate;
             _state = initialStateEnvelope.State;
             _id = initialStateEnvelope.Metadata.EntityId;
             _version = initialStateEnvelope.Metadata.Version;
@@ -40,7 +43,7 @@ namespace Escolar.States
                 var version = evnt.Metadata.StreamSequence;
                 lastEventVersion = version;
 
-                if (_id == Guid.Empty)
+                if (id == Guid.Empty)
                     throw new NullReferenceException("Id of state cannot be null");
 
                 if (id != _id)
@@ -49,13 +52,45 @@ namespace Escolar.States
                 if (version <= _version)
                     throw new Exception("State restoration failed because of wrong version sequence.");
 
-                _state.Apply(evnt.Event);
+                //_aggregate.On(evnt.Event);
             }
 
             var stateMetadata = new StateMetadata(_id, lastEventVersion);
             var stateEnvelope = new StateEnvelope(_state, stateMetadata);
 
             return stateEnvelope;
-        }         
+        }
+
+        /*
+        public void Replay(IEnumerable<IEventEnvelope> eventEnvelopes)
+        {
+            if (_state == null || _stateMetadata == null)
+                throw new Exception("Aggregate initial state wasn't specified");
+
+            var currentId = _stateMetadata.EntityId;
+            var currentStreamSequence = _stateMetadata.Version;
+
+            foreach (var eventEnvelope in eventEnvelopes)
+            {
+                var id = eventEnvelope.Metadata.SenderId;
+                var streamSequence = eventEnvelope.Metadata.StreamSequence;
+
+                if (id == Guid.Empty)
+                    throw new NullReferenceException("Id of state cannot be null");
+
+                if (id != currentId)
+                    throw new Exception("State restoration failed because of different Entity ID in the event metadata");
+
+                if (streamSequence < currentStreamSequence)
+                    throw new Exception("State restoration failed because of out of order stream sequence.");
+
+                ((dynamic)this).On((dynamic)eventEnvelope.Event);
+
+                currentStreamSequence = streamSequence;
+            }
+
+            // Metadata now has updated version
+            _stateMetadata = new StateMetadata(currentId, currentStreamSequence);
+        }*/
     }
 }

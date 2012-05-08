@@ -13,35 +13,13 @@ namespace Escolar.StackOverflow.Domain
         /// <summary>
         /// Serialization friendly, inner class for Site state
         /// </summary>
-        public class SiteState
+        public class SiteState : IState
         {
             public Guid Id { get; set; }
             public String Name { get; set; }
             public String Description { get; set; }
-
-            public void On(Site_CreatedEvent evnt)
-            {
-                Id = evnt.SiteId;
-                Name = evnt.Name;
-                Description = evnt.Description;
-            }
-
-            public void On(Site_NameChangedEvent evnt)
-            {
-                Name = evnt.Name;
-            }
-
-            public void On(Site_DescriptionChangedEvent evnt)
-            {
-                Description = evnt.Description;
-            }
         }
         #endregion
-
-        /// <summary>
-        /// Site changes
-        /// </summary>
-        private readonly Action<IEvent> _changes;
 
         /// <summary>
         /// Create user state
@@ -49,7 +27,7 @@ namespace Escolar.StackOverflow.Domain
         public Site(SiteState state, Action<IEvent> changes)
         {
             _state = state ?? new SiteState();
-            _changes = changes;
+            //_changes = changes;
         }
 
         public void Create(Site_CreateCommand command)
@@ -86,10 +64,25 @@ namespace Escolar.StackOverflow.Domain
             Apply(evnt);
         }
 
-        public void Apply(IEvent evnt)
+        #region State reconstruction
+
+        public void On(Site_CreatedEvent evnt)
         {
-            _changes(evnt);
-            ((dynamic)_state).On((dynamic) evnt);
+            State.Id = evnt.SiteId;
+            State.Name = evnt.Name;
+            State.Description = evnt.Description;
         }
+
+        public void On(Site_NameChangedEvent evnt)
+        {
+            State.Name = evnt.Name;
+        }
+
+        public void On(Site_DescriptionChangedEvent evnt)
+        {
+            State.Description = evnt.Description;
+        }
+
+        #endregion
     }
 }

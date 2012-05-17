@@ -19,7 +19,7 @@ namespace Escolar.Tests
 
             using (var session = aggregateStore.OpenSession())
             {
-                var agg = session.Load<Agg>(Guid.Empty);
+                var agg = session.LoadAggregate<Agg>(Guid.Empty);
                 session.SaveChanges();
             }*/
         }

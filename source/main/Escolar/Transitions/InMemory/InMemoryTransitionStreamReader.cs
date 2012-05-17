@@ -33,7 +33,8 @@ namespace Escolar.Transitions
         /// </summary>
         public IEnumerable<ITransition> Read()
         {
-            return _store.LoadStreamTransitions(_streamId);
+            var transitions = _store.LoadStreamTransitions(_streamId);
+            return new TransitionStreamOrderValidator(_streamId, transitions).Read();
         }
 
         public void Dispose()

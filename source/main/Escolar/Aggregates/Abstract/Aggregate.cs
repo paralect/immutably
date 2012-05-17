@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Escolar.Messages;
 using Escolar.States;
+using Escolar.Transitions;
 using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
@@ -10,21 +11,16 @@ namespace Escolar.Aggregates
         where TState : IState
     {
         /// <summary>
-        /// Current aggregate state
+        /// Aggregate context
         /// </summary>
-        protected IState _state;
-
-        /// <summary>
-        /// Current state metadata
-        /// </summary>
-        protected IStateMetadata _stateMetadata;
+        protected IAggregateContext _context;
 
         /// <summary>
         /// Current aggregate state
         /// </summary>
         public TState State
         {
-            get { return (TState)_state; }
+            get { return (TState) _context.State; }
         }
 
         /// <summary>
@@ -32,87 +28,25 @@ namespace Escolar.Aggregates
         /// </summary>
         public IStateMetadata StateMetadata
         {
-            get { return _stateMetadata; }
+            get { return _context.StateMetadata; }
         }
 
         /// <summary>
-        /// Envelope of state and state metadata 
+        /// Aggregate initialization
         /// </summary>
-        public IStateEnvelope StateEnvelope
+        public void Initialize(IAggregateContext context)
         {
-            get { return new StateEnvelope(_state, _stateMetadata); }
-        }
-
-
-        /// <summary>
-        /// Aggregate changes changes
-        /// </summary>
-        private readonly Action<IEventEnvelope> _changes;
-
-        public void Initialize(IStateEnvelope stateEnvelope)
-        {
-            _state = stateEnvelope.State;
-            _stateMetadata = stateEnvelope.Metadata;
-        }
-
-        public void Apply(IEventEnvelope eventEnvelope)
-        {
-            _changes(eventEnvelope);
-            ExecuteEventHandler(eventEnvelope);
-        }
-
-        public void Replay(IEnumerable<IEventEnvelope> eventEnvelopes)
-        {
-            if (_state == null || _stateMetadata == null)
-                throw new Exception("Aggregate initial state wasn't specified");
-
-            foreach (var eventEnvelope in eventEnvelopes)
-            {
-                ExecuteEventHandler(eventEnvelope);
-
-                // Metadata now has updated stream sequence
-                _stateMetadata.Version = eventEnvelope.Metadata.StreamSequence;
-            }
+            _context = context;
         }
 
         public void Apply(IEvent evnt)
         {
-            var eventMetadata = new EventMetadata
-            {
-                SenderId = _stateMetadata.EntityId,
-                StreamSequence = _stateMetadata.Version + 1
-            };
-
-            Action<IEventMetadata> metadata = m =>
-            {
-                m.SenderId = _stateMetadata.EntityId;
-                m.StreamSequence = _stateMetadata.Version + 1;
-            };
-
-            var metadata2 = Create<IEventMetadata>(m =>
-            {
-                m.SenderId = _stateMetadata.EntityId;
-                m.StreamSequence = _stateMetadata.Version + 1;
-            });
-
-            var metadata3 = Create<IEventMetadata>(null);
-            metadata3.SenderId = _stateMetadata.EntityId;
-            metadata3.StreamSequence = _stateMetadata.Version + 1;
-
-            var eventEnvelope = new EventEnvelope(evnt, eventMetadata);
-
-            Apply(eventEnvelope);
+            _context.Apply(evnt);
         }
 
-        private void ExecuteEventHandler(IEventEnvelope eventEnvelope)
+        public void Apply<TEvent>(Action<TEvent> evntBuilder)
         {
-            ((dynamic)this).On((dynamic) eventEnvelope.Event);
-        }
-
-        private TObj Create<TObj>(Action<TObj> modifier)
-        {
-
-            return (TObj) (Object) this;
+            
         }
     }
 }

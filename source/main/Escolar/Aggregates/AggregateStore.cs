@@ -9,6 +9,7 @@ namespace Escolar.Aggregates
 {
     public class AggregateStore : IAggregateStore
     {
+        private readonly IEscolarFactory _factory;
         private readonly ITransitionStore _transitionStore;
 
         public ITransitionStore TransitionStore
@@ -16,24 +17,37 @@ namespace Escolar.Aggregates
             get { return _transitionStore; }
         }
 
-        public AggregateStore(ITransitionStore transitionStore)
+        public AggregateStore(IEscolarFactory factory, ITransitionStore transitionStore)
         {
+            _factory = factory;
             _transitionStore = transitionStore;
         }
 
-        public IAggregateSession OpenSession()
+        public IAggregateSession<TAggregate> OpenSession<TAggregate>(Guid aggregateId)
+            where TAggregate : IAggregate
         {
-            return new AggregateSession(this);
+            return new AggregateSession<TAggregate>(this, aggregateId);
+        }
+
+        public IAggregateSession<TAggregate> OpenStatelessSession<TAggregate>(Guid aggregateId) 
+            where TAggregate : IAggregate
+        {
+            throw new NotImplementedException();
         }
 
         public Type GetAggregateStateType(Type aggregateType)
         {
-            var genericArgs = aggregateType.GetGenericArguments();
+            if (aggregateType.BaseType == null 
+                || aggregateType.BaseType.IsGenericType == false
+                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<>))
+                throw new Exception(String.Format("We cannot find state type for [{0}] aggregate", aggregateType.FullName));
+
+            var genericArgs = aggregateType.BaseType.GetGenericArguments();
             var stateType = genericArgs[0];
             return stateType;
         }
 
-        public IStateEnvelope CreateInitialStateEnvelope(Type aggregateType, Guid aggregateId)
+        public IStateEnvelope CreateStateEnvelope(Type aggregateType, Guid aggregateId)
         {
             var stateType = GetAggregateStateType(aggregateType);
 
@@ -46,8 +60,11 @@ namespace Escolar.Aggregates
 
         public IAggregate CreateAggregate(Type aggregateType, IStateEnvelope state)
         {
+            var context = new AggregateContext(_factory, state);
+
             var aggregate = (IAggregate) Activator.CreateInstance(aggregateType);
-            aggregate.Initialize(state);
+            aggregate.Initialize(context);
+
             return aggregate;
         }
     }

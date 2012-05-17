@@ -47,10 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateSessionTests.cs" />
-    <Compile Include="Aggs\InMemoryAggregateStore.cs" />
+    <Compile Include="AggregateStore\InMemoryAggregateStore.cs" />
+    <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
+    <Compile Include="Aggregates\when_aggregate_created.cs" />
+    <Compile Include="Data\DataMachineContext.cs" />
+    <Compile Include="Data\when_data_context_created.cs" />
     <Compile Include="ExampleTests.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializy\SerializyContext.cs" />
+    <Compile Include="Serializy\when_trying_to_create_serializy_context.cs" />
     <Compile Include="SpecMy.cs" />
     <Compile Include="Specs\when_one_transition_with_one_event_is_written.cs" />
     <Compile Include="Specs\when_one_transition_with_two_events_is_written.cs" />

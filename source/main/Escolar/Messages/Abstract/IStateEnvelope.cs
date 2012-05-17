@@ -5,4 +5,5 @@ namespace Paralect.Machine.Processes
         IState State { get; }
         IStateMetadata Metadata { get; }
     }
+
 }

@@ -13,11 +13,45 @@ namespace Escolar.StackOverflow.Domain
         /// <summary>
         /// Serialization friendly, inner class for Site state
         /// </summary>
-        public class SiteState : IState
+        public abstract class SiteState : IState
         {
-            public Guid Id { get; set; }
-            public String Name { get; set; }
-            public String Description { get; set; }
+            public abstract Guid Id { get; set; }
+            public abstract String Name { get; set; }
+            public abstract String Description { get; set; }
+
+            public void On(Site_CreatedEvent evnt)
+            {
+                Id = evnt.SiteId;
+                Name = evnt.Name;
+                Description = evnt.Description;
+            }
+
+            public void On(Site_NameChangedEvent evnt)
+            {
+                Name = evnt.Name;
+            }
+
+            public void On(Site_DescriptionChangedEvent evnt)
+            {
+                Description = evnt.Description;
+            }
+        }
+
+        // [BsonIgnoreExtraElements]
+        public class JsonImpl : SiteState
+        {
+            // [BsonId] 
+            public override Guid Id { get; set; }
+            public override string Name { get; set; }
+            public override string Description { get; set; }
+        }
+
+        public class ProtobufImpl : SiteState
+        {
+            // [ProtoMember]
+            public override Guid Id { get; set; }
+            public override string Name { get; set; }
+            public override string Description { get; set; }
         }
         #endregion
 
@@ -26,7 +60,8 @@ namespace Escolar.StackOverflow.Domain
         /// </summary>
         public Site(SiteState state, Action<IEvent> changes)
         {
-            _state = state ?? new SiteState();
+            var json = new JsonImpl();
+
             //_changes = changes;
         }
 
@@ -44,6 +79,9 @@ namespace Escolar.StackOverflow.Domain
 
         public void ChangeName(Site_ChangeNameCommand command)
         {
+            if (State.Name == null)
+                return;
+
             var evnt = new Site_NameChangedEvent()
             {
                 SiteId = command.SiteId,

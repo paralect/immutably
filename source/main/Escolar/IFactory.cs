@@ -31,14 +31,14 @@ namespace Escolar
 
         public TType Create<TType>()
         {
-            throw new NotImplementedException();
+            return Activator.CreateInstance<TType>();
         }
 
         public TType Create<TType>(Action<TType> builder)
         {
-            throw new NotImplementedException();
+            var obj = Activator.CreateInstance<TType>();
+            builder(obj);
+            return obj;
         }
-
-
     }
 }

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace Escolar.Transitions
 {
-    public class TransitionStreamReaderValidatorDecorator : ITransitionStreamReader
+    public class TransitionStreamOrderValidator
     {
-        private readonly ITransitionStreamReader _reader;
+        private readonly IEnumerable<ITransition> _transitions;
         private readonly Guid _streamId;
 
-        public TransitionStreamReaderValidatorDecorator(ITransitionStreamReader reader, Guid streamId)
+        public TransitionStreamOrderValidator(Guid streamId, IEnumerable<ITransition> transitions)
         {
-            _reader = reader;
             _streamId = streamId;
+            _transitions = transitions;
         }
 
         public IEnumerable<ITransition> Read()
         {
             var streamSequence = 0;
 
-            foreach (var transition in _reader.Read())
+            foreach (var transition in _transitions)
             {
                 if (transition.StreamId == Guid.Empty)
                     throw new NullReferenceException("Id of transition cannot be null");
@@ -51,12 +51,6 @@ namespace Escolar.Transitions
                 
                 yield return transition;
             }
-        }
-
-        public void Dispose()
-        {
-            if (_reader != null)
-                _reader.Dispose();
         }
     }
 }

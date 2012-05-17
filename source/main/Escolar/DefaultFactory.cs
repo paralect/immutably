@@ -16,7 +16,7 @@ namespace Escolar
         IStateMetadata CreateStateMetadata(Guid entityId, int version);
         IStateSpooler CreateStateSpooler(IStateEnvelope initialStateEnvelope);
         IStateHelper CreateStateHelper();
-        IAggregateSession CreateAggregateSession(ITransitionStore transitionStore);
+        //IAggregateSession CreateAggregateSession(ITransitionStore transitionStore);
         IAggregateStore CreateAggregateStore(ITransitionStore transitionStore);
         ITransitionStore CreateTransitionStore();
         

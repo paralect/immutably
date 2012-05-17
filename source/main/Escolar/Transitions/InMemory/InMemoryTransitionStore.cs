@@ -41,7 +41,7 @@ namespace Escolar.Transitions
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         /// <summary>
-        /// Load single transition, uniquely identified by by streamId and streamSequence
+        /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
         /// </summary>
         public ITransition LoadTransition(Guid streamId, int streamSequence)
         {
@@ -58,7 +58,7 @@ namespace Escolar.Transitions
         }
 
         /// <summary>
-        /// Load <param name="count" /> transitions for specified stream, 
+        /// LoadAggregate <param name="count" /> transitions for specified stream, 
         /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
         /// </summary>
         public IList<ITransition> LoadStreamTransitions(Guid streamId, int fromStreamSequence, int count)
@@ -67,7 +67,13 @@ namespace Escolar.Transitions
 
             try
             {
-                return _indexByStreamId[streamId]
+                List<ITransition> transitions;
+                var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
+
+                if (!exists)
+                    throw new TransitionStreamNotExistsException(String.Format("Stream with id [{0}] doesn't exist", streamId));
+
+                return transitions
                     .Where(t => t.StreamSequence >= fromStreamSequence)
                     .Take(count)
                     .ToList();
@@ -87,7 +93,13 @@ namespace Escolar.Transitions
 
             try
             {
-                return _indexByStreamId[streamId].AsReadOnly();
+                List<ITransition> transitions;
+                var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
+
+                if (!exists)
+                    throw new TransitionStreamNotExistsException(String.Format("Stream with id [{0}] doesn't exist", streamId));
+
+                return transitions.AsReadOnly();
             }
             finally
             {
@@ -96,7 +108,7 @@ namespace Escolar.Transitions
         }
 
         /// <summary>
-        /// Load <param name="count" /> transitions from store, 
+        /// LoadAggregate <param name="count" /> transitions from store, 
         /// ordered by transition Timestamp, starting from <param name="fromTimestamp" />
         /// </summary>
         /// <param name="fromTimestamp">
@@ -166,10 +178,7 @@ namespace Escolar.Transitions
 
         public ITransitionStreamReader CreateStreamReader(Guid streamId, Int32 fromSequence = 0)
         {
-            return new TransitionStreamReaderValidatorDecorator(
-                new InMemoryTransitionStreamReader(this, streamId),
-                streamId
-            );
+            return new InMemoryTransitionStreamReader(this, streamId);
         }
 
         public ITransitionStreamWriter CreateStreamWriter(Guid streamId)

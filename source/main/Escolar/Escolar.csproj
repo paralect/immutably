@@ -40,13 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\Abstract\AggregateContext.cs" />
     <Compile Include="Aggregates\Abstract\IAggregate.cs" />
+    <Compile Include="Aggregates\Abstract\IAggregateContext.cs" />
     <Compile Include="Aggregates\AggregateHelper.cs" />
     <Compile Include="Aggregates\AggregateSession.cs" />
     <Compile Include="Aggregates\AggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\Aggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
+    <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\DataContextBuilder.cs" />
+    <Compile Include="Data\DataDefinition.cs" />
     <Compile Include="DefaultFactory.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
@@ -71,6 +76,9 @@
     <Compile Include="Messages\Metadata\MessageMetadata.cs" />
     <Compile Include="Messages\Metadata\StateMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Data\Attributes\DataContract.cs" />
+    <Compile Include="Data\Attributes\DataProxy.cs" />
+    <Compile Include="Data\DataScanner.cs" />
     <Compile Include="States\IStateSpooler.cs" />
     <Compile Include="States\StateHelper.cs" />
     <Compile Include="States\StateRepository.cs" />
@@ -83,12 +91,13 @@
     <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamWriter.cs" />
     <Compile Include="Transitions\Exceptions\TransitionAlreadyExistsException.cs" />
+    <Compile Include="Transitions\Exceptions\TransitionStreamNotExistsException.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStoreReader.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStoreFactory.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStreamReader.cs" />
     <Compile Include="Transitions\DefaultTransitionStreamWriter.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStoreFactory.cs" />
-    <Compile Include="Transitions\TransitionStreamReaderValidatorDecorator.cs" />
+    <Compile Include="Transitions\TransitionStreamOrderValidator.cs" />
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStore.cs" />
     <Compile Include="Transitions\TransitionBuilder.cs" />

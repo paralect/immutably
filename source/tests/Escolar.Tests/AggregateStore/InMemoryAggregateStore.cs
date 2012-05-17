@@ -27,9 +27,59 @@ namespace Escolar.Tests.Aggs
 
             store = new InMemoryTransitionStore();
 
-            AggregateStore = new AggregateStore(store);
+            AggregateStore = new AggregateStore(new EscolarFactory(), store);
         };
     }
+
+    public class MyState : IState
+    {
+        public void Apply(IEvent events)
+        {
+            //throw new NotImplementedException();
+        }
+    }
+
+    public class MyAggregate : Aggregate<MyState>
+    {
+        public MyAggregate(IAggregateContext context)
+        {
+            _context = context;
+        }
+
+        public void Create(Guid id, String name, Int32 year)
+        {
+            Apply<MyAggregateCreatedEvent>(evnt =>
+            {
+                evnt.Id = id;
+                evnt.Name = name;
+                evnt.Year = year;
+            });
+        }
+
+        public void ChangeName(Guid id, String newName)
+        {
+            Apply<MyAggregateNameChangedEvent>(evnt =>
+            {
+                evnt.Id = id;
+                evnt.Name = newName;
+            });
+        }
+    }
+
+    public class MyAggregateCreatedEvent : IEvent
+    {
+        public Guid Id { get; set; }
+        public String Name { get; set; }
+        public Int32 Year { get; set; }
+    }
+
+    public class MyAggregateNameChangedEvent : IEvent
+    {
+        public Guid Id { get; set; }
+        public String Name { get; set; }
+    }
+
+
 /*
     public class when_someone_something_doing : InMemoryAggregateStore
     {
@@ -37,7 +87,7 @@ namespace Escolar.Tests.Aggs
         {
             using (var session = AggregateStore.OpenSession())
             {
-                session.Load<>()
+                session.LoadAggregate<>()
             }
         };
     }

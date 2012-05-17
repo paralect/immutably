@@ -11,7 +11,7 @@ namespace Escolar.Data
       
         public DataContextBuilder AddContract(Type contractType)
         {
-            var contractAttribute = DataScanner.GetAttribute<DataContract>(contractType);
+            var contractAttribute = ReflectionHelper.GetAttribute<DataContract>(contractType);
             _contracts.Add(contractType, contractAttribute);
             return this;
         }
@@ -23,7 +23,7 @@ namespace Escolar.Data
 
         public DataContextBuilder AddProxy(Type proxyType)
         {
-            var proxyAttribute = DataScanner.GetAttribute<DataProxy>(proxyType);
+            var proxyAttribute = ReflectionHelper.GetAttribute<DataProxy>(proxyType);
             _proxies.Add(proxyType, proxyAttribute);
             return this;
         }
@@ -40,7 +40,7 @@ namespace Escolar.Data
 
         public DataContextBuilder AddAssemblyContracts(Assembly assembly, String namespaceStartsFrom)
         {
-            var tuples = DataScanner.GetTypesWithAttributes<DataContract>(assembly, namespaceStartsFrom);
+            var tuples = ReflectionHelper.GetTypesWithAttributes<DataContract>(assembly, namespaceStartsFrom);
 
             foreach (var tuple in tuples)
                 _contracts.Add(tuple.Item1, tuple.Item2);
@@ -56,7 +56,7 @@ namespace Escolar.Data
 
         public DataContextBuilder AddAssemblyProxies(Assembly assembly, String namespaceStartsFrom)
         {
-            var tuples = DataScanner.GetTypesWithAttributes<DataProxy>(assembly, namespaceStartsFrom);
+            var tuples = ReflectionHelper.GetTypesWithAttributes<DataProxy>(assembly, namespaceStartsFrom);
 
             foreach (var tuple in tuples)
                 _proxies.Add(tuple.Item1, tuple.Item2);

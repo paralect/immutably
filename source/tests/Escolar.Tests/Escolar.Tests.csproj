@@ -56,17 +56,12 @@
     <Compile Include="Data\when_contract_doesnt_have_proxy_and_registered_via_scaning.cs" />
     <Compile Include="Data\when_data_context_created_with_one_contract_and_one_proxy.cs" />
     <Compile Include="Data\when_data_context_created_with_types_from_assembly.cs" />
-    <Compile Include="ExampleTests.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializy\SerializyContext.cs" />
-    <Compile Include="Serializy\when_trying_to_create_serializy_context.cs" />
-    <Compile Include="SpecMy.cs" />
-    <Compile Include="Specs\when_one_transition_with_one_event_is_written.cs" />
-    <Compile Include="Specs\when_one_transition_with_two_events_is_written.cs" />
-    <Compile Include="Specs\InMemoryTransitionStoreContext.cs" />
-    <Compile Include="Specs\when_two_transitions_with_duplicate_stream_sequence_are_written.cs" />
-    <Compile Include="Specs\when_two_transitions_with_one_event_is_written.cs" />
+    <Compile Include="Transitions\when_one_transition_with_one_event_is_written.cs" />
+    <Compile Include="Transitions\when_one_transition_with_two_events_is_written.cs" />
+    <Compile Include="Transitions\InMemoryTransitionStoreContext.cs" />
+    <Compile Include="Transitions\when_two_transitions_with_duplicate_stream_sequence_are_written.cs" />
+    <Compile Include="Transitions\when_two_transitions_with_one_event_is_written.cs" />
     <Compile Include="TransitionTests.cs" />
   </ItemGroup>
   <ItemGroup>

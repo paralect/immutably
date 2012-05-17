@@ -41,9 +41,9 @@ namespace Escolar.Tests.Data
     }
 
     [DataContract("{B04AD5BE-F0D6-4471-8F4E-C621D1A4146C}")]
-    public abstract class ContractWithoutProxy
+    public class ContractWithoutProxy
     {
-        public abstract Guid Id { get; set; }
-        public abstract Int32 Amount { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual Int32 Amount { get; set; }
     }
 }

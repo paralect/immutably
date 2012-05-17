@@ -6,8 +6,9 @@ namespace Escolar.Data
 {
     public class DataContext
     {
-        private readonly Dictionary<Guid, DataDefinition> _definitionsByTag = new Dictionary<Guid, DataDefinition>();
-        private readonly Dictionary<Type, DataDefinition> _definitionsByType = new Dictionary<Type, DataDefinition>();
+        private readonly Dictionary<Guid, DataDefinition> _definitionsByContractTag = new Dictionary<Guid, DataDefinition>();
+        private readonly Dictionary<Type, DataDefinition> _definitionsByContractType = new Dictionary<Type, DataDefinition>();
+        private readonly Dictionary<Type, DataDefinition> _definitionsByProxyType = new Dictionary<Type, DataDefinition>();
 
         public DataContext(IDictionary<Type, DataContract> contracts, IDictionary<Type, DataProxy> proxies)
         {
@@ -15,8 +16,8 @@ namespace Escolar.Data
             {
                 var definition = new DataDefinition(pair.Key, Guid.Parse(pair.Value.Tag));
 
-                _definitionsByTag.Add(definition.ContractTag, definition);
-                _definitionsByType.Add(definition.ContractType, definition);
+                _definitionsByContractTag.Add(definition.ContractTag, definition);
+                _definitionsByContractType.Add(definition.ContractType, definition);
             }
 
             foreach (var pair in proxies)
@@ -24,12 +25,13 @@ namespace Escolar.Data
                 var proxyType = pair.Key;
 
                 DataDefinition definition;
-                var contractExists = _definitionsByType.TryGetValue(proxyType.BaseType, out definition);
+                var contractExists = _definitionsByContractType.TryGetValue(proxyType.BaseType, out definition);
 
                 if (!contractExists)
                     throw new Exception(String.Format("Cannot find contract type for DataProxy {0}", proxyType.FullName));
 
                 definition.ProxyType = proxyType;
+                _definitionsByProxyType.Add(proxyType, definition);
             }
         }
 
@@ -43,7 +45,7 @@ namespace Escolar.Data
         public Type GetProxy(Type contractType)
         {
             DataDefinition definition;
-            var exists = _definitionsByType.TryGetValue(contractType, out definition);
+            var exists = _definitionsByContractType.TryGetValue(contractType, out definition);
 
             if (!exists)
                 throw new Exception(String.Format("Contract {0} doesn't registered", contractType.FullName));
@@ -57,7 +59,7 @@ namespace Escolar.Data
         public Type GetProxy(Guid contractTag)
         {
             DataDefinition definition;
-            var exists = _definitionsByTag.TryGetValue(contractTag, out definition);
+            var exists = _definitionsByContractTag.TryGetValue(contractTag, out definition);
 
             if (!exists)
                 throw new Exception(String.Format("Contract tag {0} doesn't registered", contractTag));
@@ -66,6 +68,23 @@ namespace Escolar.Data
                 return definition.ContractType;
 
             return definition.ProxyType;
+        }
+
+        public Guid GetTag(Type contractOrProxyType)
+        {
+            DataDefinition definitionByContractType;
+            _definitionsByContractType.TryGetValue(contractOrProxyType, out definitionByContractType);
+
+            DataDefinition definitionByProxyType;
+            _definitionsByProxyType.TryGetValue(contractOrProxyType, out definitionByProxyType);
+
+            if (definitionByContractType != null)
+                return definitionByContractType.ContractTag;
+
+            if (definitionByProxyType != null)
+                return definitionByProxyType.ContractTag;
+
+            throw new Exception(String.Format("Contract or proxy [{0}] are not registered"));
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Escolar.Data
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class DataContract : Attribute
     {
         private readonly string _tag;

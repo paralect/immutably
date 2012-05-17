@@ -51,7 +51,11 @@
     <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
     <Compile Include="Aggregates\when_aggregate_created.cs" />
     <Compile Include="Data\DataMachineContext.cs" />
-    <Compile Include="Data\when_data_context_created.cs" />
+    <Compile Include="Data\when_contracts_has_inheritance.cs" />
+    <Compile Include="Data\when_contract_doesnt_have_proxy_and_registered_manually.cs" />
+    <Compile Include="Data\when_contract_doesnt_have_proxy_and_registered_via_scaning.cs" />
+    <Compile Include="Data\when_data_context_created_with_one_contract_and_one_proxy.cs" />
+    <Compile Include="Data\when_data_context_created_with_types_from_assembly.cs" />
     <Compile Include="ExampleTests.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

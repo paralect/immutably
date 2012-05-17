@@ -2,6 +2,7 @@ using System;
 
 namespace Escolar.Data
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class DataProxy : Attribute
     {
         private readonly Type _dataContractType;

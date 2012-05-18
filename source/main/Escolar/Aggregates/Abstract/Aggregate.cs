@@ -31,6 +31,11 @@ namespace Escolar.Aggregates
             get { return _context.StateMetadata; }
         }
 
+        public Aggregate()
+        {
+
+        }
+
         /// <summary>
         /// Aggregate initialization
         /// </summary>

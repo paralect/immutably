@@ -38,6 +38,6 @@ namespace Escolar.Tests.Data
             context.GetTag(typeof(SpecialUser_Bson))
                 .ShouldEqual(Guid.Parse("{F4DF329F-7F5C-4662-8F27-2B923C33DDEA}"));
 
-        private static DataContext context;
+        private static IDataContext context;
     }
 }

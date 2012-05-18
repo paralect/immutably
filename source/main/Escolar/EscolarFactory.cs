@@ -1,17 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Escolar.Messages;
 using Paralect.Machine.Processes;
 
 namespace Escolar
 {
-    public interface IEscolarFactory
-    {
-        TType Create<TType>();
-
-        TType Create<TType>(Action<TType> builder);
-    }
-
     public class EscolarFactory : IEscolarFactory
     {
         private Dictionary<Type, Type> _map = new Dictionary<Type, Type>();

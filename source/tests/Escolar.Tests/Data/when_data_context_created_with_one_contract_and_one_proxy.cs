@@ -24,6 +24,6 @@ namespace Escolar.Tests.Data
         It should_return_correct_tag_for_proxy = () =>
             context.GetTag(typeof(User_Bson)).ShouldEqual(Guid.Parse("{40952BD5-993B-4706-9442-099C9AD8E33F}"));
 
-        private static DataContext context;
+        private static IDataContext context;
     }
 }

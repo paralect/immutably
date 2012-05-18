@@ -33,6 +33,9 @@ namespace Escolar.Tests.Aggs
 
     public class MyState : IState
     {
+        public Guid Id { get; set; }
+        public String Name { get; set; }
+
         public void Apply(IEvent events)
         {
             //throw new NotImplementedException();
@@ -48,6 +51,9 @@ namespace Escolar.Tests.Aggs
 
         public void Create(Guid id, String name, Int32 year)
         {
+            if (State.Name == null)
+                return;
+
             Apply<MyAggregateCreatedEvent>(evnt =>
             {
                 evnt.Id = id;

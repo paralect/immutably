@@ -8,7 +8,10 @@ namespace Escolar.Tests.Aggregates
     {
         Because of = () =>
         {
-/*            var agg = new MyAggregate();
+            /*
+            var store = new InMemoryAggregateStore();
+
+            var agg = new MyAggregate()
 
             agg.Apply<MyAggregateCreatedEvent>(evnt =>
             {

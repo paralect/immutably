@@ -40,10 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\Abstract\AggregateContext.cs" />
+    <Compile Include="Aggregates\AggregateContext.cs" />
     <Compile Include="Aggregates\Abstract\IAggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateContext.cs" />
-    <Compile Include="Aggregates\AggregateHelper.cs" />
     <Compile Include="Aggregates\AggregateSession.cs" />
     <Compile Include="Aggregates\AggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\Aggregate.cs" />
@@ -52,8 +51,10 @@
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\DataContextBuilder.cs" />
     <Compile Include="Data\DataDefinition.cs" />
+    <Compile Include="Data\Abstract\IDataContext.cs" />
     <Compile Include="DefaultFactory.cs" />
-    <Compile Include="IFactory.cs" />
+    <Compile Include="EscolarFactory.cs" />
+    <Compile Include="IEscolarFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
     <Compile Include="Messages\Abstract\IEvent.cs" />
     <Compile Include="Messages\Abstract\IMessage.cs" />

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Escolar.Data
 {
-    public class DataContext
+    public class DataContext : IDataContext
     {
         private readonly Dictionary<Guid, DataDefinition> _definitionsByContractTag = new Dictionary<Guid, DataDefinition>();
         private readonly Dictionary<Type, DataDefinition> _definitionsByContractType = new Dictionary<Type, DataDefinition>();
@@ -35,7 +35,7 @@ namespace Escolar.Data
             }
         }
 
-        public static DataContext Create(Action<DataContextBuilder> builder)
+        public static IDataContext Create(Action<DataContextBuilder> builder)
         {
             var contextBuilder = new DataContextBuilder();
             builder(contextBuilder);

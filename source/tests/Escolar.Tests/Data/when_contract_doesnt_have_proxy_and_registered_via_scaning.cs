@@ -20,6 +20,6 @@ namespace Escolar.Tests.Data
         It should_return_correct_tag_for_contract = () =>
             context.GetTag(typeof(User)).ShouldEqual(Guid.Parse("{B04AD5BE-F0D6-4471-8F4E-C621D1A4146C}"));
 
-        private static DataContext context;
+        private static IDataContext context;
     }
 }

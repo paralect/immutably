@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Escolar.Data;
 using Escolar.Messages;
 using Escolar.States;
 using Escolar.Transitions;
@@ -11,24 +12,71 @@ namespace Escolar.Aggregates
         where TState : IState
     {
         /// <summary>
-        /// Aggregate context
+        /// Current aggregate state
         /// </summary>
-        protected IAggregateContext _context;
+        private TState _state;
+
+        private IDataFactory _dataFactory;
+
+        private Int32 _initialVersion;
+        
+        private readonly List<IEvent> _changes = new List<IEvent>();
+
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        IState IAggregate.State 
+        {
+            get { return State; }
+            set { State = (TState) value; }
+        }
 
         /// <summary>
         /// Current aggregate state
         /// </summary>
         public TState State
         {
-            get { return (TState) _context.State; }
+            get
+            {
+                if (_state == null)
+                    _state = Create<TState>();
+
+                return _state;                
+            }
+            set { _state = value; }
         }
 
-        /// <summary>
-        /// Current state metadata
-        /// </summary>
-        public IStateMetadata StateMetadata
+        public int CurrentVersion
         {
-            get { return _context.StateMetadata; }
+            get { return Changed ? _initialVersion + 1 : _initialVersion;  }
+        }
+
+        public int InitialVersion
+        {
+            get { return _initialVersion; } 
+            set { _initialVersion = value; }
+        }
+
+        public Guid Id { get; set; }
+
+        public IDataFactory DataFactory
+        {
+            get { return _dataFactory; }
+            set { _dataFactory = value; }
+        }
+
+        public Boolean Changed
+        {
+            get 
+            {   
+                return _changes != null 
+                    && _changes.Count > 0; 
+            }
+        }
+
+        public IList<IEvent> Changes
+        {
+            get { return _changes.AsReadOnly(); }
         }
 
         public Aggregate()
@@ -36,22 +84,35 @@ namespace Escolar.Aggregates
 
         }
 
-        /// <summary>
-        /// Aggregate initialization
-        /// </summary>
-        public void Initialize(IAggregateContext context)
-        {
-            _context = context;
-        }
-
         public void Apply(IEvent evnt)
         {
-            _context.Apply(evnt);
+            ApplyInternal(evnt);
         }
 
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
+            where TEvent : IEvent
         {
-            
+            var evnt = Create<TEvent>();
+            evntBuilder(evnt);
+            ApplyInternal(evnt);
+        }
+
+        private void ApplyInternal(IEvent evnt)
+        {
+            _changes.Add(evnt);
+        }
+
+        private TData Create<TData>()
+        {
+            if (_dataFactory == null)
+                return Activator.CreateInstance<TData>();
+
+            return _dataFactory.Create<TData>();
+        }
+
+        public void Initialize(IAggregateContext factory)
+        {
+            throw new NotImplementedException();
         }
     }
 }

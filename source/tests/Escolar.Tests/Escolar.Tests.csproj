@@ -49,7 +49,11 @@
     <Compile Include="AggregateSessionTests.cs" />
     <Compile Include="AggregateStore\InMemoryAggregateStore.cs" />
     <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
+    <Compile Include="Aggregates\AggregateContext.cs" />
+    <Compile Include="Aggregates\Behaviors\AggregateWithOneEventBehaviors.cs" />
     <Compile Include="Aggregates\when_aggregate_created.cs" />
+    <Compile Include="Aggregates\when_one_event_applied.cs" />
+    <Compile Include="Aggregates\when_one_event_applied_via_generic.cs" />
     <Compile Include="Data\DataMachineContext.cs" />
     <Compile Include="Data\when_contracts_has_inheritance.cs" />
     <Compile Include="Data\when_contract_doesnt_have_proxy_and_registered_manually.cs" />

@@ -44,9 +44,9 @@ namespace Escolar.Tests.Aggs
 
     public class MyAggregate : Aggregate<MyState>
     {
-        public MyAggregate(IAggregateContext context)
+        public MyAggregate()
         {
-            _context = context;
+            //_context = context;
         }
 
         public void Create(Guid id, String name, Int32 year)

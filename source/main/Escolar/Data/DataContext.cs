@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Escolar.Data
 {
-    public class DataContext : IDataContext
+    public class DataContext : IDataContext, IDataFactory
     {
         private readonly Dictionary<Guid, DataDefinition> _definitionsByContractTag = new Dictionary<Guid, DataDefinition>();
         private readonly Dictionary<Type, DataDefinition> _definitionsByContractType = new Dictionary<Type, DataDefinition>();
@@ -85,6 +85,17 @@ namespace Escolar.Data
                 return definitionByProxyType.ContractTag;
 
             throw new Exception(String.Format("Contract or proxy [{0}] are not registered"));
+        }
+
+        public TDataType Create<TDataType>()
+        {
+            return (TDataType) Create(typeof (TDataType));
+        }
+
+        public object Create(Type type)
+        {
+            var proxyType = GetProxy(type);
+            return Activator.CreateInstance(proxyType);
         }
     }
 }

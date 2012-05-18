@@ -4,29 +4,29 @@ using Machine.Specifications;
 
 namespace Escolar.Tests.Aggregates
 {
-    public class when_aggregate_created
+    public class when_aggregate_created : AggregateContext
     {
         Because of = () =>
-        {
-            /*
-            var store = new InMemoryAggregateStore();
+            aggregate = new MyAggregate();
 
-            var agg = new MyAggregate()
+        It state_should_be_not_null = () =>
+            aggregate.State.ShouldNotBeNull();
 
-            agg.Apply<MyAggregateCreatedEvent>(evnt =>
-            {
-                evnt.Id = Guid.Empty;
-                evnt.Name = "Hello";
-                evnt.Year = 2012;
-            });*/
-        };
-    }
+        It current_version_should_be_zero = () =>
+            aggregate.CurrentVersion.ShouldEqual(0); 
 
-    public class zzz : when_aggregate_created
-    {
-        public zzz()
-        {
-            
-        }
+        It initial_version_should_be_zero = () =>
+            aggregate.InitialVersion.ShouldEqual(0);
+
+        It data_factory_should_be_null = () =>
+            aggregate.DataFactory.ShouldBeNull();
+
+        It should_be_not_changed = () =>
+            aggregate.Changed.ShouldBeFalse();
+
+        It changes_should_be_initialized_but_empty = () =>
+            aggregate.Changes.Count.ShouldEqual(0);
+
+        private static MyAggregate aggregate;
     }
 }

@@ -8,9 +8,9 @@ namespace Escolar.Tests.Aggs
     {
         Because of = () =>
         {
-            using (var session = AggregateStore.OpenSession<MyAggregate>(Guid.Empty))
+            using (var session = AggregateStore.OpenSession(Guid.Empty))
             {
-                exception = Catch.Exception(() => session.LoadAggregate());
+                exception = Catch.Exception(() => session.LoadAggregate<MyAggregate>());
             }
         };
 
@@ -24,9 +24,9 @@ namespace Escolar.Tests.Aggs
     {
         Because of = () =>
         {
-            using (var session = AggregateStore.OpenSession<MyAggregate>(Guid.Empty))
+            using (var session = AggregateStore.OpenSession(Guid.Empty))
             {
-                var agg = session.CreateAggregate();
+                var agg = session.CreateAggregate<MyAggregate>();
                 agg.ChangeName(default(Guid), "dfdf)");
                 session.SaveChanges();
             }

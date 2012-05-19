@@ -6,18 +6,15 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public interface IAggregateStore<TAggregateId>
+    public interface IAggregateStore
     {
         ITransitionStore TransitionStore { get; }
 
-        IAggregateSession<TAggregateId, TAggregate> OpenSession<TAggregate>(TAggregateId aggregateId)
-            where TAggregate : IAggregate<TAggregateId>;
-
-        IAggregateSession<TAggregateId, TAggregate> OpenStatelessSession<TAggregate>(TAggregateId aggregateId)
-            where TAggregate : IAggregate<TAggregateId>;
+        IAggregateSession<TAggregateId> OpenSession<TAggregateId>(TAggregateId aggregateId);
+        IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId);
         
         Type GetAggregateStateType(Type aggregateType);
-        IStateEnvelope<TAggregateId> CreateStateEnvelope(Type aggregateType, TAggregateId aggregateId);
-        IAggregate<TAggregateId> CreateAggregate(Type aggregateType, IStateEnvelope<TAggregateId> state);
+        IStateEnvelope<TAggregateId> CreateStateEnvelope<TAggregateId>(Type aggregateType, TAggregateId aggregateId);
+        IAggregate<TAggregateId> CreateAggregate<TAggregateId>(Type aggregateType, IStateEnvelope<TAggregateId> state);
     }
 }

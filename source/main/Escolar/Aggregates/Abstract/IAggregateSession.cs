@@ -3,12 +3,11 @@ using Escolar.Aggregates;
 
 namespace Escolar.Aggregates
 {
-    public interface IAggregateSession<TId, TAggregate> : IDisposable
-        where TAggregate : IAggregate<TId>
+    public interface IAggregateSession<TId> : IDisposable
     {
-        TAggregate LoadAggregate();
-        TAggregate CreateAggregate();
-        TAggregate LoadOrCreateAggregate();
+        TAggregateType LoadAggregate<TAggregateType>();
+        TAggregateType CreateAggregate<TAggregateType>();
+        TAggregateType LoadOrCreateAggregate<TAggregateType>();
 
         void SaveChanges();
     }

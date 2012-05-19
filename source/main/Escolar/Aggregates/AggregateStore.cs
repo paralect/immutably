@@ -7,7 +7,7 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class AggregateStore<TAggregateId> : IAggregateStore<TAggregateId>
+    public class AggregateStore : IAggregateStore
     {
         private readonly IEscolarFactory _factory;
         private readonly ITransitionStore _transitionStore;
@@ -23,14 +23,12 @@ namespace Escolar.Aggregates
             _transitionStore = transitionStore;
         }
 
-        public IAggregateSession<TAggregateId, TAggregate> OpenSession<TAggregate>(TAggregateId aggregateId)
-            where TAggregate : IAggregate<TAggregateId>
+        public IAggregateSession<TAggregateId> OpenSession<TAggregateId>(TAggregateId aggregateId)
         {
-            return new AggregateSession<TAggregate, TAggregateId>(this, aggregateId);
+            return new AggregateSession<TAggregateId>(this, aggregateId);
         }
 
-        public IAggregateSession<TAggregateId, TAggregate> OpenStatelessSession<TAggregate>(TAggregateId aggregateId) 
-            where TAggregate : IAggregate<TAggregateId>
+        public IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId) 
         {
             throw new NotImplementedException();
         }
@@ -47,7 +45,7 @@ namespace Escolar.Aggregates
             return stateType;
         }
 
-        public IStateEnvelope<TAggregateId> CreateStateEnvelope(Type aggregateType, TAggregateId aggregateId)
+        public IStateEnvelope<TAggregateId> CreateStateEnvelope<TAggregateId>(Type aggregateType, TAggregateId aggregateId)
         {
             var stateType = GetAggregateStateType(aggregateType);
 
@@ -58,7 +56,7 @@ namespace Escolar.Aggregates
             return stateEnvelope;
         }
 
-        public IAggregate<TAggregateId> CreateAggregate(Type aggregateType, IStateEnvelope<TAggregateId> state)
+        public IAggregate<TAggregateId> CreateAggregate<TAggregateId>(Type aggregateType, IStateEnvelope<TAggregateId> state)
         {
             var context = new AggregateContext<TAggregateId>(_factory, state);
 

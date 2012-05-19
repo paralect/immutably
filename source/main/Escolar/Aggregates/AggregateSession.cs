@@ -7,10 +7,9 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class AggregateSession<TAggregate, TAggregateId> : IAggregateSession<TAggregateId, TAggregate>
-        where TAggregate :IAggregate<TAggregateId>
+    public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
     {
-        private readonly IAggregateStore<TAggregateId> _store;
+        private readonly IAggregateStore _store;
         private readonly TAggregateId _aggregateId;
 
         public TAggregateId AggregateId
@@ -18,13 +17,13 @@ namespace Escolar.Aggregates
             get { return _aggregateId; }
         }
 
-        public AggregateSession(IAggregateStore<TAggregateId> store, TAggregateId aggregateId)
+        public AggregateSession(IAggregateStore store, TAggregateId aggregateId)
         {
             _store = store;
             _aggregateId = aggregateId;
         }
 
-        public TAggregate LoadAggregate()
+        public TAggregate LoadAggregate<TAggregate>()
         {
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialStateEnvelope = _store.CreateStateEnvelope(typeof(TAggregate), _aggregateId);
@@ -43,12 +42,12 @@ namespace Escolar.Aggregates
             return (TAggregate) _store.CreateAggregate(typeof(TAggregate), spooler.StateEnvelope);
         }
 
-        public TAggregate LoadOrCreateAggregate()
+        public TAggregate LoadOrCreateAggregate<TAggregate>()
         {
             return (TAggregate)(Object)null;
         }
 
-        public TAggregate CreateAggregate()
+        public TAggregate CreateAggregate<TAggregate>()
         {
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialStateEnvelope = _store.CreateStateEnvelope(typeof(TAggregate), _aggregateId);

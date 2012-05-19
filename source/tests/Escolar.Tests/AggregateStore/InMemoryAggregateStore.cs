@@ -13,7 +13,7 @@ namespace Escolar.Tests.Aggs
     {
         public static SimpleEvent evnt;
         public static InMemoryTransitionStore store;
-        public static AggregateStore<Guid> AggregateStore;
+        public static AggregateStore AggregateStore;
         public static List<ITransition<Guid>> transitions;
 
         Establish context = () =>
@@ -27,7 +27,7 @@ namespace Escolar.Tests.Aggs
 
             store = new InMemoryTransitionStore();
 
-            AggregateStore = new AggregateStore<Guid>(new EscolarFactory(), store);
+            AggregateStore = new AggregateStore(new EscolarFactory(), store);
         };
     }
 

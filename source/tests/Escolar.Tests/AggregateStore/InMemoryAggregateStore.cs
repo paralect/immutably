@@ -12,9 +12,9 @@ namespace Escolar.Tests.Aggs
     public class InMemoryAggregateStore
     {
         public static SimpleEvent evnt;
-        public static InMemoryTransitionStore store;
-        public static AggregateStore AggregateStore;
-        public static List<ITransition> transitions;
+        public static InMemoryTransitionStore<Guid> store;
+        public static AggregateStore<Guid> AggregateStore;
+        public static List<ITransition<Guid>> transitions;
 
         Establish context = () =>
         {
@@ -25,9 +25,9 @@ namespace Escolar.Tests.Aggs
                 Name = "Lenin"
             };
 
-            store = new InMemoryTransitionStore();
+            store = new InMemoryTransitionStore<Guid>();
 
-            AggregateStore = new AggregateStore(new EscolarFactory(), store);
+            AggregateStore = new AggregateStore<Guid>(new EscolarFactory(), store);
         };
     }
 
@@ -42,7 +42,7 @@ namespace Escolar.Tests.Aggs
         }
     }
 
-    public class MyAggregate : Aggregate<MyState>
+    public class MyAggregate : Aggregate<Guid, MyState>
     {
         public MyAggregate()
         {

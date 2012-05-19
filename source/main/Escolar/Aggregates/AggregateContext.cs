@@ -5,7 +5,7 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class AggregateContext : IAggregateContext
+    public class AggregateContext<TAggregateId> : IAggregateContext<TAggregateId>
     {
         /// <summary>
         /// Factory
@@ -15,12 +15,12 @@ namespace Escolar.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private readonly IStateEnvelope _stateEnvelope;
+        private readonly IStateEnvelope<TAggregateId> _stateEnvelope;
 
         /// <summary>
         /// List of applied events
         /// </summary>
-        private readonly List<IEventEnvelope> _changes = new List<IEventEnvelope>();
+        private readonly List<IEventEnvelope<TAggregateId>> _changes = new List<IEventEnvelope<TAggregateId>>();
 
         /// <summary>
         /// Current aggregate state
@@ -33,7 +33,7 @@ namespace Escolar.Aggregates
         /// <summary>
         /// Current aggregate state metadata
         /// </summary>
-        public IStateMetadata StateMetadata
+        public IStateMetadata<TAggregateId> StateMetadata
         {
             get { return _stateEnvelope.Metadata;  }
         }
@@ -41,7 +41,7 @@ namespace Escolar.Aggregates
         /// <summary>
         /// List applied changes
         /// </summary>
-        public IList<IEventEnvelope> Changes
+        public IList<IEventEnvelope<TAggregateId>> Changes
         {
             get { return _changes.AsReadOnly(); }
         }
@@ -54,7 +54,7 @@ namespace Escolar.Aggregates
             get { return _factory; }
         }
 
-        public AggregateContext(IEscolarFactory factory, IStateEnvelope stateEnvelope)
+        public AggregateContext(IEscolarFactory factory, IStateEnvelope<TAggregateId> stateEnvelope)
         {
             _factory = factory;
             _stateEnvelope = stateEnvelope;
@@ -62,9 +62,9 @@ namespace Escolar.Aggregates
 
         public void Apply(IEvent evnt)
         {
-            var env = new EventEnvelope(evnt, _factory.Create<IEventMetadata>(m =>
+            var env = new EventEnvelope<TAggregateId>(evnt, _factory.Create<IEventMetadata<TAggregateId>>(m =>
             {
-                m.SenderId = Guid.Empty;
+                m.SenderId = default(TAggregateId);
             }));
 
             _changes.Add(env);

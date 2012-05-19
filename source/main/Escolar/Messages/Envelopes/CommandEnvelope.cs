@@ -1,10 +1,10 @@
 namespace Escolar.Messages
 {
-    public class CommandEnvelope : MessageEnvelope, ICommandEnvelope
+    public class CommandEnvelope<TId> : MessageEnvelope, ICommandEnvelope<TId>
     {
-        public new ICommandMetadata Metadata
+        public new ICommandMetadata<TId> Metadata
         {
-            get { return (ICommandMetadata) base.Metadata; }
+            get { return (ICommandMetadata<TId>) base.Metadata; }
         }
 
         public ICommand Command
@@ -12,7 +12,7 @@ namespace Escolar.Messages
             get { return (ICommand) Message; }
         }
 
-        public CommandEnvelope(ICommand message, ICommandMetadata metadata) : base(message, metadata)
+        public CommandEnvelope(ICommand message, ICommandMetadata<TId> metadata) : base(message, metadata)
         {
         }
     }

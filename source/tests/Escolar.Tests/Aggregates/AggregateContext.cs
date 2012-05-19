@@ -21,7 +21,7 @@ namespace Escolar.Tests.Aggregates
         }
     }
 
-    public class MyAggregate : Aggregate<Aggs.MyState>
+    public class MyAggregate : Aggregate<Guid, Aggs.MyState>
     {
         public MyAggregate()
         {

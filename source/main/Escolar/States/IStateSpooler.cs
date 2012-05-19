@@ -4,13 +4,13 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.States
 {
-    public interface IStateSpooler
+    public interface IStateSpooler<TStreamId>
     {
         /// <summary>
         /// Replay specified events to restore state of IState.
         /// </summary>
-        void Spool(IEnumerable<IEventEnvelope> events);
+        void Spool(IEnumerable<IEventEnvelope<TStreamId>> events);
 
-        IStateEnvelope StateEnvelope { get; }
+        IStateEnvelope<TStreamId> StateEnvelope { get; }
     }
 }

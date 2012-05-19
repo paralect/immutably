@@ -1,10 +1,10 @@
 namespace Escolar.Messages
 {
-    public class EventEnvelope : MessageEnvelope, IEventEnvelope
+    public class EventEnvelope<TId> : MessageEnvelope, IEventEnvelope<TId>
     {
-        public new IEventMetadata Metadata
+        public new IEventMetadata<TId> Metadata
         {
-            get { return (IEventMetadata) base.Metadata; }
+            get { return (IEventMetadata<TId>) base.Metadata; }
         }
 
         public IEvent Event
@@ -12,7 +12,7 @@ namespace Escolar.Messages
             get { return (IEvent)Message; }
         }
 
-        public EventEnvelope(IEvent message, IEventMetadata metadata) : base(message, metadata)
+        public EventEnvelope(IEvent message, IEventMetadata<TId> metadata) : base(message, metadata)
         {
         }
     }

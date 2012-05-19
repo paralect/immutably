@@ -11,17 +11,17 @@ namespace Escolar.Transitions
     /// for **one** Stream (usually Aggregate Root) in one atomic package, 
     /// that can be either canceled or persisted by Event Store.
     /// </summary>  
-    public class Transition : ITransition
+    public class Transition<TStreamId> : ITransition<TStreamId>
     {
         /// <summary>
         /// Event envelops, in order (by transition sequence)
         /// </summary>
-        private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
+        private readonly List<IEventEnvelope<TStreamId>> _eventEnvelopes = new List<IEventEnvelope<TStreamId>>();
 
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        private readonly Guid _streamId;
+        private readonly TStreamId _streamId;
 
         /// <summary>
         /// Serial number of this transition inside stream
@@ -37,7 +37,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        public Guid StreamId
+        public TStreamId StreamId
         {
             get { return _streamId; }
         }
@@ -62,7 +62,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Readonly collection of Event envelopes, in order (by transition sequence)
         /// </summary>
-        public IList<IEventEnvelope> EventEnvelopes
+        public IList<IEventEnvelope<TStreamId>> EventEnvelopes
         {
             get { return _eventEnvelopes.AsReadOnly(); }
         }
@@ -88,7 +88,7 @@ namespace Escolar.Transitions
         /// Specifies, should we validate envelopes that they belongs 
         /// to specified <param name="streamId" /> and they all have specified <param name="streamSequence" />
         /// </param>
-        public Transition(Guid streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
+        public Transition(TStreamId streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope<TStreamId>> eventEnvelopes, Boolean validate = true)
         {
             _streamId = streamId;
             _streamSequence = streamSeq;
@@ -107,7 +107,7 @@ namespace Escolar.Transitions
                     if (eventEnvelope.Metadata.TransitionSequence <= _transitionSequence)
                         throw new Exception("Invalid transition sequence. Events aren't in order, or ");
 
-                    if (eventEnvelope.Metadata.SenderId != _streamId)
+                    if (!EqualityComparer<TStreamId>.Default.Equals(eventEnvelope.Metadata.SenderId, _streamId))
                         throw new Exception("Invalid transition, because events are for different streams");
 
                     if (eventEnvelope.Metadata.StreamSequence != _streamSequence)

@@ -3,12 +3,12 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Messages
 {
-    public class StateMetadata : IStateMetadata
+    public class StateMetadata<TId> : IStateMetadata<TId>
     {
         public int Version { get; set; }
-        public Guid EntityId { get; set; }
+        public TId EntityId { get; set; }
 
-        public StateMetadata(Guid entityId, int version)
+        public StateMetadata(TId entityId, int version)
         {
             EntityId = entityId;
             Version = version;

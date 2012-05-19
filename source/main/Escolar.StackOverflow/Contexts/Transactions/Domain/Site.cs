@@ -7,7 +7,7 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.StackOverflow.Domain
 {
-    public class Site : Aggregate<Site.SiteState>
+    public class Site : Aggregate<Guid, Site.SiteState>
     {
         #region Site State
         /// <summary>

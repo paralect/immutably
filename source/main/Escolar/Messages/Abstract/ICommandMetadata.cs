@@ -3,12 +3,12 @@ using System;
 
 namespace Escolar.Messages
 {
-    public interface ICommandMetadata : IMessageMetadata
+    public interface ICommandMetadata<TReceiverId> : IMessageMetadata
     {
         /// <summary>
         /// Id of Aggregate Root, Service, Saga or Process this commant addressed to
         /// </summary>
-        Guid ReceiverId { get; set; }
+        TReceiverId ReceiverId { get; set; }
 
         /// <summary>
         /// Expected version of receiver (Aggregate Root, Service, Saga or Process). 

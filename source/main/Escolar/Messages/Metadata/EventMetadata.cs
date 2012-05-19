@@ -3,12 +3,12 @@ using System;
 namespace Escolar.Messages
 {
     
-    public class EventMetadata : MessageMetadata, IEventMetadata
+    public class EventMetadata<TId> : MessageMetadata, IEventMetadata<TId>
     {
         /// <summary>
         /// Id of Aggregate Root, Service or Process that emits this events.
         /// </summary>
-        public Guid SenderId { get; set; }
+        public TId SenderId { get; set; }
 
         /// <summary>
         /// StreamSequence of Aggregate Root, Service, Saga or Process at the moment event was emitted.

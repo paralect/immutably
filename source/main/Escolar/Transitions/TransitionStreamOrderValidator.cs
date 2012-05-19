@@ -3,27 +3,31 @@ using System.Collections.Generic;
 
 namespace Escolar.Transitions
 {
-    public class TransitionStreamOrderValidator
+    public class TransitionStreamOrderValidator<TStreamId>
     {
-        private readonly IEnumerable<ITransition> _transitions;
-        private readonly Guid _streamId;
+        private readonly IEnumerable<ITransition<TStreamId>> _transitions;
+        private readonly TStreamId _streamId;
 
-        public TransitionStreamOrderValidator(Guid streamId, IEnumerable<ITransition> transitions)
+        public TransitionStreamOrderValidator(TStreamId streamId, IEnumerable<ITransition<TStreamId>> transitions)
         {
             _streamId = streamId;
             _transitions = transitions;
         }
 
-        public IEnumerable<ITransition> Read()
+        public IEnumerable<ITransition<TStreamId>> Read()
         {
             var streamSequence = 0;
 
+            var comparer = EqualityComparer<TStreamId>.Default;
+
             foreach (var transition in _transitions)
             {
-                if (transition.StreamId == Guid.Empty)
-                    throw new NullReferenceException("Id of transition cannot be null");
+                
 
-                if (transition.StreamId != _streamId)
+                if (comparer.Equals(transition.StreamId, default(TStreamId)))
+                    throw new NullReferenceException("Id of transition cannot be null for reference types and default(TStreamId) for value type");
+
+                if (!comparer.Equals(transition.StreamId, _streamId))
                     throw new Exception("Invalid transitions stream because of wrong stream ID");
 
                 if (transition.StreamSequence <= streamSequence)
@@ -35,10 +39,10 @@ namespace Escolar.Transitions
                 {
                     var metadata = eventEnvelope.Metadata;
 
-                    if (metadata.SenderId == Guid.Empty)
-                        throw new NullReferenceException("SenderId in event metadata cannot be null");
+                    if (EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, default(TStreamId)))
+                        throw new NullReferenceException("SenderId in event metadata cannot be null for reference type, or default(T) for value type");
 
-                    if (metadata.SenderId != _streamId)
+                    if (!EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, _streamId))
                         throw new Exception("Invalid transitions stream because of different stream IDs in the event metadata");
 
                     if (metadata.TransitionSequence <= transitionSequence)

@@ -2,12 +2,12 @@ using System;
 
 namespace Escolar.Messages
 {
-    public interface IEventMetadata : IMessageMetadata
+    public interface IEventMetadata<TId> : IMessageMetadata
     {
         /// <summary>
         /// Id of Aggregate Root, Service, Saga or Process that emits this events.
         /// </summary>
-        Guid SenderId { get; set; }
+        TId SenderId { get; set; }
 
         /// <summary>
         /// StreamSequence of Aggregate Root, Service, Saga or Process at the moment event was emitted.

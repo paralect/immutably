@@ -12,7 +12,7 @@ namespace Escolar.Tests
     {
         public void can_write_and_read_single_transition()
         {
-            var store = new InMemoryTransitionStore();
+            var store = new InMemoryTransitionStore<Guid>();
 
             var evnt = new SimpleEvent()
             {
@@ -30,7 +30,7 @@ namespace Escolar.Tests
             }
 
             // Reading
-            List<ITransition> transitions = null;
+            List<ITransition<Guid>> transitions = null;
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
                 transitions = reader.Read().ToList();
@@ -52,7 +52,7 @@ namespace Escolar.Tests
         [Test]
         public void simple_test()
         {
-            var store = new InMemoryTransitionStore();
+            var store = new InMemoryTransitionStore<Guid>();
 
             var evnt = new SimpleEvent()
             {
@@ -105,13 +105,13 @@ namespace Escolar.Tests
                 Name = "Lenin"
             };
 
-            var metadata = new EventMetadata()
+            var metadata = new EventMetadata<Guid>()
             {
                 SenderId = evnt.Id,
                 StreamSequence = 1
             };
 
-            var envelope = new EventEnvelope(evnt, metadata);
+            var envelope = new EventEnvelope<Guid>(evnt, metadata);
 
             //var transition = new Transition(envelope);
 

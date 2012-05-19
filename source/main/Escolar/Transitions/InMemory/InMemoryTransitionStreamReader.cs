@@ -7,22 +7,22 @@ namespace Escolar.Transitions
     /// <summary>
     /// Reads stream transitions by portions (default portion size is 1000)
     /// </summary>
-    public class InMemoryTransitionStreamReader : ITransitionStreamReader
+    public class InMemoryTransitionStreamReader<TStreamId> : ITransitionStreamReader<TStreamId>
     {
         /// <summary>
         /// Transitions store
         /// </summary>
-        private readonly InMemoryTransitionStore _store;
+        private readonly InMemoryTransitionStore<TStreamId> _store;
 
         /// <summary>
         /// Stream ID
         /// </summary>
-        private readonly Guid _streamId;
+        private readonly TStreamId _streamId;
 
         /// <summary>
         /// Creates DefaultTransitionStreamReader with default portion size - 1000.
         /// </summary>
-        public InMemoryTransitionStreamReader(InMemoryTransitionStore store, Guid streamId)
+        public InMemoryTransitionStreamReader(InMemoryTransitionStore<TStreamId> store, TStreamId streamId)
         {
             _store = store;
             _streamId = streamId;
@@ -31,10 +31,10 @@ namespace Escolar.Transitions
         /// <summary>
         /// Reads stream by portions (default portion size 1000)
         /// </summary>
-        public IEnumerable<ITransition> Read()
+        public IEnumerable<ITransition<TStreamId>> Read()
         {
             var transitions = _store.LoadStreamTransitions(_streamId);
-            return new TransitionStreamOrderValidator(_streamId, transitions).Read();
+            return new TransitionStreamOrderValidator<TStreamId>(_streamId, transitions).Read();
         }
 
         public void Dispose()

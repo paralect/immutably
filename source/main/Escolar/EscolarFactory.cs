@@ -11,10 +11,10 @@ namespace Escolar
 
         public EscolarFactory()
         {
-            Register<IEventMetadata, EventMetadata>();
-            Register<IEventEnvelope, EventEnvelope>();
-            Register<IStateMetadata, StateMetadata>();
-            Register<IStateEnvelope, StateEnvelope>();
+//            Register<IEventMetadata, EventMetadata>();
+  //          Register<IEventEnvelope, EventEnvelope>();
+    //        Register<IStateMetadata, StateMetadata>();
+      //      Register<IStateEnvelope, StateEnvelope>();
         }
 
         private void Register<TFrom, TTo>()

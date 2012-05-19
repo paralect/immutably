@@ -3,10 +3,9 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public interface IAggregateContext
+    public interface IAggregateContext<TAggregateId>
     {
         IState State { get; }
-        IStateMetadata StateMetadata { get; }
         IEscolarFactory Factory { get; }
         void Apply(IEvent evnt);
     }

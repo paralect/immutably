@@ -10,12 +10,12 @@ namespace Escolar.Transitions
     /// for **one** Stream (usually Aggregate Root) in one atomic package, 
     /// that can be either canceled or persisted by Event Store.
     /// </summary>  
-    public interface ITransition
+    public interface ITransition<TStreamId>
     {
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        Guid StreamId { get; }
+        TStreamId StreamId { get; }
 
         /// <summary>
         /// Serial number of this transition inside stream
@@ -31,7 +31,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Readonly collection of Event envelopes, in order (by transition sequence)
         /// </summary>
-        IList<IEventEnvelope> EventEnvelopes { get; }
+        IList<IEventEnvelope<TStreamId>> EventEnvelopes { get; }
 
         /// <summary>
         /// Readonly collection of Events, in order (by transition sequence)

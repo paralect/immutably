@@ -27,6 +27,7 @@ namespace Escolar.Tests.Aggs
             using (var session = AggregateStore.OpenSession<MyAggregate>(Guid.Empty))
             {
                 var agg = session.CreateAggregate();
+                agg.ChangeName(default(Guid), "dfdf)");
                 session.SaveChanges();
             }
         };        

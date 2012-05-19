@@ -1,8 +1,8 @@
 namespace Escolar.Messages
 {
-    public interface IEventEnvelope : IMessageEnvelope
+    public interface IEventEnvelope<TId> : IMessageEnvelope
     {
         IEvent Event { get; }
-        new IEventMetadata Metadata { get; }
+        new IEventMetadata<TId> Metadata { get; }
     }
 }

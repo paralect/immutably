@@ -2,14 +2,14 @@
 
 namespace Escolar.Transitions
 {
-    public interface ITransitionStore
+    public interface ITransitionStore<TStreamId>
     {
-        ITransitionStreamReader CreateStreamReader(Guid streamId, Int32 fromSequence = 0);
+        ITransitionStreamReader<TStreamId> CreateStreamReader(TStreamId streamId, Int32 fromSequence = 0);
 
-        ITransitionStreamWriter CreateStreamWriter(Guid streamId);
+        ITransitionStreamWriter<TStreamId> CreateStreamWriter(TStreamId streamId);
 
-        ITransitionStoreReader CreateStoreReader();
+        ITransitionStoreReader<TStreamId> CreateStoreReader();
 
-        ITransitionRepository CreateTransitionRepository();
+        ITransitionRepository<TStreamId> CreateTransitionRepository();
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Escolar.Transitions
 {
-    public interface ITransitionStreamReader : IDisposable
+    public interface ITransitionStreamReader<TStreamId> : IDisposable
     {
-        IEnumerable<ITransition> Read();
+        IEnumerable<ITransition<TStreamId>> Read();
     }
 }

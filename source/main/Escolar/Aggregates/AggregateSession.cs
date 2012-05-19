@@ -7,13 +7,18 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class AggregateSession<TAggregate> : IAggregateSession<TAggregate>
-        where TAggregate :IAggregate
+    public class AggregateSession<TAggregate, TAggregateId> : IAggregateSession<TAggregateId, TAggregate>
+        where TAggregate :IAggregate<TAggregateId>
     {
-        private readonly IAggregateStore _store;
-        private readonly Guid _aggregateId;
+        private readonly IAggregateStore<TAggregateId> _store;
+        private readonly TAggregateId _aggregateId;
 
-        public AggregateSession(IAggregateStore store, Guid aggregateId)
+        public TAggregateId AggregateId
+        {
+            get { return _aggregateId; }
+        }
+
+        public AggregateSession(IAggregateStore<TAggregateId> store, TAggregateId aggregateId)
         {
             _store = store;
             _aggregateId = aggregateId;
@@ -26,7 +31,7 @@ namespace Escolar.Aggregates
 
             // Spooler will "spool" our events based on initial state of spooler 
             // (that in our case is just newly created state)
-            var spooler = new StateSpooler(initialStateEnvelope);
+            var spooler = new StateSpooler<TAggregateId>(initialStateEnvelope);
 
             // Reading transitions and "spooling" of events to receive final state
             using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))

@@ -1,8 +1,8 @@
 namespace Escolar.Messages
 {
-    public interface ICommandEnvelope : IMessageEnvelope
+    public interface ICommandEnvelope<TId> : IMessageEnvelope
     {
         ICommand Command { get; }
-        new ICommandMetadata Metadata { get; }
+        new ICommandMetadata<TId> Metadata { get; }
     }
 }

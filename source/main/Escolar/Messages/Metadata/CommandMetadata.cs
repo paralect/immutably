@@ -2,12 +2,12 @@
 
 namespace Escolar.Messages
 {
-    public class CommandMetadata : MessageMetadata, ICommandMetadata
+    public class CommandMetadata<TId> : MessageMetadata, ICommandMetadata<TId>
     {
         /// <summary>
         /// Id of Aggregate Root, Service or Process that command addressed to
         /// </summary>
-        public Guid ReceiverId { get; set; }
+        public TId ReceiverId { get; set; }
 
         /// <summary>
         /// Expected version of receiver (Aggregate Root, Service, Saga or Process). 

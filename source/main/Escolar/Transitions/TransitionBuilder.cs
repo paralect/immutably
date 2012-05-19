@@ -4,17 +4,17 @@ using Escolar.Messages;
 
 namespace Escolar.Transitions
 {
-    public class TransitionBuilder : ITransitionBuilder
+    public class TransitionBuilder<TStreamId> : ITransitionBuilder<TStreamId>
     {
         /// <summary>
         /// Event envelops, in order (by transition sequence)
         /// </summary>
-        private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
+        private readonly List<IEventEnvelope<TStreamId>> _eventEnvelopes = new List<IEventEnvelope<TStreamId>>();
 
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        private readonly Guid _streamId;
+        private readonly TStreamId _streamId;
 
         /// <summary>
         /// Serial number of this transition inside stream
@@ -35,7 +35,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Creates transition builder
         /// </summary>
-        public TransitionBuilder(Guid streamId, Int32 streamSequence, DateTime timestamp)
+        public TransitionBuilder(TStreamId streamId, Int32 streamSequence, DateTime timestamp)
         {
             _streamId = streamId;
             _streamSequence = streamSequence;
@@ -47,16 +47,16 @@ namespace Escolar.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamSequence and next available TransitionSequence)
         /// </summary>
-        public ITransitionBuilder AddEvent(IEvent evnt)
+        public ITransitionBuilder<TStreamId> AddEvent(IEvent evnt)
         {
-            var metadata = new EventMetadata()
+            var metadata = new EventMetadata<TStreamId>()
             {
                 SenderId = _streamId,
                 StreamSequence = _streamSequence,
                 TransitionSequence = _transitionSequence
             };
 
-            _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
+            _eventEnvelopes.Add(new EventEnvelope<TStreamId>(evnt, metadata));
             _transitionSequence++;
             return this;
         }
@@ -65,10 +65,10 @@ namespace Escolar.Transitions
         /// Adds event and corresponding event metadata to this transition
         /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
         /// </summary>
-        public ITransitionBuilder AddEvent(IEvent evnt, IEventMetadata metadata)
+        public ITransitionBuilder<TStreamId> AddEvent(IEvent evnt, IEventMetadata<TStreamId> metadata)
         {
             ValidateEventMetadata(metadata);
-            _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
+            _eventEnvelopes.Add(new EventEnvelope<TStreamId>(evnt, metadata));
             _transitionSequence = metadata.TransitionSequence + 1;
             return this;
         }
@@ -77,7 +77,7 @@ namespace Escolar.Transitions
         /// Adds event envelope to this transition
         /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
         /// </summary>
-        public ITransitionBuilder AddEvent(IEventEnvelope envelope)
+        public ITransitionBuilder<TStreamId> AddEvent(IEventEnvelope<TStreamId> envelope)
         {
             ValidateEventMetadata(envelope.Metadata);
             _eventEnvelopes.Add(envelope);
@@ -88,18 +88,18 @@ namespace Escolar.Transitions
         /// <summary>
         /// Build Transition
         /// </summary>
-        public ITransition Build()
+        public ITransition<TStreamId> Build()
         {
-            var transition = new Transition(_streamId, _streamSequence, _timestamp, _eventEnvelopes, true);
+            var transition = new Transition<TStreamId>(_streamId, _streamSequence, _timestamp, _eventEnvelopes, true);
             return transition;
         }
 
         /// <summary>
         /// Performs validation of event metadata
         /// </summary>
-        private void ValidateEventMetadata(IEventMetadata metadata)
+        private void ValidateEventMetadata(IEventMetadata<TStreamId> metadata)
         {
-            if (metadata.SenderId != _streamId)
+            if (!EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, _streamId))
                 throw new Exception("Invalid stream ID");
 
             if (metadata.StreamSequence != _streamSequence)

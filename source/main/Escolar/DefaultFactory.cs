@@ -12,13 +12,12 @@ namespace Escolar
         Object CreateAggregate(Type type);
         Object CreateState(Type type);
         
-        IStateEnvelope CreateStateEnvelope(IState state, IStateMetadata metadata);
+/*        IStateEnvelope CreateStateEnvelope(IState state, IStateMetadata metadata);
         IStateMetadata CreateStateMetadata(Guid entityId, int version);
         IStateSpooler CreateStateSpooler(IStateEnvelope initialStateEnvelope);
-        IStateHelper CreateStateHelper();
         //IAggregateSession CreateAggregateSession(ITransitionStore transitionStore);
         IAggregateStore CreateAggregateStore(ITransitionStore transitionStore);
         ITransitionStore CreateTransitionStore();
-        
+  */      
     }
 }

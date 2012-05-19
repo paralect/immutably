@@ -7,22 +7,22 @@ namespace Escolar.Transitions
     /// <summary>
     /// Writes transitions to stream
     /// </summary>
-    public class DefaultTransitionStreamWriter : ITransitionStreamWriter
+    public class DefaultTransitionStreamWriter<TStreamId> : ITransitionStreamWriter<TStreamId>
     {
         /// <summary>
         /// Transition repository
         /// </summary>
-        private readonly ITransitionRepository _repository;
+        private readonly ITransitionRepository<TStreamId> _repository;
 
         /// <summary>
         /// Stream Id
         /// </summary>
-        private readonly Guid _streamId;
+        private readonly TStreamId _streamId;
 
         /// <summary>
         /// Creates DefaultTransitionStreamWriter
         /// </summary>
-        public DefaultTransitionStreamWriter(ITransitionRepository repository, Guid streamId)
+        public DefaultTransitionStreamWriter(ITransitionRepository<TStreamId> repository, TStreamId streamId)
         {
             _repository = repository;
             _streamId = streamId;
@@ -31,7 +31,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Writes transition to the end of stream
         /// </summary>
-        public void Write(ITransition transition)
+        public void Write(ITransition<TStreamId> transition)
         {
             _repository.Append(transition);
         }
@@ -39,9 +39,9 @@ namespace Escolar.Transitions
         /// <summary>
         /// Writes transition to the end of stream with specified <param name="streamSequence" />
         /// </summary>
-        public void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder)
+        public void Write(Int32 streamSequence, Action<ITransitionBuilder<TStreamId>> transitionBuilder)
         {
-            var transition = new TransitionBuilder(_streamId, streamSequence, DateTime.UtcNow);
+            var transition = new TransitionBuilder<TStreamId>(_streamId, streamSequence, DateTime.UtcNow);
             transitionBuilder(transition);
             _repository.Append(transition.Build());
         }

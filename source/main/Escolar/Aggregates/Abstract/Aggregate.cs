@@ -8,7 +8,7 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class Aggregate<TState> : IAggregate
+    public class Aggregate<TId, TState> : IAggregate<TId>
         where TState : IState
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace Escolar.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        IState IAggregate.State 
+        IState IAggregate<TId>.State 
         {
             get { return State; }
             set { State = (TState) value; }
@@ -57,7 +57,7 @@ namespace Escolar.Aggregates
             set { _initialVersion = value; }
         }
 
-        public Guid Id { get; set; }
+        public TId Id { get; set; }
 
         public IDataFactory DataFactory
         {
@@ -110,7 +110,7 @@ namespace Escolar.Aggregates
             return _dataFactory.Create<TData>();
         }
 
-        public void Initialize(IAggregateContext factory)
+        public void Initialize(IAggregateContext<TId> factory)
         {
             throw new NotImplementedException();
         }

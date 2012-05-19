@@ -7,30 +7,30 @@ using Paralect.Machine.Processes;
 
 namespace Escolar.Aggregates
 {
-    public class AggregateStore : IAggregateStore
+    public class AggregateStore<TAggregateId> : IAggregateStore<TAggregateId>
     {
         private readonly IEscolarFactory _factory;
-        private readonly ITransitionStore _transitionStore;
+        private readonly ITransitionStore<TAggregateId> _transitionStore;
 
-        public ITransitionStore TransitionStore
+        public ITransitionStore<TAggregateId> TransitionStore
         {
             get { return _transitionStore; }
         }
 
-        public AggregateStore(IEscolarFactory factory, ITransitionStore transitionStore)
+        public AggregateStore(IEscolarFactory factory, ITransitionStore<TAggregateId> transitionStore)
         {
             _factory = factory;
             _transitionStore = transitionStore;
         }
 
-        public IAggregateSession<TAggregate> OpenSession<TAggregate>(Guid aggregateId)
-            where TAggregate : IAggregate
+        public IAggregateSession<TAggregateId, TAggregate> OpenSession<TAggregate>(TAggregateId aggregateId)
+            where TAggregate : IAggregate<TAggregateId>
         {
-            return new AggregateSession<TAggregate>(this, aggregateId);
+            return new AggregateSession<TAggregate, TAggregateId>(this, aggregateId);
         }
 
-        public IAggregateSession<TAggregate> OpenStatelessSession<TAggregate>(Guid aggregateId) 
-            where TAggregate : IAggregate
+        public IAggregateSession<TAggregateId, TAggregate> OpenStatelessSession<TAggregate>(TAggregateId aggregateId) 
+            where TAggregate : IAggregate<TAggregateId>
         {
             throw new NotImplementedException();
         }
@@ -39,30 +39,30 @@ namespace Escolar.Aggregates
         {
             if (aggregateType.BaseType == null 
                 || aggregateType.BaseType.IsGenericType == false
-                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<>))
+                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<,>))
                 throw new Exception(String.Format("We cannot find state type for [{0}] aggregate", aggregateType.FullName));
 
             var genericArgs = aggregateType.BaseType.GetGenericArguments();
-            var stateType = genericArgs[0];
+            var stateType = genericArgs[1];
             return stateType;
         }
 
-        public IStateEnvelope CreateStateEnvelope(Type aggregateType, Guid aggregateId)
+        public IStateEnvelope<TAggregateId> CreateStateEnvelope(Type aggregateType, TAggregateId aggregateId)
         {
             var stateType = GetAggregateStateType(aggregateType);
 
             var state = (IState) Activator.CreateInstance(stateType);
-            var stateMetadata = new StateMetadata(aggregateId, 0);
-            var stateEnvelope = new StateEnvelope(state, stateMetadata);
+            var stateMetadata = new StateMetadata<TAggregateId>(aggregateId, 0);
+            var stateEnvelope = new StateEnvelope<TAggregateId>(state, stateMetadata);
 
             return stateEnvelope;
         }
 
-        public IAggregate CreateAggregate(Type aggregateType, IStateEnvelope state)
+        public IAggregate<TAggregateId> CreateAggregate(Type aggregateType, IStateEnvelope<TAggregateId> state)
         {
-            var context = new AggregateContext(_factory, state);
+            var context = new AggregateContext<TAggregateId>(_factory, state);
 
-            var aggregate = (IAggregate) Activator.CreateInstance(aggregateType);
+            var aggregate = (IAggregate<TAggregateId>) Activator.CreateInstance(aggregateType);
             aggregate.Initialize(context);
 
             return aggregate;

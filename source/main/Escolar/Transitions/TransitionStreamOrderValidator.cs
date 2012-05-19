@@ -35,7 +35,7 @@ namespace Escolar.Transitions
 
                 var transitionSequence = 0;
 
-                foreach (var eventEnvelope in transition.EventEnvelopes)
+                foreach (var eventEnvelope in transition.EventsWithMetadata)
                 {
                     var metadata = eventEnvelope.Metadata;
 

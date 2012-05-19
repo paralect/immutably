@@ -38,10 +38,10 @@ namespace Escolar.Tests
 
             // Checking
             Assert.That(transitions.Count, Is.EqualTo(1));
-            Assert.That(transitions[0].EventEnvelopes.Count, Is.EqualTo(1));
+            Assert.That(transitions[0].EventsWithMetadata.Count, Is.EqualTo(1));
             Assert.That(transitions[0].Events.Count, Is.EqualTo(1));
 
-            var stored = (SimpleEvent)transitions[0].EventEnvelopes[0].Event;
+            var stored = (SimpleEvent)transitions[0].EventsWithMetadata[0].Event;
             Assert.That(stored.Year, Is.EqualTo(evnt.Year));
 
             var stored2 = (SimpleEvent)transitions[0].Events[0];
@@ -90,7 +90,7 @@ namespace Escolar.Tests
             {
                 var result = session.LoadTransitions();
 
-                Assert.That(((SimpleEvent)result[0].EventEnvelopes[0].Event).Year, Is.EqualTo(54545));
+                Assert.That(((SimpleEvent)result[0].EventsWithMetadata[0].Event).Year, Is.EqualTo(54545));
             }
  * */
 

@@ -24,36 +24,49 @@ namespace Escolar.Aggregates
         }
 
         public TAggregate LoadAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
         {
             // Here we can load state from snapshot store, but we are starting from initial state.
-            var initialStateEnvelope = _store.CreateStateEnvelope(typeof(TAggregate), _aggregateId);
+            var initialState = _store.CreateStateForAggregate(typeof(TAggregate));
 
-            // Spooler will "spool" our events based on initial state of spooler 
-            // (that in our case is just newly created state)
-            var spooler = new StateSpooler<TAggregateId>(initialStateEnvelope);
+            TAggregate aggregate = _store.CreateAggregate<TAggregate>();
 
             // Reading transitions and "spooling" of events to receive final state
+            ITransition<TAggregateId> lastTransition = null;
             using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
             {
-                spooler.Spool(reader.Read().SelectMany(t => t.EventEnvelopes));
+                foreach (var transition in reader.Read())
+                {
+                    aggregate.Reply(transition.Events);
+                    lastTransition = transition;
+                }
             }
 
-            // Create aggregate, initialized with final state that we just "spooled"
-            return (TAggregate) _store.CreateAggregate(typeof(TAggregate), spooler.StateEnvelope);
+            if (lastTransition == null)
+                throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
+
+            aggregate.Id = lastTransition.StreamId;
+            aggregate.InitialVersion = lastTransition.StreamSequence;
+            aggregate.State = initialState;
+
+
+            return aggregate;
         }
 
         public TAggregate LoadOrCreateAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
         {
             return (TAggregate)(Object)null;
         }
 
         public TAggregate CreateAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
         {
             // Here we can load state from snapshot store, but we are starting from initial state.
-            var initialStateEnvelope = _store.CreateStateEnvelope(typeof(TAggregate), _aggregateId);
+            var initialStateEnvelope = _store.CreateStateForAggregate(typeof(TAggregate));
 
             // Create aggregate, initialized with final state that we just "spooled"
-            return (TAggregate)_store.CreateAggregate(typeof(TAggregate), initialStateEnvelope);
+            return _store.CreateAggregate<TAggregate>();
         }
 
         public void SaveChanges()

@@ -14,7 +14,7 @@ namespace Escolar.Aggregates
         IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId);
         
         Type GetAggregateStateType(Type aggregateType);
-        IStateEnvelope<TAggregateId> CreateStateEnvelope<TAggregateId>(Type aggregateType, TAggregateId aggregateId);
-        IAggregate<TAggregateId> CreateAggregate<TAggregateId>(Type aggregateType, IStateEnvelope<TAggregateId> state);
+        IState CreateStateForAggregate(Type aggregateType);
+        TAggregate CreateAggregate<TAggregate>();
     }
 }

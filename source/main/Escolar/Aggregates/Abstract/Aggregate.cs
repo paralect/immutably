@@ -126,10 +126,5 @@ namespace Escolar.Aggregates
 
             return _dataFactory.Create<TData>();
         }
-
-        public void Initialize(IAggregateContext<TId> factory)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

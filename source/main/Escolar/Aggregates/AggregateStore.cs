@@ -45,25 +45,18 @@ namespace Escolar.Aggregates
             return stateType;
         }
 
-        public IStateEnvelope<TAggregateId> CreateStateEnvelope<TAggregateId>(Type aggregateType, TAggregateId aggregateId)
+        public IState CreateStateForAggregate(Type aggregateType)
         {
             var stateType = GetAggregateStateType(aggregateType);
-
             var state = (IState) Activator.CreateInstance(stateType);
-            var stateMetadata = new StateMetadata<TAggregateId>(aggregateId, 0);
-            var stateEnvelope = new StateEnvelope<TAggregateId>(state, stateMetadata);
-
-            return stateEnvelope;
+            return state;
         }
 
-        public IAggregate<TAggregateId> CreateAggregate<TAggregateId>(Type aggregateType, IStateEnvelope<TAggregateId> state)
+        public TAggregate CreateAggregate<TAggregate>()
         {
-            var context = new AggregateContext<TAggregateId>(_factory, state);
-
-            var aggregate = (IAggregate<TAggregateId>) Activator.CreateInstance(aggregateType);
-            aggregate.Initialize(context);
-
-            return aggregate;
+            return Activator.CreateInstance<TAggregate>();
         }
+
+
     }
 }

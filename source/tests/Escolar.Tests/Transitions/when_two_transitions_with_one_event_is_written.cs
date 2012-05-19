@@ -17,14 +17,14 @@ namespace Escolar.Tests.Specs
 
         It should_has_one_event_in_each_transition = () =>
         {
-            transitions[0].EventEnvelopes.Count.ShouldEqual(1);
-            transitions[1].EventEnvelopes.Count.ShouldEqual(1);
+            transitions[0].EventsWithMetadata.Count.ShouldEqual(1);
+            transitions[1].EventsWithMetadata.Count.ShouldEqual(1);
         };
 
         It should_contain_the_same_event_in_every_transition_using_EventEnvelope_property = () =>
         {
-            transitions[0].EventEnvelopes[0].Event.ShouldEqual(evnt);
-            transitions[1].EventEnvelopes[0].Event.ShouldEqual(evnt);
+            transitions[0].EventsWithMetadata[0].Event.ShouldEqual(evnt);
+            transitions[1].EventsWithMetadata[0].Event.ShouldEqual(evnt);
         };
 
         It should_contain_the_same_event_in_this_transition_using_Events_property = () =>

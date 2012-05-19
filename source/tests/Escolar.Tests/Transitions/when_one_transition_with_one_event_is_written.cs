@@ -15,7 +15,7 @@ namespace Escolar.Tests.Specs
             transitions.Count.ShouldEqual(1);
 
         It should_contain_the_same_event_in_this_transition_using_EventEnvelope_property = () =>
-            transitions[0].EventEnvelopes[0].Event.ShouldEqual(evnt);
+            transitions[0].EventsWithMetadata[0].Event.ShouldEqual(evnt);
 
         It should_contain_the_same_event_in_this_transition_using_Events_property = () =>
             transitions[0].Events[0].ShouldEqual(evnt);

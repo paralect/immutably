@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Escolar.Data;
 using Escolar.Messages;
 using Paralect.Machine.Processes;
@@ -13,9 +14,8 @@ namespace Escolar.Aggregates
         Int32 InitialVersion { get; set; }
         IDataFactory DataFactory { get; set; }
 
-
-        void Initialize(IAggregateContext<TId> factory);
-
         void Apply(IEvent evnt);
+        void Reply(IEvent evnt);
+        void Reply(IEnumerable<IEvent> events);
     }
 }

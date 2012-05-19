@@ -23,7 +23,7 @@ namespace Escolar.Tests.Specs
             transitions.Count.ShouldEqual(1);
 
         It should_has_one_event = () =>
-            transitions[0].EventEnvelopes.Count.ShouldEqual(1);
+            transitions[0].EventsWithMetadata.Count.ShouldEqual(1);
 
         It should_have_correct_stream_id = () =>
             transitions[0].StreamId.ShouldEqual(evnt.Id);

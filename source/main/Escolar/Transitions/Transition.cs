@@ -62,7 +62,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Readonly collection of Event envelopes, in order (by transition sequence)
         /// </summary>
-        public IList<IEventEnvelope<TStreamId>> EventEnvelopes
+        public IList<IEventEnvelope<TStreamId>> EventsWithMetadata
         {
             get { return _eventEnvelopes.AsReadOnly(); }
         }

@@ -10,14 +10,14 @@ namespace Escolar.Aggregates
     public class AggregateStore<TAggregateId> : IAggregateStore<TAggregateId>
     {
         private readonly IEscolarFactory _factory;
-        private readonly ITransitionStore<TAggregateId> _transitionStore;
+        private readonly ITransitionStore _transitionStore;
 
-        public ITransitionStore<TAggregateId> TransitionStore
+        public ITransitionStore TransitionStore
         {
             get { return _transitionStore; }
         }
 
-        public AggregateStore(IEscolarFactory factory, ITransitionStore<TAggregateId> transitionStore)
+        public AggregateStore(IEscolarFactory factory, ITransitionStore transitionStore)
         {
             _factory = factory;
             _transitionStore = transitionStore;

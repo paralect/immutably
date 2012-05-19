@@ -10,7 +10,7 @@ namespace Escolar.Tests.Specs
     public class InMemoryTransitionStoreContext
     {
         public static SimpleEvent evnt;
-        public static InMemoryTransitionStore<Guid> store;
+        public static InMemoryTransitionStore store;
         public static List<ITransition<Guid>> transitions;
 
         Establish context = () =>
@@ -22,7 +22,7 @@ namespace Escolar.Tests.Specs
                 Name = "Lenin"
             };
 
-            store = new InMemoryTransitionStore<Guid>();
+            store = new InMemoryTransitionStore();
         };
 
         public static List<ITransition<Guid>> LoadAllStreamTransitions()

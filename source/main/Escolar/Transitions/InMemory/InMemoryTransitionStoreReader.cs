@@ -11,12 +11,12 @@ namespace Escolar.Transitions
         /// <summary>
         /// Transition store
         /// </summary>
-        private readonly InMemoryTransitionStore<TStreamId> _store;
+        private readonly InMemoryTransitionStore _store;
 
         /// <summary>
         /// Creates InMemoryTransitionStoreReader
         /// </summary>
-        public InMemoryTransitionStoreReader(InMemoryTransitionStore<TStreamId> store)
+        public InMemoryTransitionStoreReader(InMemoryTransitionStore store)
         {
             _store = store;
         }
@@ -26,7 +26,7 @@ namespace Escolar.Transitions
         /// </summary>
         public IEnumerable<ITransition<TStreamId>> Read()
         {
-            return _store.LoadStoreTransitions();
+            return _store.LoadStoreTransitions<TStreamId>();
         }
 
         public void Dispose()

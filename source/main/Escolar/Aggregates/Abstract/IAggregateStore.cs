@@ -8,7 +8,7 @@ namespace Escolar.Aggregates
 {
     public interface IAggregateStore<TAggregateId>
     {
-        ITransitionStore<TAggregateId> TransitionStore { get; }
+        ITransitionStore TransitionStore { get; }
 
         IAggregateSession<TAggregateId, TAggregate> OpenSession<TAggregate>(TAggregateId aggregateId)
             where TAggregate : IAggregate<TAggregateId>;

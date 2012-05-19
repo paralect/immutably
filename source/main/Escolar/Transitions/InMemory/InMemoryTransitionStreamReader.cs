@@ -5,14 +5,14 @@ using System.Linq;
 namespace Escolar.Transitions
 {
     /// <summary>
-    /// Reads stream transitions by portions (default portion size is 1000)
+    /// Reads transitions stream
     /// </summary>
     public class InMemoryTransitionStreamReader<TStreamId> : ITransitionStreamReader<TStreamId>
     {
         /// <summary>
         /// Transitions store
         /// </summary>
-        private readonly InMemoryTransitionStore<TStreamId> _store;
+        private readonly InMemoryTransitionStore _store;
 
         /// <summary>
         /// Stream ID
@@ -22,7 +22,7 @@ namespace Escolar.Transitions
         /// <summary>
         /// Creates DefaultTransitionStreamReader with default portion size - 1000.
         /// </summary>
-        public InMemoryTransitionStreamReader(InMemoryTransitionStore<TStreamId> store, TStreamId streamId)
+        public InMemoryTransitionStreamReader(InMemoryTransitionStore store, TStreamId streamId)
         {
             _store = store;
             _streamId = streamId;
@@ -33,7 +33,7 @@ namespace Escolar.Transitions
         /// </summary>
         public IEnumerable<ITransition<TStreamId>> Read()
         {
-            var transitions = _store.LoadStreamTransitions(_streamId);
+            var transitions = _store.LoadStreamTransitions<TStreamId>(_streamId);
             return new TransitionStreamOrderValidator<TStreamId>(_streamId, transitions).Read();
         }
 

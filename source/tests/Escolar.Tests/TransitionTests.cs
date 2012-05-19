@@ -12,7 +12,7 @@ namespace Escolar.Tests
     {
         public void can_write_and_read_single_transition()
         {
-            var store = new InMemoryTransitionStore<Guid>();
+            var store = new InMemoryTransitionStore();
 
             var evnt = new SimpleEvent()
             {
@@ -52,7 +52,7 @@ namespace Escolar.Tests
         [Test]
         public void simple_test()
         {
-            var store = new InMemoryTransitionStore<Guid>();
+            var store = new InMemoryTransitionStore();
 
             var evnt = new SimpleEvent()
             {

@@ -8,6 +8,9 @@ namespace Escolar.Tests.Aggregates
         It state_should_be_not_null = () =>
             aggregate.State.ShouldNotBeNull();
 
+        It state_should_has_correct_data = () =>
+            aggregate.State.Name.ShouldEqual(name);
+
         It current_version_should_be_one = () =>
             aggregate.CurrentVersion.ShouldEqual(1);
 
@@ -24,5 +27,6 @@ namespace Escolar.Tests.Aggregates
             aggregate.Changes.Count.ShouldEqual(1);
 
         protected static MyAggregate aggregate;
+        protected static string name;
     }
 }

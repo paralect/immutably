@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AggregateSessionTests.cs" />
     <Compile Include="AggregateStore\InMemoryAggregateStore.cs" />
+    <Compile Include="AggregateStore\when_aggregate_saved.cs" />
     <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
     <Compile Include="Aggregates\AggregateContext.cs" />
     <Compile Include="Aggregates\Behaviors\AggregateWithOneEventBehaviors.cs" />

@@ -15,19 +15,20 @@ namespace Escolar.Tests.Aggregates
         public Guid Id { get; set; }
         public String Name { get; set; }
 
-        public void Apply(IEvent events)
+        public void On(MyAggregateCreatedEvent evnt)
         {
-            //throw new NotImplementedException();
+            Id = evnt.Id;
+            Name = evnt.Name;
+        }
+
+        public void On(MyAggregateNameChangedEvent changed)
+        {
+            Name = changed.Name;
         }
     }
 
-    public class MyAggregate : Aggregate<Guid, Aggs.MyState>
+    public class MyAggregate : Aggregate<Guid, MyState>
     {
-        public MyAggregate()
-        {
-            //_context = context;
-        }
-
         public void Create(Guid id, String name, Int32 year)
         {
             if (State.Name == null)

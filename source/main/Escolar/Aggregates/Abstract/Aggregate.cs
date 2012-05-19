@@ -97,9 +97,26 @@ namespace Escolar.Aggregates
             ApplyInternal(evnt);
         }
 
+        public void Reply(IEvent evnt)
+        {
+            ExecuteStateEventHandler(evnt);
+        }
+
+        public void Reply(IEnumerable<IEvent> events)
+        {
+            foreach (var evnt in events)
+                ExecuteStateEventHandler(evnt);
+        }
+
         private void ApplyInternal(IEvent evnt)
         {
             _changes.Add(evnt);
+            ExecuteStateEventHandler(evnt);
+        }
+
+        private void ExecuteStateEventHandler(IEvent evnt)
+        {
+            ((dynamic) State).On((dynamic) evnt);
         }
 
         private TData Create<TData>()

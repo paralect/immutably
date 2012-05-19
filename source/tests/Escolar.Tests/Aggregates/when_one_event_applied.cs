@@ -6,12 +6,18 @@ namespace Escolar.Tests.Aggregates
     {
         Because of = () =>
         {
+            name = "Some name";
             aggregate = new MyAggregate();
-            aggregate.Apply(new MyAggregateCreatedEvent());
+            aggregate.Apply(new MyAggregateCreatedEvent
+            {
+                Name = name
+            });
         };
+        
 
         Behaves_like<AggregateWithOneEventBehaviors> behavior;
 
         protected static MyAggregate aggregate;
+        protected static string name;
     }
 }

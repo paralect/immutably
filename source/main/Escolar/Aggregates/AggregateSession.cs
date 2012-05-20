@@ -46,7 +46,7 @@ namespace Escolar.Aggregates
                 throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
 
             aggregate.Id = lastTransition.StreamId;
-            aggregate.InitialVersion = lastTransition.StreamSequence;
+            aggregate.CurrentVersion = lastTransition.StreamSequence;
             aggregate.State = initialState;
 
 

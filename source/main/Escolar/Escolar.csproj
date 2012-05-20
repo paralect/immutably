@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\AggregateContext.cs" />
     <Compile Include="Aggregates\Abstract\IAggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateContext.cs" />
     <Compile Include="Aggregates\AggregateSession.cs" />
@@ -48,6 +47,7 @@
     <Compile Include="Aggregates\Abstract\Aggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
+    <Compile Include="Aggregates\Exceptions\AggregateContextModificationDenied.cs" />
     <Compile Include="Data\Abstract\IDataFactory.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\DataContextBuilder.cs" />

@@ -10,8 +10,8 @@ namespace Escolar.Aggregates
     {
         IState State { get; set; }
         TId Id { get; set; }
-        Int32 CurrentVersion { get; }
-        Int32 InitialVersion { get; set; }
+        Int32 CurrentVersion { get; set; }
+        Int32 InitialVersion { get; }
         IDataFactory DataFactory { get; set; }
 
         void Apply(IEvent evnt);

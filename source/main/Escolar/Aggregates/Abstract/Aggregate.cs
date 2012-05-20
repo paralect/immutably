@@ -16,8 +16,19 @@ namespace Escolar.Aggregates
         /// </summary>
         private TState _state;
 
+        /// <summary>
+        /// Aggregate id
+        /// </summary>
+        private TId _id;
+
+        /// <summary>
+        /// DataFactory, used to create data types, such as state and messages (events, commands)
+        /// </summary>
         private IDataFactory _dataFactory;
 
+        /// <summary>
+        /// Initial version 
+        /// </summary>
         private Int32 _initialVersion;
         
         private readonly List<IEvent> _changes = new List<IEvent>();
@@ -38,31 +49,62 @@ namespace Escolar.Aggregates
         {
             get
             {
-                if (_state == null)
+                if (EqualityComparer<TState>.Default.Equals(_state, default(TState)))
                     _state = Create<TState>();
 
                 return _state;                
             }
-            set { _state = value; }
+            set
+            {
+                if (Changed)
+                    throw new AggregateContextModificationDeniedException("Modification of State forbidden, because of already applied changes to Aggregate");
+
+                _state = value;
+            }
         }
 
         public int CurrentVersion
         {
-            get { return Changed ? _initialVersion + 1 : _initialVersion;  }
+            get
+            {
+                return Changed ? _initialVersion + 1 : _initialVersion;
+            }
+            set
+            {
+                if (Changed)
+                    throw new AggregateContextModificationDeniedException("Modification of State forbidden, because of already applied changes to Aggregate");
+
+                _initialVersion = value;
+            }
         }
 
         public int InitialVersion
         {
             get { return _initialVersion; } 
-            set { _initialVersion = value; }
         }
 
-        public TId Id { get; set; }
+        public TId Id
+        {
+            get { return _id; }
+            set
+            {
+                if (Changed)
+                    throw new AggregateContextModificationDeniedException("Modification of Id forbidden, because of already applied changes to Aggregate");
+
+                _id = value;
+            }
+        }
 
         public IDataFactory DataFactory
         {
             get { return _dataFactory; }
-            set { _dataFactory = value; }
+            set
+            {
+                if (Changed)
+                    throw new AggregateContextModificationDeniedException("Modification of DataFactory forbidden, because of already applied changes to Aggregate");
+
+                _dataFactory = value;
+            }
         }
 
         public Boolean Changed
@@ -119,7 +161,7 @@ namespace Escolar.Aggregates
             ((dynamic) State).On((dynamic) evnt);
         }
 
-        private TData Create<TData>()
+        protected TData Create<TData>()
         {
             if (_dataFactory == null)
                 return Activator.CreateInstance<TData>();

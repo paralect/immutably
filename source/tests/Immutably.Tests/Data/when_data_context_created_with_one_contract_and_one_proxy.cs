@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Reflection;
-using Escolar.Data;
+using Immutably.Data;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Data
+namespace Immutably.Tests.Data
 {
     public class when_data_context_created_with_one_contract_and_one_proxy : DataMachineContext
     {

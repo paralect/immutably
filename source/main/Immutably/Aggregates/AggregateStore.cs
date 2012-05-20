@@ -1,11 +1,8 @@
 using System;
-using Escolar.Aggregates;
-using Escolar.Messages;
-using Escolar.States;
-using Escolar.Transitions;
-using Paralect.Machine.Processes;
+using Immutably.Messages;
+using Immutably.Transitions;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public class AggregateStore : IAggregateStore
     {

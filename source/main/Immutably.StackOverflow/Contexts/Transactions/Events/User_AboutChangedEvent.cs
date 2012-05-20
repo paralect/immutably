@@ -1,7 +1,7 @@
 using System;
-using Escolar.Messages;
+using Immutably.Messages;
 
-namespace Escolar.StackOverflow.Events
+namespace Immutably.StackOverflow.Contexts.Transactions.Events
 {
     public class User_AboutChangedEvent : IEvent
     {

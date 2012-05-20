@@ -1,4 +1,4 @@
-namespace Escolar.Messages
+namespace Immutably.Messages
 {
     public class EventEnvelope<TId> : MessageEnvelope, IEventEnvelope<TId>
     {

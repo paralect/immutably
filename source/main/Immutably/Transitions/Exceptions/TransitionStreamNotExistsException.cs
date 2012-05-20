@@ -1,6 +1,6 @@
 using System;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     public class TransitionStreamNotExistsException : Exception
     {

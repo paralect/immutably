@@ -1,6 +1,4 @@
-using System;
-
-namespace Escolar.Messages
+namespace Immutably.Messages
 {
     
     public class EventMetadata<TId> : MessageMetadata, IEventMetadata<TId>

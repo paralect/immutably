@@ -1,8 +1,8 @@
 using System;
-using Escolar.Transitions;
+using Immutably.Transitions;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Aggs
+namespace Immutably.Tests.AggregateStore
 {
     public class when_loading_aggregate_from_not_available_stream : InMemoryAggregateStore
     {

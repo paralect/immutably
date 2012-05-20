@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
-namespace Escolar.Data
+namespace Immutably.Data
 {
     public class DataContext : IDataContext, IDataFactory
     {

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Escolar.Messages;
-using Escolar.Transitions;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     /// <summary>
     /// In memory transition store.

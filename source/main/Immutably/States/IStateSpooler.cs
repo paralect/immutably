@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Escolar.Messages;
-using Paralect.Machine.Processes;
+using Immutably.Messages;
 
-namespace Escolar.States
+namespace Immutably.States
 {
     public interface IStateSpooler<TStreamId>
     {

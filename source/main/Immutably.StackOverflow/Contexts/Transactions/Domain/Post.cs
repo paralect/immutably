@@ -1,7 +1,7 @@
 ﻿using System;
-using Escolar.StackOverflow.Enums;
+using Immutably.StackOverflow.Enums;
 
-namespace Escolar.StackOverflow.Domain
+namespace Immutably.StackOverflow.Contexts.Transactions.Domain
 {
     public class Post
     {

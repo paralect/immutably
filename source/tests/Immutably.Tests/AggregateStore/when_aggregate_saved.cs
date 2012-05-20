@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Aggs
+namespace Immutably.Tests.AggregateStore
 {
     public class when_aggregate_saved : InMemoryAggregateStore
     {

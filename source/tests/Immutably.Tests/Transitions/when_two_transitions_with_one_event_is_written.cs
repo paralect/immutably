@@ -1,6 +1,6 @@
 using Machine.Specifications;
 
-namespace Escolar.Tests.Specs
+namespace Immutably.Tests.Transitions
 {
     [Subject("Transition Store")]
     public class when_two_transitions_with_one_event_is_written : InMemoryTransitionStoreContext

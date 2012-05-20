@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     /// <summary>
     /// In memory transition repository.

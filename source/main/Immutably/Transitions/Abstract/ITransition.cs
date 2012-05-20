@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Escolar.Messages;
+using Immutably.Messages;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     /// <summary>
     /// Transition - is a way to group a number of modifications (events) 

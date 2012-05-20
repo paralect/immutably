@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Escolar.Data;
-using Escolar.Messages;
-using Paralect.Machine.Processes;
+using Immutably.Data;
+using Immutably.Messages;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public interface IAggregate<TId>
     {

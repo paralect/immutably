@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Escolar.Messages
+﻿namespace Immutably.Messages
 {
     /// <summary>
     /// Marker interface

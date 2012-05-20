@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Escolar.Messages;
-using Escolar.Transitions;
+using Immutably.Messages;
+using Immutably.Transitions;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Specs
+namespace Immutably.Tests.Transitions
 {
     public class InMemoryTransitionStoreContext
     {

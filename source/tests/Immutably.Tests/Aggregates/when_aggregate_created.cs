@@ -1,8 +1,6 @@
-﻿using System;
-using Escolar.Tests.Aggs;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 
-namespace Escolar.Tests.Aggregates
+namespace Immutably.Tests.Aggregates
 {
     public class when_aggregate_created : AggregateContext
     {

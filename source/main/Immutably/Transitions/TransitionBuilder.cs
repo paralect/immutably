@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Escolar.Messages;
+using Immutably.Messages;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     public class TransitionBuilder<TStreamId> : ITransitionBuilder<TStreamId>
     {

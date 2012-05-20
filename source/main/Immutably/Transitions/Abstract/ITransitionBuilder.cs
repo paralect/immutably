@@ -1,7 +1,6 @@
-using System;
-using Escolar.Messages;
+using Immutably.Messages;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     public interface ITransitionBuilder<TStreamId>
     {

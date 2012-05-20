@@ -1,7 +1,4 @@
-﻿using System;
-using Paralect.Machine.Processes;
-
-namespace Escolar.Messages
+﻿namespace Immutably.Messages
 {
     public class StateMetadata<TId> : IStateMetadata<TId>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Escolar.Messages;
+using Immutably.Messages;
 
-namespace Escolar.StackOverflow.Commands
+namespace Immutably.StackOverflow.Contexts.Transactions.Commands
 {
     public class Site_CreateCommand : ICommand 
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using Escolar.Data;
+using Immutably.Data;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Data
+namespace Immutably.Tests.Data
 {
     public class DataMachineContext
     {

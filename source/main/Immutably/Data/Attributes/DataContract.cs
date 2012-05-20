@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Escolar.Data
+namespace Immutably.Data
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class DataContract : Attribute

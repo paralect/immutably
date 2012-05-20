@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Escolar.Messages;
-using Escolar.Transitions;
+using Immutably.Messages;
+using Immutably.Transitions;
 using NUnit.Framework;
 
-namespace Escolar.Tests
+namespace Immutably.Tests
 {
     [TestFixture]
     public class TransitionTests

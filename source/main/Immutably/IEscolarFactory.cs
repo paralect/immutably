@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Escolar
+namespace Immutably
 {
     public interface IEscolarFactory
     {

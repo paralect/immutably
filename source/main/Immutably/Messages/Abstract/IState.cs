@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Escolar.Messages;
-
-namespace Paralect.Machine.Processes
+namespace Immutably.Messages
 {
     /// <summary>
     /// Serializable object, that represent state of process

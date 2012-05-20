@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     public interface ITransitionRepository<TStreamId>
     {

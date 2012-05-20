@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Escolar.Aggregates;
-using Escolar.Messages;
-using Escolar.Transitions;
+using Immutably.Aggregates;
+using Immutably.Messages;
+using Immutably.Transitions;
 using Machine.Specifications;
-using Paralect.Machine.Processes;
 
-namespace Escolar.Tests.Aggs
+namespace Immutably.Tests.AggregateStore
 {
     public class InMemoryAggregateStore
     {
         public static SimpleEvent evnt;
         public static InMemoryTransitionStore store;
-        public static AggregateStore AggregateStore;
+        public static Immutably.Aggregates.AggregateStore AggregateStore;
         public static List<ITransition<Guid>> transitions;
 
         Establish context = () =>
@@ -27,7 +25,7 @@ namespace Escolar.Tests.Aggs
 
             store = new InMemoryTransitionStore();
 
-            AggregateStore = new AggregateStore(new EscolarFactory(), store);
+            AggregateStore = new Immutably.Aggregates.AggregateStore(new EscolarFactory(), store);
         };
     }
 

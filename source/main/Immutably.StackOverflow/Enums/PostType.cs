@@ -1,4 +1,4 @@
-﻿namespace Escolar.StackOverflow.Enums
+﻿namespace Immutably.StackOverflow.Enums
 {
     public enum PostType
     {

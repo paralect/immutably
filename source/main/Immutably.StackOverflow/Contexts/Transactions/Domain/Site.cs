@@ -1,11 +1,10 @@
 ﻿using System;
-using Escolar.Aggregates;
-using Escolar.Messages;
-using Escolar.StackOverflow.Commands;
-using Escolar.StackOverflow.Events;
-using Paralect.Machine.Processes;
+using Immutably.Aggregates;
+using Immutably.Messages;
+using Immutably.StackOverflow.Contexts.Transactions.Commands;
+using Immutably.StackOverflow.Contexts.Transactions.Events;
 
-namespace Escolar.StackOverflow.Domain
+namespace Immutably.StackOverflow.Contexts.Transactions.Domain
 {
     public class Site : Aggregate<Guid, Site.SiteState>
     {

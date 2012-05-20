@@ -1,6 +1,6 @@
 using Machine.Specifications;
 
-namespace Escolar.Tests.Aggregates
+namespace Immutably.Tests.Aggregates
 {
     public class when_one_event_applied_via_generic : AggregateContext
     {

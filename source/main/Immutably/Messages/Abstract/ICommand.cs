@@ -1,6 +1,4 @@
-using System;
-
-namespace Escolar.Messages
+namespace Immutably.Messages
 {
     public interface ICommand : IMessage
     {

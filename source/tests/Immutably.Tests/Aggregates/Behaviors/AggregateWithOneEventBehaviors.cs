@@ -1,6 +1,6 @@
 using Machine.Specifications;
 
-namespace Escolar.Tests.Aggregates
+namespace Immutably.Tests.Aggregates
 {
     [Behaviors]
     public class AggregateWithOneEventBehaviors

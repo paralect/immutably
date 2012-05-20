@@ -1,10 +1,6 @@
 ﻿using System;
-using Escolar.Aggregates;
-using Escolar.States;
-using Escolar.Transitions;
-using Paralect.Machine.Processes;
 
-namespace Escolar
+namespace Immutably
 {
     public interface IFactory
     {

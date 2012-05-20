@@ -1,7 +1,6 @@
 using System;
-using Escolar.Aggregates;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public interface IAggregateSession<TId> : IDisposable
     {

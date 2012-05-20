@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace Escolar.Transitions
+namespace Immutably.Transitions
 {
     /// <summary>
     /// Reads all transitions in store in chronological order

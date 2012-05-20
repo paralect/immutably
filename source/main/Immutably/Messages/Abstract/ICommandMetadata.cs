@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Escolar.Messages
+namespace Immutably.Messages
 {
     public interface ICommandMetadata<TReceiverId> : IMessageMetadata
     {

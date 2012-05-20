@@ -1,6 +1,6 @@
 using System;
 
-namespace Escolar.Data
+namespace Immutably.Data
 {
     public interface IDataContext
     {

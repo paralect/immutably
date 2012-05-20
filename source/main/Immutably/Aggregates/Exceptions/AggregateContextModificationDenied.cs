@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public class AggregateContextModificationDeniedException : Exception
     {

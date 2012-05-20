@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Escolar.StackOverflow.Domain
+namespace Immutably.StackOverflow.Contexts.Transactions.Domain
 {
     public class Comment
     {

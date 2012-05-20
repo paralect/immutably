@@ -1,8 +1,8 @@
 ﻿using System;
-using Escolar.Data;
+using Immutably.Data;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Data
+namespace Immutably.Tests.Data
 {
     public class when_contract_doesnt_have_proxy_and_registered_manually : DataMachineContext
     {

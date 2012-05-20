@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Escolar.Messages;
-using Paralect.Machine.Processes;
 
-namespace Escolar
+namespace Immutably
 {
     public class EscolarFactory : IEscolarFactory
     {

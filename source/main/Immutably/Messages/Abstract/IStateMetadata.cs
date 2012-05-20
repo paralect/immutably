@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Paralect.Machine.Processes
+namespace Immutably.Messages
 {
     public interface IStateMetadata<TId>
     {

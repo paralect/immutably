@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Escolar.Messages
+namespace Immutably.Messages
 {
     public class MessageMetadata : IMessageMetadata
     {

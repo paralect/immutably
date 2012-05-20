@@ -1,4 +1,4 @@
-namespace Paralect.Machine.Processes
+namespace Immutably.Messages
 {
     public interface IStateEnvelope<TId>
     {

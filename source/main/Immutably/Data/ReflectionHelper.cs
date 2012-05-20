@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Escolar.Messages;
 
-namespace Escolar.Data
+namespace Immutably.Data
 {
     public class ReflectionHelper
     {

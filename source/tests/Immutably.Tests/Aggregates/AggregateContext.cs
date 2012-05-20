@@ -1,10 +1,9 @@
 ﻿using System;
-using Escolar.Aggregates;
-using Escolar.Data;
-using Escolar.Messages;
-using Paralect.Machine.Processes;
+using Immutably.Aggregates;
+using Immutably.Data;
+using Immutably.Messages;
 
-namespace Escolar.Tests.Aggregates
+namespace Immutably.Tests.Aggregates
 {
     public class AggregateContext
     {
@@ -18,7 +17,7 @@ namespace Escolar.Tests.Aggregates
             if (State.Name == null)
                 return;
 
-            Apply<Aggs.MyAggregateCreatedEvent>(evnt =>
+            Apply<AggregateStore.MyAggregateCreatedEvent>(evnt =>
             {
                 evnt.Id = id;
                 evnt.Name = name;
@@ -28,7 +27,7 @@ namespace Escolar.Tests.Aggregates
 
         public void ChangeName(Guid id, String newName)
         {
-            Apply<Aggs.MyAggregateNameChangedEvent>(evnt =>
+            Apply<AggregateStore.MyAggregateNameChangedEvent>(evnt =>
             {
                 evnt.Id = id;
                 evnt.Name = newName;

@@ -1,7 +1,6 @@
-using Escolar.Messages;
-using Paralect.Machine.Processes;
+using Immutably.Messages;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public interface IAggregateContext<TAggregateId>
     {

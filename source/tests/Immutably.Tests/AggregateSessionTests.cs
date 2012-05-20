@@ -1,9 +1,6 @@
-﻿using System;
-using Escolar.Aggregates;
-using NUnit.Framework;
-using Paralect.Machine.Processes;
+﻿using NUnit.Framework;
 
-namespace Escolar.Tests
+namespace Immutably.Tests
 {
     [TestFixture]
     public class AggregateSessionTests

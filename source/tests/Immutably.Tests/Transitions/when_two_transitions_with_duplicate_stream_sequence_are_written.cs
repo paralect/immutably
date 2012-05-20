@@ -1,8 +1,8 @@
 using System;
-using Escolar.Transitions;
+using Immutably.Transitions;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Specs
+namespace Immutably.Tests.Transitions
 {
     [Subject("Transition Store")]
     public class when_two_transitions_with_duplicate_stream_sequence_are_written : InMemoryTransitionStoreContext

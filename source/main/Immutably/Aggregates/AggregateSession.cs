@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Linq;
-using Escolar.Messages;
-using Escolar.States;
-using Escolar.Transitions;
-using Paralect.Machine.Processes;
+using Immutably.Transitions;
 
-namespace Escolar.Aggregates
+namespace Immutably.Aggregates
 {
     public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
     {

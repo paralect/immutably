@@ -1,16 +1,16 @@
 using System;
-using Escolar.Data;
+using Immutably.Data;
 using Machine.Specifications;
 
-namespace Escolar.Tests.Data
+namespace Immutably.Tests.Data
 {
     public class when_data_context_created_with_types_from_assembly : DataMachineContext
     {
         Because of = () =>
         {
             context = DataContext.Create(builder => builder
-                .AddAssemblyContracts(typeof(DataMachineContext).Assembly, "Escolar.Tests.Data")
-                .AddAssemblyProxies(typeof(DataMachineContext).Assembly, "Escolar.Tests.Data")
+                .AddAssemblyContracts(typeof(DataMachineContext).Assembly, "Immutably.Tests.Data")
+                .AddAssemblyProxies(typeof(DataMachineContext).Assembly, "Immutably.Tests.Data")
             );
         };
 

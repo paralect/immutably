@@ -7,14 +7,15 @@ namespace Immutably.Aggregates
 {
     public interface IAggregate<TId>
     {
-        IState State { get; set; }
-        TId Id { get; set; }
-        Int32 CurrentVersion { get; set; }
+        TId Id { get; }
+        IState State { get; }
+        Int32 CurrentVersion { get; }
         Int32 InitialVersion { get; }
-        IDataFactory DataFactory { get; set; }
+        IDataFactory DataFactory { get; }
 
         void Apply(IEvent evnt);
         void Reply(IEvent evnt);
         void Reply(IEnumerable<IEvent> events);
+        void EstablishContext(IAggregateContext context);
     }
 }

@@ -11,24 +11,18 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private TState _state;
+        private AggregateContext<TId, TState> _context;
 
-        /// <summary>
-        /// Aggregate id
-        /// </summary>
-        private TId _id;
+        public AggregateContext<TId, TState> Context
+        {
+            get
+            {
+                if (_context == null)
+                    _context = new AggregateContext<TId, TState>();
 
-        /// <summary>
-        /// DataFactory, used to create data types, such as state and messages (events, commands)
-        /// </summary>
-        private IDataFactory _dataFactory;
-
-        /// <summary>
-        /// Initial version 
-        /// </summary>
-        private Int32 _initialVersion;
-        
-        private readonly List<IEvent> _changes = new List<IEvent>();
+                return _context;
+            }
+        }
 
         /// <summary>
         /// Current aggregate state
@@ -36,7 +30,6 @@ namespace Immutably.Aggregates
         IState IAggregate<TId>.State 
         {
             get { return State; }
-            set { State = (TState) value; }
         }
 
         /// <summary>
@@ -44,126 +37,89 @@ namespace Immutably.Aggregates
         /// </summary>
         public TState State
         {
-            get
-            {
-                if (EqualityComparer<TState>.Default.Equals(_state, default(TState)))
-                    _state = Create<TState>();
-
-                return _state;                
-            }
-            set
-            {
-                if (Changed)
-                    throw new AggregateContextModificationDeniedException("Modification of State forbidden, because of already applied changes to Aggregate");
-
-                _state = value;
-            }
+            get { return Context.State; }
         }
 
         public int CurrentVersion
         {
-            get
-            {
-                return Changed ? _initialVersion + 1 : _initialVersion;
-            }
-            set
-            {
-                if (Changed)
-                    throw new AggregateContextModificationDeniedException("Modification of State forbidden, because of already applied changes to Aggregate");
-
-                _initialVersion = value;
-            }
+            get { return Context.CurrentVersion; }
         }
 
         public int InitialVersion
         {
-            get { return _initialVersion; } 
+            get { return Context.AggregateInitialVersion; } 
         }
 
         public TId Id
         {
-            get { return _id; }
-            set
-            {
-                if (Changed)
-                    throw new AggregateContextModificationDeniedException("Modification of Id forbidden, because of already applied changes to Aggregate");
-
-                _id = value;
-            }
+            get { return Context.Id; }
         }
 
         public IDataFactory DataFactory
         {
-            get { return _dataFactory; }
-            set
-            {
-                if (Changed)
-                    throw new AggregateContextModificationDeniedException("Modification of DataFactory forbidden, because of already applied changes to Aggregate");
-
-                _dataFactory = value;
-            }
+            get { return Context.DataFactory; }
         }
 
         public Boolean Changed
         {
-            get 
-            {   
-                return _changes != null 
-                    && _changes.Count > 0; 
-            }
+            get { return Context.Changed; }
         }
 
         public IList<IEvent> Changes
         {
-            get { return _changes.AsReadOnly(); }
-        }
-
-        public Aggregate()
-        {
-
+            get { return Context.Changes; }
         }
 
         public void Apply(IEvent evnt)
         {
-            ApplyInternal(evnt);
+            Context.Apply(evnt);
         }
 
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
             where TEvent : IEvent
         {
-            var evnt = Create<TEvent>();
-            evntBuilder(evnt);
-            ApplyInternal(evnt);
+            Context.Apply(evntBuilder);
         }
 
         public void Reply(IEvent evnt)
         {
-            ExecuteStateEventHandler(evnt);
+            Context.Reply(evnt);
         }
 
         public void Reply(IEnumerable<IEvent> events)
         {
-            foreach (var evnt in events)
-                ExecuteStateEventHandler(evnt);
-        }
-
-        private void ApplyInternal(IEvent evnt)
-        {
-            _changes.Add(evnt);
-            ExecuteStateEventHandler(evnt);
-        }
-
-        private void ExecuteStateEventHandler(IEvent evnt)
-        {
-            ((dynamic) State).On((dynamic) evnt);
+            Context.Reply(events);
         }
 
         protected TData Create<TData>()
         {
-            if (_dataFactory == null)
-                return Activator.CreateInstance<TData>();
+            return Context.Create<TData>();
+        }
 
-            return _dataFactory.Create<TData>();
+        public void EstablishContext(IAggregateContext context)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            _context = (AggregateContext<TId, TState>) context;
+        }
+
+        public void EstablishContext(AggregateContext<TId, TState> context)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            _context = context;
+        }
+
+        public void EstablishContext(Action<AggregateContextBuilder<TId, TState>> contextBuilder)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            var builder = new AggregateContextBuilder<TId, TState>();
+            contextBuilder(builder);
+            _context = builder.Build();
         }
     }
 }

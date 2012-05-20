@@ -1,4 +1,5 @@
 using System;
+using Immutably.Data;
 using Immutably.Messages;
 using Immutably.Transitions;
 
@@ -12,7 +13,8 @@ namespace Immutably.Aggregates
         IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId);
         
         Type GetAggregateStateType(Type aggregateType);
-        IState CreateStateForAggregate(Type aggregateType);
+        IState CreateState(Type stateType);
         TAggregate CreateAggregate<TAggregate>();
+        IAggregateContext CreateAggregateContext(Type idType, Type stateType, Object aggregateId, Int32 version, Object state, IDataFactory dataFactory);
     }
 }

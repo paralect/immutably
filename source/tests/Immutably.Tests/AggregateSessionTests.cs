@@ -27,12 +27,4 @@ namespace Immutably.Tests
             
         }
     }
-
-/*    public class Agg : IAggregate
-    {
-        public void Initialize(IStateEnvelope stateEnvelope)
-        {
-            
-        }
-    }*/
 }

@@ -22,8 +22,10 @@ namespace Immutably.Aggregates
         public TAggregate LoadAggregate<TAggregate>()
             where TAggregate : IAggregate<TAggregateId>
         {
+            var stateType = _store.GetAggregateStateType(typeof (TAggregate));
+
             // Here we can load state from snapshot store, but we are starting from initial state.
-            var initialState = _store.CreateStateForAggregate(typeof(TAggregate));
+            var initialState = _store.CreateState(stateType);
 
             TAggregate aggregate = _store.CreateAggregate<TAggregate>();
 
@@ -41,10 +43,18 @@ namespace Immutably.Aggregates
             if (lastTransition == null)
                 throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
 
-            aggregate.Id = lastTransition.StreamId;
+            var context = _store.CreateAggregateContext(typeof (TAggregateId), stateType,
+                lastTransition.StreamId,
+                lastTransition.StreamSequence,
+                initialState,
+                null);
+
+            aggregate.EstablishContext(context);
+
+/*            aggregate.Context.Id = lastTransition.StreamId;
             aggregate.CurrentVersion = lastTransition.StreamSequence;
             aggregate.State = initialState;
-
+            */
 
             return aggregate;
         }
@@ -59,10 +69,12 @@ namespace Immutably.Aggregates
             where TAggregate : IAggregate<TAggregateId>
         {
             // Here we can load state from snapshot store, but we are starting from initial state.
-            var initialStateEnvelope = _store.CreateStateForAggregate(typeof(TAggregate));
+/*            var initialStateEnvelope = _store.CreateStateForAggregate(typeof(TAggregate));
 
             // Create aggregate, initialized with final state that we just "spooled"
             return _store.CreateAggregate<TAggregate>();
+ */
+            return default(TAggregate);
         }
 
         public void SaveChanges()

@@ -1,4 +1,5 @@
 using System;
+using Immutably.Data;
 using Immutably.Messages;
 using Immutably.Transitions;
 
@@ -42,9 +43,8 @@ namespace Immutably.Aggregates
             return stateType;
         }
 
-        public IState CreateStateForAggregate(Type aggregateType)
+        public IState CreateState(Type stateType)
         {
-            var stateType = GetAggregateStateType(aggregateType);
             var state = (IState) Activator.CreateInstance(stateType);
             return state;
         }
@@ -54,6 +54,12 @@ namespace Immutably.Aggregates
             return Activator.CreateInstance<TAggregate>();
         }
 
+        public IAggregateContext CreateAggregateContext(Type idType, Type stateType, Object aggregateId, Int32 version, Object state, IDataFactory dataFactory)
+        {
+            var type = typeof (AggregateContext<,>);
+            var contextType = type.MakeGenericType(idType, stateType);
 
+            return (IAggregateContext) Activator.CreateInstance(contextType, new[] { aggregateId, version, state, dataFactory });
+        }
     }
 }

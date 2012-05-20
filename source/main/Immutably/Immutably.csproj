@@ -42,12 +42,14 @@
   <ItemGroup>
     <Compile Include="Aggregates\Abstract\IAggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateContext.cs" />
+    <Compile Include="Aggregates\AggregateContext.cs" />
+    <Compile Include="Aggregates\AggregateContextBuilder.cs" />
     <Compile Include="Aggregates\AggregateSession.cs" />
     <Compile Include="Aggregates\AggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\Aggregate.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
     <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
-    <Compile Include="Aggregates\Exceptions\AggregateContextModificationDenied.cs" />
+    <Compile Include="Aggregates\Exceptions\Exceptions.cs" />
     <Compile Include="Data\Abstract\IDataFactory.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\DataContextBuilder.cs" />

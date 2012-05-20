@@ -52,6 +52,8 @@
     <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
     <Compile Include="Aggregates\AggregateContext.cs" />
     <Compile Include="Aggregates\Behaviors\AggregateWithOneEventBehaviors.cs" />
+    <Compile Include="Aggregates\when_aggregate_context_was_initialized_via_builder_second_time.cs" />
+    <Compile Include="Aggregates\when_aggregate_context_was_modified_second_time.cs" />
     <Compile Include="Aggregates\when_aggregate_created.cs" />
     <Compile Include="Aggregates\when_one_event_applied.cs" />
     <Compile Include="Aggregates\when_one_event_applied_via_generic.cs" />

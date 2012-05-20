@@ -1,11 +1,12 @@
+using System;
 using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public interface IAggregateContext<TAggregateId>
+    public interface IAggregateContext
     {
-        IState State { get; }
-        IEscolarFactory Factory { get; }
+        Object State { get; }
+        Object Id { get; }
         void Apply(IEvent evnt);
     }
 }

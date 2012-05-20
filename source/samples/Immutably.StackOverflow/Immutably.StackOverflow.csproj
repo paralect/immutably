@@ -85,7 +85,7 @@
     <Folder Include="Contexts\Analytics\Handlers\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Immutably\Immutably.csproj">
+    <ProjectReference Include="..\..\main\Immutably\Immutably.csproj">
       <Project>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</Project>
       <Name>Immutably</Name>
     </ProjectReference>

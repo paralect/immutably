@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Immutably", "main\Immutably\Immutably.csproj", "{966DB4B2-8C47-474B-A417-D34C3CAC041B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Immutably.StackOverflow", "main\Immutably.StackOverflow\Immutably.StackOverflow.csproj", "{E07BB67B-7074-4AA3-BB87-481CBA4C1C88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Immutably.StackOverflow", "samples\Immutably.StackOverflow\Immutably.StackOverflow.csproj", "{E07BB67B-7074-4AA3-BB87-481CBA4C1C88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Main", "Main", "{0139B6E6-355F-45A5-ADE1-F6FD1C004333}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8990E0B-8AA4-4A26-990C-736B29A30860}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Immutably.Tests", "tests\Immutably.Tests\Immutably.Tests.csproj", "{9405E09D-F710-4EDB-9690-3CC5F9E118B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A7F06A21-3D7F-4022-A372-7ED079757B63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,8 +36,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E07BB67B-7074-4AA3-BB87-481CBA4C1C88} = {0139B6E6-355F-45A5-ADE1-F6FD1C004333}
 		{966DB4B2-8C47-474B-A417-D34C3CAC041B} = {0139B6E6-355F-45A5-ADE1-F6FD1C004333}
 		{9405E09D-F710-4EDB-9690-3CC5F9E118B2} = {A8990E0B-8AA4-4A26-990C-736B29A30860}
+		{E07BB67B-7074-4AA3-BB87-481CBA4C1C88} = {A7F06A21-3D7F-4022-A372-7ED079757B63}
 	EndGlobalSection
 EndGlobal

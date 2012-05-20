@@ -8,8 +8,8 @@
     <ProjectGuid>{E07BB67B-7074-4AA3-BB87-481CBA4C1C88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Escolar.StackOverflow</RootNamespace>
-    <AssemblyName>Escolar.StackOverflow</AssemblyName>
+    <RootNamespace>Immutably.StackOverflow</RootNamespace>
+    <AssemblyName>Immutably.StackOverflow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -85,9 +85,9 @@
     <Folder Include="Contexts\Analytics\Handlers\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Escolar\Escolar.csproj">
+    <ProjectReference Include="..\Immutably\Immutably.csproj">
       <Project>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</Project>
-      <Name>Escolar</Name>
+      <Name>Immutably</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

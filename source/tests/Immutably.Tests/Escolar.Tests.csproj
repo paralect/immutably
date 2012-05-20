@@ -8,8 +8,8 @@
     <ProjectGuid>{9405E09D-F710-4EDB-9690-3CC5F9E118B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Escolar.Tests</RootNamespace>
-    <AssemblyName>Escolar.Tests</AssemblyName>
+    <RootNamespace>Immutably.Tests</RootNamespace>
+    <AssemblyName>Immutably.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,9 +70,9 @@
     <Compile Include="TransitionTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\main\Escolar\Escolar.csproj">
+    <ProjectReference Include="..\..\main\Immutably\Immutably.csproj">
       <Project>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</Project>
-      <Name>Escolar</Name>
+      <Name>Immutably</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

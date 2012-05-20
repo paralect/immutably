@@ -8,8 +8,8 @@
     <ProjectGuid>{966DB4B2-8C47-474B-A417-D34C3CAC041B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Escolar</RootNamespace>
-    <AssemblyName>Escolar</AssemblyName>
+    <RootNamespace>Immutably</RootNamespace>
+    <AssemblyName>Immutably</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

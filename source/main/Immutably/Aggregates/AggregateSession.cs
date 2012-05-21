@@ -23,12 +23,17 @@ namespace Immutably.Aggregates
         public TAggregate LoadAggregate<TAggregate>()
             where TAggregate : IAggregate<TAggregateId>
         {
-            var stateType = _store.GetAggregateStateType(typeof (TAggregate));
+            return (TAggregate) LoadAggregate(typeof(TAggregate));
+        }
+
+        public IAggregate LoadAggregate(Type aggregateType)
+        {
+            var stateType = _store.GetAggregateStateType(aggregateType);
 
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
-            TAggregate aggregate = _store.CreateAggregate<TAggregate>();
+            IAggregate aggregate = _store.CreateAggregate(aggregateType);
 
             // Reading transitions and "spooling" of events to receive final state
             ITransition<TAggregateId> lastTransition = null;
@@ -44,7 +49,7 @@ namespace Immutably.Aggregates
             if (lastTransition == null)
                 throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
 
-            _context = _store.CreateAggregateContext(typeof (TAggregateId), stateType,
+            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 lastTransition.StreamId,
                 lastTransition.StreamSequence,
                 initialState,
@@ -52,18 +57,18 @@ namespace Immutably.Aggregates
 
             aggregate.EstablishContext(_context);
 
-/*            aggregate.Context.Id = lastTransition.StreamId;
-            aggregate.CurrentVersion = lastTransition.StreamSequence;
-            aggregate.State = initialState;
-            */
-
-            return aggregate;
+            return aggregate;            
         }
 
         public TAggregate LoadOrCreateAggregate<TAggregate>()
             where TAggregate : IAggregate<TAggregateId>
         {
             return (TAggregate)(Object)null;
+        }
+
+        public IAggregate LoadOrCreateAggregate(Type aggregateType)
+        {
+            return (IAggregate)(Object)null;
         }
 
         public TAggregate CreateAggregate<TAggregate>()
@@ -91,6 +96,11 @@ namespace Immutably.Aggregates
             return _store.CreateAggregate<TAggregate>();
  */
             return aggregate;
+        }
+
+        public IAggregate CreateAggregate(Type aggregateType)
+        {
+            throw new NotImplementedException();
         }
 
         public void SaveChanges()

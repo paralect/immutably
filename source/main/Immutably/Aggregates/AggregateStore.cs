@@ -23,7 +23,22 @@ namespace Immutably.Aggregates
 
         public IAggregateSession<TAggregateId> OpenSession<TAggregateId>(TAggregateId aggregateId)
         {
+            // We don't allow null (in case this is a reference type).
+            // If this is a value type, this check will be ignored.
+            if (aggregateId == null)
+                throw new InvalidAggregateIdException();
+
             return new AggregateSession<TAggregateId>(this, aggregateId);
+        }
+
+        public IAggregateSession OpenSession(Object aggregateId)
+        {
+            // We don't allow null (in case this is a reference type).
+            // If this is a value type, this check will be ignored.
+            if (aggregateId == null)
+                throw new InvalidAggregateIdException();
+
+            return CreateAggregateSession(aggregateId.GetType(), aggregateId);
         }
 
         public IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId) 
@@ -54,12 +69,23 @@ namespace Immutably.Aggregates
             return Activator.CreateInstance<TAggregate>();
         }
 
+        public IAggregate CreateAggregate(Type aggregateType)
+        {
+            return (IAggregate) Activator.CreateInstance(aggregateType);
+        }
+
         public IAggregateContext CreateAggregateContext(Type idType, Type stateType, Object aggregateId, Int32 version, Object state, IDataFactory dataFactory)
         {
             var type = typeof (AggregateContext<,>);
             var contextType = type.MakeGenericType(idType, stateType);
-
             return (IAggregateContext) Activator.CreateInstance(contextType, new[] { aggregateId, version, state, dataFactory });
+        }        
+        
+        public IAggregateSession CreateAggregateSession(Type idType, Object aggregateId)
+        {
+            var type = typeof (AggregateSession<>);
+            var sessionType = type.MakeGenericType(idType);
+            return (IAggregateSession) Activator.CreateInstance(sessionType, new[] { aggregateId });
         }
     }
 }

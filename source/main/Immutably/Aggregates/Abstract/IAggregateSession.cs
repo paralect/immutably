@@ -2,7 +2,15 @@ using System;
 
 namespace Immutably.Aggregates
 {
-    public interface IAggregateSession<TId> : IDisposable
+    public interface IAggregateSession : IDisposable
+    {
+        IAggregate LoadAggregate(Type aggregateType);
+        IAggregate CreateAggregate(Type aggregateType);
+        IAggregate LoadOrCreateAggregate(Type aggregateType);
+        void SaveChanges();
+    }
+
+    public interface IAggregateSession<TId> : IAggregateSession
     {
         TAggregate LoadAggregate<TAggregate>()
             where TAggregate : IAggregate<TId>;
@@ -12,8 +20,5 @@ namespace Immutably.Aggregates
 
         TAggregate LoadOrCreateAggregate<TAggregate>()
             where TAggregate : IAggregate<TId>;
-
-
-        void SaveChanges();
     }
 }

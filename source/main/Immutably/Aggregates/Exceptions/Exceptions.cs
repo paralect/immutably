@@ -4,8 +4,8 @@ namespace Immutably.Aggregates
 {
     public class InvalidAggregateIdException : Exception
     {
-        public InvalidAggregateIdException(Type idType) : base(String.Format(
-            "Aggregate Id cannot be default({0})", idType.Name))
+        public InvalidAggregateIdException() : base(String.Format(
+            "Aggregate ID cannot be null for reference types"))
         {
         }
     }

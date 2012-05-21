@@ -27,7 +27,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        IState IAggregate<TId>.State 
+        IState IAggregate.State 
         {
             get { return State; }
         }
@@ -53,6 +53,11 @@ namespace Immutably.Aggregates
         public TId Id
         {
             get { return Context.Id; }
+        }
+
+        object IAggregate.Id
+        {
+            get { return Id; }
         }
 
         public IDataFactory DataFactory

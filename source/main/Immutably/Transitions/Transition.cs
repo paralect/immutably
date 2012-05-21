@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Immutably.Messages;
+using Immutably.Utilities;
 
 namespace Immutably.Transitions
 {
@@ -41,6 +42,11 @@ namespace Immutably.Transitions
             get { return _streamId; }
         }
 
+        Object ITransition.StreamId
+        {
+            get { return _streamId; }
+        }
+
         /// <summary>
         /// Serial number of this transition inside stream
         /// </summary>
@@ -61,22 +67,27 @@ namespace Immutably.Transitions
         /// <summary>
         /// Readonly collection of Event envelopes, in order (by transition sequence)
         /// </summary>
-        public IList<IEventEnvelope<TStreamId>> EventsWithMetadata
+        public IIndexedEnumerable<IEventEnvelope<TStreamId>> EventsWithMetadata
         {
-            get { return _eventEnvelopes.AsReadOnly(); }
+            get { return _eventEnvelopes.AsIndexedEnumerable(); }
+        }
+
+        IIndexedEnumerable<IEventEnvelope> ITransition.EventsWithMetadata
+        {
+            get { return EventsWithMetadata; }
         }
 
         /// <summary>
         /// Readonly collection of Events, in order (by transition sequence)
         /// </summary>
-        public IList<IEvent> Events
+        public IIndexedEnumerable<IEvent> Events
         {
             get 
             { 
                 return _eventEnvelopes
                     .Select(envelope => envelope.Event)
                     .ToList()
-                    .AsReadOnly(); 
+                    .AsIndexedEnumerable(); 
             }
         }
 

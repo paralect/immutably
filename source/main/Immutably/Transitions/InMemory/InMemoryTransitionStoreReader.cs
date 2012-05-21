@@ -32,5 +32,10 @@ namespace Immutably.Transitions
         {
             // nothing to dispose
         }
+
+        IEnumerable<ITransition> ITransitionStoreReader.Read()
+        {
+            return _store.LoadStoreTransitions<TStreamId>();
+        }
     }
 }

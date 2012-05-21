@@ -94,6 +94,26 @@ namespace Immutably.Transitions
             return transition;
         }
 
+        ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt)
+        {
+            return AddEvent(evnt);
+        }
+
+        ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt, IEventMetadata metadata)
+        {
+            return AddEvent(evnt, (IEventMetadata<TStreamId>) metadata);
+        }
+
+        ITransitionBuilder ITransitionBuilder.AddEvent(IEventEnvelope envelope)
+        {
+            return AddEvent((IEventEnvelope<TStreamId>) envelope);
+        }
+
+        ITransition ITransitionBuilder.Build()
+        {
+            return Build();
+        }
+
         /// <summary>
         /// Performs validation of event metadata
         /// </summary>

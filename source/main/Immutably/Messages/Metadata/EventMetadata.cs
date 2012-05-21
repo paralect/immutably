@@ -8,6 +8,12 @@ namespace Immutably.Messages
         /// </summary>
         public TId SenderId { get; set; }
 
+        object IEventMetadata.SenderId
+        {
+            get { return SenderId; }
+            set { SenderId = (TId) value; }
+        }
+
         /// <summary>
         /// StreamSequence of Aggregate Root, Service, Saga or Process at the moment event was emitted.
         /// Emitting party should increment version and next event should have version incremented by one.

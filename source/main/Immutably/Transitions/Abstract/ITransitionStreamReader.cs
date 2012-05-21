@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace Immutably.Transitions
 {
-    public interface ITransitionStreamReader<TStreamId> : IDisposable
+    public interface ITransitionStreamReader : IDisposable
     {
-        IEnumerable<ITransition<TStreamId>> Read();
+        IEnumerable<ITransition> Read();
+    }
+
+    public interface ITransitionStreamReader<TStreamId> : ITransitionStreamReader
+    {
+        new IEnumerable<ITransition<TStreamId>> Read();
     }
 }

@@ -101,6 +101,7 @@
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStore.cs" />
     <Compile Include="Transitions\TransitionBuilder.cs" />
+    <Compile Include="Utilities\IndexedEnumerable.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

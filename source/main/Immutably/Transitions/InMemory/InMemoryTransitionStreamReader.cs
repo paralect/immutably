@@ -35,6 +35,11 @@ namespace Immutably.Transitions
             return new TransitionStreamOrderValidator<TStreamId>(_streamId, transitions).Read();
         }
 
+        IEnumerable<ITransition> ITransitionStreamReader.Read()
+        {
+            return Read();
+        }
+
         public void Dispose()
         {
             // nothing to dispose

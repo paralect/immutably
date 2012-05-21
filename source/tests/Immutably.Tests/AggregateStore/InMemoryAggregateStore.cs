@@ -34,9 +34,9 @@ namespace Immutably.Tests.AggregateStore
         public Guid Id { get; set; }
         public String Name { get; set; }
 
-        public void Apply(IEvent events)
+        public void On(MyAggregateNameChangedEvent evnt)
         {
-            //throw new NotImplementedException();
+            Name = evnt.Name;
         }
     }
 

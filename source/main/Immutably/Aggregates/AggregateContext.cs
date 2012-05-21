@@ -74,13 +74,11 @@ namespace Immutably.Aggregates
 
             // If TId is a value type, comparizon will be ignored. 
             // If TId is a reference type that points to null - new id will be created
-            if (aggregateId == null)
-                _aggregateId = Activator.CreateInstance<TId>();
+            _aggregateId = (aggregateId == null) ? Activator.CreateInstance<TId>() : aggregateId;
 
             // If TState is a value type, comparizon will be ignored. 
             // If TState is a reference type that points to null - new state will be created
-            if (state == null)
-                _aggregateState = Create<TState>();
+            _aggregateState = state == null ? Create<TState>() : state;
         }
 
         Object IAggregateContext.State
@@ -167,7 +165,17 @@ namespace Immutably.Aggregates
 
         private void ExecuteStateEventHandler(IEvent evnt)
         {
-            ((dynamic) State).On((dynamic) evnt);
+            if (evnt == null)
+                return;
+
+            var methodInfo = State.GetType().GetMethod("On", new[] { evnt.GetType() });
+
+            if (methodInfo == null)
+                return;
+
+            methodInfo.Invoke(State, new object[] { evnt });
+//
+//            ((dynamic) State).On((dynamic) evnt);
         }
 
         public TData Create<TData>()

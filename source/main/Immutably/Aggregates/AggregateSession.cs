@@ -7,6 +7,7 @@ namespace Immutably.Aggregates
     {
         private readonly IAggregateStore _store;
         private readonly TAggregateId _aggregateId;
+        private IAggregateContext _context;
 
         public TAggregateId AggregateId
         {
@@ -43,13 +44,13 @@ namespace Immutably.Aggregates
             if (lastTransition == null)
                 throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
 
-            var context = _store.CreateAggregateContext(typeof (TAggregateId), stateType,
+            _context = _store.CreateAggregateContext(typeof (TAggregateId), stateType,
                 lastTransition.StreamId,
                 lastTransition.StreamSequence,
                 initialState,
                 null);
 
-            aggregate.EstablishContext(context);
+            aggregate.EstablishContext(_context);
 
 /*            aggregate.Context.Id = lastTransition.StreamId;
             aggregate.CurrentVersion = lastTransition.StreamSequence;
@@ -68,18 +69,44 @@ namespace Immutably.Aggregates
         public TAggregate CreateAggregate<TAggregate>()
             where TAggregate : IAggregate<TAggregateId>
         {
+            var stateType = _store.GetAggregateStateType(typeof(TAggregate));
+
+            // Here we can load state from snapshot store, but we are starting from initial state.
+            var initialState = _store.CreateState(stateType);
+
+            TAggregate aggregate = _store.CreateAggregate<TAggregate>();
+
+            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
+                _aggregateId,
+                0,
+                initialState,
+                null);
+
+            aggregate.EstablishContext(_context);
+
             // Here we can load state from snapshot store, but we are starting from initial state.
 /*            var initialStateEnvelope = _store.CreateStateForAggregate(typeof(TAggregate));
 
             // Create aggregate, initialized with final state that we just "spooled"
             return _store.CreateAggregate<TAggregate>();
  */
-            return default(TAggregate);
+            return aggregate;
         }
 
         public void SaveChanges()
         {
-            
+            if (_context == null)
+                return;
+
+            if (!_context.Changed)
+                return;
+
+            using (var writer = _store.TransitionStore.CreateStreamWriter(_aggregateId))
+            {
+                writer.Write(_context.CurrentVersion, builder => builder
+                    .AddEvent(_context.Changes[0])
+                );
+            }
         }
 
         public void Dispose()

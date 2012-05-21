@@ -35,4 +35,12 @@ namespace Immutably.Aggregates
         {
         }        
     }
+
+    public class AggregateDoesntExistException : Exception
+    {
+        public AggregateDoesntExistException(Type aggregateType, Object id) : base(String.Format(
+            "Aggregate ({0}) with id ({1}) desn't exist in the store. ", aggregateType.FullName, id.ToString()))
+        {
+        }               
+    }
 }

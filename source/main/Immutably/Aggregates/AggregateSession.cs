@@ -5,25 +5,37 @@ namespace Immutably.Aggregates
 {
     public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
     {
+        /// <summary>
+        /// Aggregate store, this session is working with
+        /// </summary>
         private readonly IAggregateStore _store;
+
+        /// <summary>
+        /// Aggregate ID for this session.
+        /// AggregateSession can work only with one Aggregate.
+        /// </summary>
         private readonly TAggregateId _aggregateId;
+
+        /// <summary>
+        /// Aggregate Context 
+        /// </summary>
         private IAggregateContext _context;
 
+        /// <summary>
+        /// Aggregate ID for this session
+        /// </summary>
         public TAggregateId AggregateId
         {
             get { return _aggregateId; }
         }
 
+        /// <summary>
+        /// Creates AggregateSession
+        /// </summary>
         public AggregateSession(IAggregateStore store, TAggregateId aggregateId)
         {
             _store = store;
             _aggregateId = aggregateId;
-        }
-
-        public TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
-        {
-            return (TAggregate) LoadAggregate(typeof(TAggregate));
         }
 
         public IAggregate LoadAggregate(Type aggregateType)
@@ -33,6 +45,7 @@ namespace Immutably.Aggregates
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
+            // Create aggregate 
             IAggregate aggregate = _store.CreateAggregate(aggregateType);
 
             // Reading transitions and "spooling" of events to receive final state
@@ -47,7 +60,7 @@ namespace Immutably.Aggregates
             }
 
             if (lastTransition == null)
-                throw new Exception(String.Format("There is no aggregate with id {0}", _aggregateId));
+                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
 
             _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 lastTransition.StreamId,
@@ -58,12 +71,6 @@ namespace Immutably.Aggregates
             aggregate.EstablishContext(_context);
 
             return aggregate;            
-        }
-
-        public TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
-        {
-            return (TAggregate)(Object)null;
         }
 
         public IAggregate LoadOrCreateAggregate(Type aggregateType)
@@ -89,12 +96,6 @@ namespace Immutably.Aggregates
 
             aggregate.EstablishContext(_context);
 
-            // Here we can load state from snapshot store, but we are starting from initial state.
-/*            var initialStateEnvelope = _store.CreateStateForAggregate(typeof(TAggregate));
-
-            // Create aggregate, initialized with final state that we just "spooled"
-            return _store.CreateAggregate<TAggregate>();
- */
             return aggregate;
         }
 
@@ -102,6 +103,19 @@ namespace Immutably.Aggregates
         {
             throw new NotImplementedException();
         }
+
+        public TAggregate LoadAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
+        {
+            return (TAggregate)LoadAggregate(typeof(TAggregate));
+        }
+
+        public TAggregate LoadOrCreateAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
+        {
+            return (TAggregate)(Object)null;
+        }
+
 
         public void SaveChanges()
         {

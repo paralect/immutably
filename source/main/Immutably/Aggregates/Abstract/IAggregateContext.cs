@@ -14,5 +14,7 @@ namespace Immutably.Aggregates
         Boolean Changed { get; }
         IList<IEvent> Changes { get; }
         void Apply(IEvent evnt);
+        void Reply(IEvent evnt);
+        void Reply(IEnumerable<IEvent> events);
     }
 }

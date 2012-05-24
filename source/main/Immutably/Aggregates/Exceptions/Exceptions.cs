@@ -2,18 +2,18 @@
 
 namespace Immutably.Aggregates
 {
-    public class InvalidAggregateIdException : Exception
+    public class NullAggregateIdException : Exception
     {
-        public InvalidAggregateIdException() : base(String.Format(
+        public NullAggregateIdException() : base(String.Format(
             "Aggregate ID cannot be null for reference types"))
         {
         }
     }
 
-    public class InvalidAggregateStateException : Exception
+    public class NullAggregateStateException : Exception
     {
-        public InvalidAggregateStateException(Type stateType) : base(String.Format(
-            "Aggregate State cannot be default({0})", stateType.Name))
+        public NullAggregateStateException() : base(String.Format(
+            "Aggregate State cannot be null"))
         {
         }        
     }

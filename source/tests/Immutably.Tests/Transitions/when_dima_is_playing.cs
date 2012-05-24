@@ -8,14 +8,6 @@ namespace Immutably.Tests.Transitions
     {
         private Because of = () =>
         {
-            using (var writer = store.CreateStreamWriter(45.ToString()))
-            {
-                writer.Write(2, builder => builder
-                    .AddEvent(evnt)
-                    .AddEvent(evnt)
-                );
-            }
-
             using (var writer = store.CreateStreamWriter(evnt.Id))
             {
                 writer.Write(1, builder => builder
@@ -39,4 +31,5 @@ namespace Immutably.Tests.Transitions
         It should_have_correct_stream_sequence = () =>
             transitions[0].StreamSequence.ShouldEqual(1);
     }
+
 }

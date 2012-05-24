@@ -5,12 +5,12 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public class AggregateContext<TState> : IAggregateContext
+    public class AggregateContext : IAggregateContext
     {
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private TState _aggregateState;
+        private Object _aggregateState;
 
         /// <summary>
         /// Aggregate id
@@ -29,42 +29,27 @@ namespace Immutably.Aggregates
         
         private readonly List<IEvent> _aggregateChanges = new List<IEvent>();
 
-        public AggregateContext()
+        public AggregateContext(Object state)
         {
-            Initialize(null, 0, default(TState), null);
+            Initialize(state, "temporary_id", 0, null);
         }
 
-        public AggregateContext(TState state)
+        public AggregateContext(Object state, String aggregateId)
         {
-            Initialize(null, 0, state, null);
+            Initialize(state, aggregateId, 0, null);
         }
 
-        public AggregateContext(String aggregateId)
+        public AggregateContext(Object state, String aggregateId, Int32 version)
         {
-            Initialize(aggregateId, 0, default(TState), null);
+            Initialize(state, aggregateId, version, null);
         }
 
-        public AggregateContext(Int32 version)
+        public AggregateContext(Object state, String aggregateId, Int32 version, IDataFactory dataFactory)
         {
-            Initialize(null, version, default(TState), null);
+            Initialize(state, aggregateId, version, dataFactory);
         }
 
-        public AggregateContext(String aggregateId, Int32 version)
-        {
-            Initialize(aggregateId, version, default(TState), null);
-        }
-
-        public AggregateContext(String aggregateId, Int32 version, TState state)
-        {
-            Initialize(aggregateId, version, state, null);
-        }
-
-        public AggregateContext(String aggregateId, Int32 version, TState state, IDataFactory dataFactory)
-        {
-            Initialize(aggregateId, version, state, dataFactory);
-        }
-
-        private void Initialize(String aggregateId, Int32 version, TState state, IDataFactory dataFactory)
+        private void Initialize(Object state, string aggregateId, int version, IDataFactory dataFactory)
         {
             if (version < 0)
                 throw new InvalidAggregateVersionException(version);
@@ -72,25 +57,21 @@ namespace Immutably.Aggregates
             _dataFactory = dataFactory;
             _aggregateInitialVersion = version;
 
-            // If TId is a value type, comparizon will be ignored. 
-            // If TId is a reference type that points to null - new id will be created
-            //_aggregateId = (aggregateId == null) ? Activator.CreateInstance<TId>() : aggregateId;
-            // we should throw exception if id is null...
+            if (aggregateId == null)
+                throw new NullAggregateIdException();
 
-            // If TState is a value type, comparizon will be ignored. 
-            // If TState is a reference type that points to null - new state will be created
-            _aggregateState = state == null ? Create<TState>() : state;
-        }
+            _aggregateId = aggregateId;
 
-        Object IAggregateContext.State
-        {
-            get { return State; }
+            if (state == null)
+                throw new NullAggregateStateException();
+
+            _aggregateState = state;
         }
 
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        public TState State
+        public Object State
         {
             get { return _aggregateState; }
         }

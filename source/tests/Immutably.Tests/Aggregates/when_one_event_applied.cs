@@ -2,7 +2,7 @@ using Machine.Specifications;
 
 namespace Immutably.Tests.Aggregates
 {
-    public class when_one_event_applied : AggregateContext
+    public class when_one_event_applied : AggregateMachineContext
     {
         Because of = () =>
         {

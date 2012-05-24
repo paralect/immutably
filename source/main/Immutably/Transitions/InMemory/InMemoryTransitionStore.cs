@@ -10,12 +10,17 @@ namespace Immutably.Transitions
     /// </summary>
     public class InMemoryTransitionStore : ITransitionStore
     {
-        private readonly Dictionary<Type, Object> _repositoriesByIdType = new Dictionary<Type, object>();
+        private InMemoryTransitionRepository _repository;
 
         /// <summary>
         /// Synchronization for concurrent reads and exclusive writes
         /// </summary>
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+
+        public InMemoryTransitionStore()
+        {
+            _repository = new InMemoryTransitionRepository();
+        }
 
         /// <summary>
         /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
@@ -26,8 +31,7 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                return innerStore.LoadTransition(streamId, streamSequence);
+                return _repository.LoadTransition(streamId, streamSequence);
             }
             finally
             {
@@ -45,8 +49,7 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                return innerStore.LoadStreamTransitions(streamId, fromStreamSequence, count);
+                return _repository.LoadStreamTransitions(streamId, fromStreamSequence, count);
             }
             finally
             {
@@ -63,8 +66,7 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                return innerStore.LoadStreamTransitions(streamId);
+                return _repository.LoadStreamTransitions(streamId);
             }
             finally
             {
@@ -85,8 +87,7 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                return innerStore.LoadStoreTransitions(fromTimestamp, count);
+                return _repository.LoadStoreTransitions(fromTimestamp, count);
             }
             finally
             {
@@ -103,8 +104,7 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                return innerStore.LoadStoreTransitions();
+                return _repository.LoadStoreTransitions();
             }
             finally
             {
@@ -121,24 +121,12 @@ namespace Immutably.Transitions
 
             try
             {
-                var innerStore = GetRepositoryByIdType();
-                innerStore.Append(transition);
+                _repository.Append(transition);
             }
             finally
             {
                 _lock.ExitWriteLock();
             }
-        }        
-    
-        private InMemoryTransitionRepository GetRepositoryByIdType()
-        {
-            object innerStore;
-            var exists = _repositoriesByIdType.TryGetValue(typeof (String), out innerStore);
-
-            if (!exists)
-                innerStore = _repositoriesByIdType[typeof (String)] = new InMemoryTransitionRepository();
-
-            return (InMemoryTransitionRepository) innerStore;
         }
 
 
@@ -159,7 +147,7 @@ namespace Immutably.Transitions
 
         public ITransitionRepository CreateTransitionRepository()
         {
-            return GetRepositoryByIdType();
+            return _repository;
         }
     }
 }

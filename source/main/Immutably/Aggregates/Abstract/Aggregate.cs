@@ -11,14 +11,14 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private AggregateContext<TState> _context;
+        private AggregateContext _context;
 
-        public AggregateContext<TState> Context
+        public AggregateContext Context
         {
             get
             {
                 if (_context == null)
-                    _context = new AggregateContext<TState>();
+                    _context = new AggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0);
 
                 return _context;
             }
@@ -37,7 +37,7 @@ namespace Immutably.Aggregates
         /// </summary>
         public TState State
         {
-            get { return Context.State; }
+            get { return (TState) Context.State; }
         }
 
         public int CurrentVersion
@@ -101,15 +101,7 @@ namespace Immutably.Aggregates
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            _context = (AggregateContext<TState>) context;
-        }
-
-        public void EstablishContext(AggregateContext<TState> context)
-        {
-            if (_context != null)
-                throw new AggregateContextModificationForbiddenException(GetType());
-
-            _context = context;
+            _context = (AggregateContext) context;
         }
 
         public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)

@@ -5,10 +5,10 @@ namespace Immutably.Aggregates
 {
     public class AggregateContextBuilder<TState>
     {
-        private String _aggregateId;
+        private String _aggregateId = "temporary_id";
         private TState _aggregateState;
         private IDataFactory _dataFactory;
-        private Int32 _aggregateVersion;
+        private Int32 _aggregateVersion = 0;
 
         public AggregateContextBuilder<TState> SetId(String id)
         {
@@ -34,9 +34,12 @@ namespace Immutably.Aggregates
             return this;
         }
 
-        public AggregateContext<TState> Build()
+        public AggregateContext Build()
         {
-            return new AggregateContext<TState>(_aggregateId, _aggregateVersion, _aggregateState, _dataFactory);
+            if (_aggregateState == null && _dataFactory == null)
+                _aggregateState = Activator.CreateInstance<TState>();
+
+            return new AggregateContext(_aggregateState, _aggregateId, _aggregateVersion, _dataFactory);
         }
     }
 }

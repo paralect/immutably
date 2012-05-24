@@ -10,23 +10,23 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Aggregate store, this session is working with
         /// </summary>
-        protected readonly IAggregateStore _store;
+        private readonly IAggregateStore _store;
 
         /// <summary>
         /// Aggregate ID for this session.
         /// AggregateSession can work only with one Aggregate.
         /// </summary>
-        protected readonly String _aggregateId;
+        private readonly String _aggregateId;
 
         /// <summary>
         /// Aggregate Context 
         /// </summary>
-        protected IAggregateContext _context;
+        private IAggregateContext _context;
 
         /// <summary>
         /// Aggregate ID for this session
         /// </summary>
-        public Object AggregateId
+        public String AggregateId
         {
             get { return _aggregateId; }
         }

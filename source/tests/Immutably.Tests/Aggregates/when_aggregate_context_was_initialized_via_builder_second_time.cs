@@ -4,7 +4,7 @@ using Machine.Specifications;
 
 namespace Immutably.Tests.Aggregates
 {
-    public class when_aggregate_context_was_initialized_via_builder_second_time : AggregateContext
+    public class when_aggregate_context_was_initialized_via_builder_second_time : AggregateMachineContext
     {
         Establish context = () =>
         {

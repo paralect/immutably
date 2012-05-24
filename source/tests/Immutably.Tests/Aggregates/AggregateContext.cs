@@ -5,7 +5,7 @@ using Immutably.Messages;
 
 namespace Immutably.Tests.Aggregates
 {
-    public class AggregateContext
+    public class AggregateMachineContext
     {
          
     }

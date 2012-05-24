@@ -26,7 +26,7 @@ namespace Immutably.Aggregates
             // We don't allow null (in case this is a reference type).
             // If this is a value type, this check will be ignored.
             if (aggregateId == null)
-                throw new InvalidAggregateIdException();
+                throw new NullAggregateIdException();
 
             return new AggregateSession(this, aggregateId);
         }
@@ -64,11 +64,9 @@ namespace Immutably.Aggregates
             return (IAggregate) Activator.CreateInstance(aggregateType);
         }
 
-        public IAggregateContext CreateAggregateContext(Type idType, Type stateType, Object aggregateId, Int32 version, Object state, IDataFactory dataFactory)
+        public IAggregateContext CreateAggregateContext(String aggregateId, Int32 version, Object state, IDataFactory dataFactory)
         {
-            var type = typeof (AggregateContext<>);
-            var contextType = type.MakeGenericType(idType, stateType);
-            return (IAggregateContext) Activator.CreateInstance(contextType, new[] { aggregateId, version, state, dataFactory });
+            return new AggregateContext(state, aggregateId, version, dataFactory);
         }        
         
         public IAggregateSession CreateAggregateSession(Type idType, Object aggregateId)

@@ -14,7 +14,6 @@ namespace Immutably.Tests.AggregateStore
             using (var session = AggregateStore.OpenSession(Guid.Empty.ToString()))
             {
                 var agg = session.CreateAggregate<MyAggregate>();
-                
                 agg.ChangeName(default(Guid), "dfdf");
                 session.SaveChanges();
             }

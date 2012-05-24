@@ -4,16 +4,17 @@ using Machine.Specifications;
 
 namespace Immutably.Tests.Aggregates
 {
-    public class when_aggregate_context_was_initialized_second_time : AggregateContext
+    public class when_aggregate_context_was_initialized_second_time : AggregateMachineContext
     {
         Establish context = () =>
         {
             aggregate = new MyAggregate();
-            aggregate.EstablishContext(new AggregateContext<MyState>(Guid.NewGuid().ToString()));
+            aggregate.EstablishContext(new AggregateContext(new MyState()));
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => aggregate.EstablishContext(new AggregateContext<MyState>(Guid.NewGuid().ToString())));
+            exception = Catch.Exception(() => aggregate.EstablishContext(
+                new AggregateContext(new MyState(), Guid.NewGuid().ToString())));
 
         It should_throw_exception = () =>
             exception.ShouldBeOfType<AggregateContextModificationForbiddenException>();

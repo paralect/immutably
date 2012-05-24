@@ -2,7 +2,7 @@
 
 namespace Immutably.Tests.Aggregates
 {
-    public class when_aggregate_created : AggregateContext
+    public class when_aggregate_created : AggregateMachineContext
     {
         Because of = () =>
             aggregate = new MyAggregate();

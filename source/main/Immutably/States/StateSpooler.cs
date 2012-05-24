@@ -4,49 +4,60 @@ using Immutably.Messages;
 
 namespace Immutably.States
 {
-    public class StateSpooler<TStreamId> : IStateSpooler<TStreamId>
+    public class StateSpooler
     {
         /// <summary>
         /// State envelope
         /// </summary>
-        private IStateEnvelope<TStreamId> _stateEnvelope;
+        private IState _state;
 
-        /// <summary>
-        /// State envelope
-        /// </summary>
-        public IStateEnvelope<TStreamId> StateEnvelope
+        private Int32 _version;
+
+        public IState State
         {
-            get { return _stateEnvelope; }
+            get { return _state; }
+        }
+
+        public int Version
+        {
+            get { return _version; }
         }
 
         /// <summary>
         /// Creates StateSpooler initialized with initial state
         /// </summary>
-        public StateSpooler(IStateEnvelope<TStreamId> initialStateEnvelope)
+        public StateSpooler(IState initialState)
         {
-            _stateEnvelope = initialStateEnvelope;
+            _state = initialState;
         }
 
         /// <summary>
         /// Replay specified events to restore state of IState.
         /// </summary>
-        public void Spool(IEnumerable<IEventEnvelope<TStreamId>> events)
+        public void Spool(Int32 version, IEnumerable<IEvent> events)
         {
+            if (version < _version)
+                throw new InvalidOperationException("Version cannot be lower than existing");
+
             foreach (var evnt in events)
             {
-                if (EqualityComparer<TStreamId>.Default.Equals(evnt.Metadata.SenderId, default(TStreamId)))
-                    throw new NullReferenceException("Id of state cannot be null or default(T) for value types");
-
-                if (!EqualityComparer<TStreamId>.Default.Equals(evnt.Metadata.SenderId, _stateEnvelope.Metadata.EntityId))
-                    throw new Exception("State restoration failed because of different Stream ID in the events");
-
-                if (evnt.Metadata.StreamSequence < _stateEnvelope.Metadata.Version)
-                    throw new Exception("State restoration failed because of wrong version sequence.");
-
-                ((dynamic)_stateEnvelope.State).On((dynamic) evnt.Event);
-
-                _stateEnvelope.Metadata.Version = evnt.Metadata.StreamSequence;
+                ExecuteStateEventHandler(evnt);
             }
+
+            _version = version;
+        }
+
+        private void ExecuteStateEventHandler(IEvent evnt)
+        {
+            if (evnt == null)
+                return;
+
+            var methodInfo = State.GetType().GetMethod("On", new[] { evnt.GetType() });
+
+            if (methodInfo == null)
+                return;
+
+            methodInfo.Invoke(State, new object[] { evnt });
         }
     }
 }

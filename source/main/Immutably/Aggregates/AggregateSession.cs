@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using Immutably.States;
 using Immutably.Transitions;
 
 namespace Immutably.Aggregates
 {
-    public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
+    public class AggregateSession : IAggregateSession
     {
         /// <summary>
         /// Aggregate store, this session is working with
         /// </summary>
-        private readonly IAggregateStore _store;
+        protected readonly IAggregateStore _store;
 
         /// <summary>
         /// Aggregate ID for this session.
         /// AggregateSession can work only with one Aggregate.
         /// </summary>
-        private readonly TAggregateId _aggregateId;
+        protected readonly Object _aggregateId;
 
         /// <summary>
         /// Aggregate Context 
         /// </summary>
-        private IAggregateContext _context;
+        protected IAggregateContext _context;
 
         /// <summary>
         /// Aggregate ID for this session
         /// </summary>
-        public TAggregateId AggregateId
+        public Object AggregateId
         {
             get { return _aggregateId; }
         }
@@ -32,7 +34,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(IAggregateStore store, TAggregateId aggregateId)
+        public AggregateSession(IAggregateStore store, Object aggregateId)
         {
             _store = store;
             _aggregateId = aggregateId;
@@ -45,77 +47,53 @@ namespace Immutably.Aggregates
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
-            // Create aggregate 
-            IAggregate aggregate = _store.CreateAggregate(aggregateType);
-
-            // Reading transitions and "spooling" of events to receive final state
-            ITransition<TAggregateId> lastTransition = null;
+            var spooler = new StateSpooler(initialState);
             using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
             {
                 foreach (var transition in reader.Read())
-                {
-                    aggregate.Reply(transition.Events);
-                    lastTransition = transition;
-                }
+                    spooler.Spool(transition.StreamSequence, transition.Events);
             }
 
-            if (lastTransition == null)
-                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
+//            if (lastTransition == null)
+//                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
 
-            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
-                lastTransition.StreamId,
-                lastTransition.StreamSequence,
+            // Create aggregate 
+            IAggregate aggregate = _store.CreateAggregate(aggregateType);
+            /*_context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
+                _aggregateId,
+                spooler.Version,
                 initialState,
                 null);
 
-            aggregate.EstablishContext(_context);
+            aggregate.EstablishContext(_context);*/
 
             return aggregate;            
         }
 
-        public IAggregate LoadOrCreateAggregate(Type aggregateType)
+        IAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)
         {
             return (IAggregate)(Object)null;
         }
 
-        public TAggregate CreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
+        IAggregate IAggregateSession.CreateAggregate(Type aggregateType)
         {
-            var stateType = _store.GetAggregateStateType(typeof(TAggregate));
+            var stateType = _store.GetAggregateStateType(aggregateType);
 
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
-            TAggregate aggregate = _store.CreateAggregate<TAggregate>();
+            IAggregate aggregate = _store.CreateAggregate(aggregateType);
 
-            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
+/*            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 _aggregateId,
                 0,
                 initialState,
                 null);
 
-            aggregate.EstablishContext(_context);
+            aggregate.EstablishContext(_context);*/
 
             return aggregate;
         }
-
-        public IAggregate CreateAggregate(Type aggregateType)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
-        {
-            return (TAggregate)LoadAggregate(typeof(TAggregate));
-        }
-
-        public TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
-        {
-            return (TAggregate)(Object)null;
-        }
-
 
         public void SaveChanges()
         {
@@ -136,6 +114,42 @@ namespace Immutably.Aggregates
         public void Dispose()
         {
             
+        }
+    }
+
+    public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
+    {
+        public AggregateSession(IAggregateStore store, TAggregateId aggregateId)// : base(store, aggregateId)
+        {
+        }
+
+        public TAggregate CreateAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
+        {
+            return (TAggregate)((IAggregateSession)this).CreateAggregate(typeof(TAggregate));
+        }
+
+        public TAggregate LoadAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
+        {
+            //base.LoadAggregate(typeof (TAggregate));
+            return (TAggregate)((IAggregateSession)this).LoadAggregate(typeof(TAggregate));
+        }
+
+        public TAggregate LoadOrCreateAggregate<TAggregate>()
+            where TAggregate : IAggregate<TAggregateId>
+        {
+            return (TAggregate)((IAggregateSession)this).LoadOrCreateAggregate(typeof(TAggregate));
+        }
+
+        public void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

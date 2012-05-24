@@ -64,6 +64,7 @@
     <Compile Include="Data\when_data_context_created_with_one_contract_and_one_proxy.cs" />
     <Compile Include="Data\when_data_context_created_with_types_from_assembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transitions\when_dima_is_playing.cs" />
     <Compile Include="Transitions\when_one_transition_with_one_event_is_written.cs" />
     <Compile Include="Transitions\when_one_transition_with_two_events_is_written.cs" />
     <Compile Include="Transitions\InMemoryTransitionStoreContext.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Immutably.Aggregates;
 using Machine.Specifications;
 
 namespace Immutably.Tests.AggregateStore
@@ -13,11 +14,10 @@ namespace Immutably.Tests.AggregateStore
             using (var session = AggregateStore.OpenSession(Guid.Empty))
             {
                 var agg = session.CreateAggregate<MyAggregate>();
+                
                 agg.ChangeName(default(Guid), "dfdf");
-
                 session.SaveChanges();
             }
-            
         };
 
         It should_be_aga = () =>

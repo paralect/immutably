@@ -26,7 +26,7 @@ namespace Immutably.Aggregates
         void SaveChanges();
     }
 
-    public interface IAggregateSession<TId> : IAggregateSession
+    public interface IAggregateSession<TId> : IDisposable
     {
         /// <summary>
         /// Load Aggregate of specified type
@@ -46,5 +46,10 @@ namespace Immutably.Aggregates
         /// </summary>
         TAggregate LoadOrCreateAggregate<TAggregate>()
             where TAggregate : IAggregate<TId>;
+
+        /// <summary>
+        /// Commit your changes (if any) to aggregate Store.
+        /// </summary>
+        void SaveChanges();
     }
 }

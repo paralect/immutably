@@ -5,7 +5,7 @@ namespace Immutably.Transitions
     /// <summary>
     /// Reads all transitions in store in chronological order
     /// </summary>
-    public class InMemoryTransitionStoreReader<TStreamId> : ITransitionStoreReader<TStreamId>
+    public class InMemoryTransitionStoreReader : ITransitionStoreReader
     {
         /// <summary>
         /// Transition store
@@ -23,9 +23,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Reads stream by portions (default portion size 1000)
         /// </summary>
-        public IEnumerable<ITransition<TStreamId>> Read()
+        public IEnumerable<ITransition> Read()
         {
-            return _store.LoadStoreTransitions<TStreamId>();
+            return _store.LoadStoreTransitions();
         }
 
         public void Dispose()
@@ -35,7 +35,7 @@ namespace Immutably.Transitions
 
         IEnumerable<ITransition> ITransitionStoreReader.Read()
         {
-            return _store.LoadStoreTransitions<TStreamId>();
+            return _store.LoadStoreTransitions();
         }
     }
 }

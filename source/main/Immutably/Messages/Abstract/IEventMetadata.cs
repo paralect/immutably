@@ -7,7 +7,7 @@ namespace Immutably.Messages
         /// <summary>
         /// Id of Aggregate Root, Service, Saga or Process that emits this events.
         /// </summary>
-        Object SenderId { get; set; }
+        String SenderId { get; set; }
 
         /// <summary>
         /// StreamSequence of Aggregate Root, Service, Saga or Process at the moment event was emitted.
@@ -17,13 +17,5 @@ namespace Immutably.Messages
         Int32 StreamSequence { get; set; }
 
         Int32 TransitionSequence { get; set; }        
-    }
-
-    public interface IEventMetadata<TId> : IEventMetadata
-    {
-        /// <summary>
-        /// Id of Aggregate Root, Service, Saga or Process that emits this events.
-        /// </summary>
-        new TId SenderId { get; set; }
     }
 }

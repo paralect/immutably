@@ -24,32 +24,14 @@ namespace Immutably.Aggregates
         /// Commit your changes (if any) to aggregate Store.
         /// </summary>
         void SaveChanges();
-    }
 
-    public interface IAggregateSession<TId> : IDisposable
-    {
-        /// <summary>
-        /// Load Aggregate of specified type
-        /// </summary>
-        TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IAggregate<TId>;
-
-        /// <summary>
-        /// Create Aggregate of specified type
-        /// </summary>
         TAggregate CreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TId>;
+            where TAggregate : IAggregate;
 
-        /// <summary>
-        /// If aggregate exists - it will be loaded.
-        /// If aggregate doesn't exist - it will be created.
-        /// </summary>
+        TAggregate LoadAggregate<TAggregate>()
+            where TAggregate : IAggregate;
+
         TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TId>;
-
-        /// <summary>
-        /// Commit your changes (if any) to aggregate Store.
-        /// </summary>
-        void SaveChanges();
+            where TAggregate : IAggregate;
     }
 }

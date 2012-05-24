@@ -1,8 +1,8 @@
 namespace Immutably.Messages
 {
-    public interface ICommandEnvelope<TId> : IMessageEnvelope
+    public interface ICommandEnvelope : IMessageEnvelope
     {
         ICommand Command { get; }
-        new ICommandMetadata<TId> Metadata { get; }
+        new ICommandMetadata Metadata { get; }
     }
 }

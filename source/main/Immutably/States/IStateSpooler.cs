@@ -3,13 +3,13 @@ using Immutably.Messages;
 
 namespace Immutably.States
 {
-    public interface IStateSpooler<TStreamId>
+    public interface IStateSpooler
     {
         /// <summary>
         /// Replay specified events to restore state of IState.
         /// </summary>
-        void Spool(IEnumerable<IEventEnvelope<TStreamId>> events);
+        void Spool(IEnumerable<IEventEnvelope> events);
 
-        IStateEnvelope<TStreamId> StateEnvelope { get; }
+        IStateEnvelope StateEnvelope { get; }
     }
 }

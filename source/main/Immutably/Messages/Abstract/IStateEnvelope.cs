@@ -1,9 +1,9 @@
 namespace Immutably.Messages
 {
-    public interface IStateEnvelope<TId>
+    public interface IStateEnvelope
     {
         IState State { get; }
-        IStateMetadata<TId> Metadata { get; }
+        IStateMetadata Metadata { get; }
     }
 
 }

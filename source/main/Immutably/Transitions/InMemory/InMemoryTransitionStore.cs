@@ -20,13 +20,13 @@ namespace Immutably.Transitions
         /// <summary>
         /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
         /// </summary>
-        public ITransition<TStreamId> LoadTransition<TStreamId>(TStreamId streamId, int streamSequence)
+        public ITransition LoadTransition(String streamId, int streamSequence)
         {
             _lock.EnterReadLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 return innerStore.LoadTransition(streamId, streamSequence);
             }
             finally
@@ -39,13 +39,13 @@ namespace Immutably.Transitions
         /// LoadAggregate <param name="count" /> transitions for specified stream, 
         /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
         /// </summary>
-        public IList<ITransition<TStreamId>> LoadStreamTransitions<TStreamId>(TStreamId streamId, int fromStreamSequence, int count)
+        public IList<ITransition> LoadStreamTransitions<TStreamId>(String streamId, int fromStreamSequence, int count)
         {
             _lock.EnterReadLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 return innerStore.LoadStreamTransitions(streamId, fromStreamSequence, count);
             }
             finally
@@ -57,13 +57,13 @@ namespace Immutably.Transitions
         /// <summary>
         /// Returns all transitions for specified stream in chronological order
         /// </summary>
-        public IList<ITransition<TStreamId>> LoadStreamTransitions<TStreamId>(TStreamId streamId)
+        public IList<ITransition> LoadStreamTransitions(String streamId)
         {
             _lock.EnterReadLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 return innerStore.LoadStreamTransitions(streamId);
             }
             finally
@@ -79,13 +79,13 @@ namespace Immutably.Transitions
         /// <param name="fromTimestamp">
         /// Not inclusively timestamp value
         /// </param>
-        public IList<ITransition<TStreamId>> LoadStoreTransitions<TStreamId>(DateTime fromTimestamp, int count)
+        public IList<ITransition> LoadStoreTransitions<TStreamId>(DateTime fromTimestamp, int count)
         {
             _lock.EnterReadLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 return innerStore.LoadStoreTransitions(fromTimestamp, count);
             }
             finally
@@ -97,13 +97,13 @@ namespace Immutably.Transitions
         /// <summary>
         /// Returns readonly collection of all transitions in the store in chronological order
         /// </summary>
-        internal IList<ITransition<TStreamId>> LoadStoreTransitions<TStreamId>()
+        internal IList<ITransition> LoadStoreTransitions()
         {
             _lock.EnterReadLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 return innerStore.LoadStoreTransitions();
             }
             finally
@@ -115,13 +115,13 @@ namespace Immutably.Transitions
         /// <summary>
         /// Append transition
         /// </summary>
-        public void Append<TStreamId>(ITransition<TStreamId> transition)
+        public void Append<TStreamId>(ITransition transition)
         {
             _lock.EnterWriteLock();
 
             try
             {
-                var innerStore = GetRepositoryByIdType<TStreamId>();
+                var innerStore = GetRepositoryByIdType();
                 innerStore.Append(transition);
             }
             finally
@@ -130,36 +130,36 @@ namespace Immutably.Transitions
             }
         }        
     
-        private InMemoryTransitionRepository<TStreamId> GetRepositoryByIdType<TStreamId>()
+        private InMemoryTransitionRepository GetRepositoryByIdType()
         {
             object innerStore;
-            var exists = _repositoriesByIdType.TryGetValue(typeof (TStreamId), out innerStore);
+            var exists = _repositoriesByIdType.TryGetValue(typeof (String), out innerStore);
 
             if (!exists)
-                innerStore = _repositoriesByIdType[typeof (TStreamId)] = new InMemoryTransitionRepository<TStreamId>();
+                innerStore = _repositoriesByIdType[typeof (String)] = new InMemoryTransitionRepository();
 
-            return (InMemoryTransitionRepository<TStreamId>) innerStore;
+            return (InMemoryTransitionRepository) innerStore;
         }
 
 
-        public ITransitionStreamReader<TStreamId> CreateStreamReader<TStreamId>(TStreamId streamId, Int32 fromSequence = 0)
+        public ITransitionStreamReader CreateStreamReader(String streamId, Int32 fromSequence = 0)
         {
-            return new InMemoryTransitionStreamReader<TStreamId>(this, streamId);
+            return new InMemoryTransitionStreamReader(this, streamId);
         }
 
-        public ITransitionStreamWriter<TStreamId> CreateStreamWriter<TStreamId>(TStreamId streamId)
+        public ITransitionStreamWriter CreateStreamWriter(String streamId)
         {
-            return new DefaultTransitionStreamWriter<TStreamId>(CreateTransitionRepository<TStreamId>(), streamId);
+            return new DefaultTransitionStreamWriter(CreateTransitionRepository(), streamId);
         }
 
-        public ITransitionStoreReader<TStreamId> CreateStoreReader<TStreamId>()
+        public ITransitionStoreReader CreateStoreReader()
         {
-            return new InMemoryTransitionStoreReader<TStreamId>(this);
+            return new InMemoryTransitionStoreReader(this);
         }
 
-        public ITransitionRepository<TStreamId> CreateTransitionRepository<TStreamId>()
+        public ITransitionRepository CreateTransitionRepository()
         {
-            return GetRepositoryByIdType<TStreamId>();
+            return GetRepositoryByIdType();
         }
     }
 }

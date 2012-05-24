@@ -9,11 +9,11 @@ namespace Immutably.Tests.Aggregates
         Establish context = () =>
         {
             aggregate = new MyAggregate();
-            aggregate.EstablishContext(new AggregateContext<Guid, MyState>(Guid.NewGuid()));
+            aggregate.EstablishContext(new AggregateContext<MyState>(Guid.NewGuid().ToString()));
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => aggregate.EstablishContext(new AggregateContext<Guid, MyState>(Guid.NewGuid())));
+            exception = Catch.Exception(() => aggregate.EstablishContext(new AggregateContext<MyState>(Guid.NewGuid().ToString())));
 
         It should_throw_exception = () =>
             exception.ShouldBeOfType<AggregateContextModificationForbiddenException>();

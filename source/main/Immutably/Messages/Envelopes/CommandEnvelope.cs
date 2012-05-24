@@ -1,10 +1,10 @@
 namespace Immutably.Messages
 {
-    public class CommandEnvelope<TId> : MessageEnvelope, ICommandEnvelope<TId>
+    public class CommandEnvelope : MessageEnvelope, ICommandEnvelope
     {
-        public new ICommandMetadata<TId> Metadata
+        public new ICommandMetadata Metadata
         {
-            get { return (ICommandMetadata<TId>) base.Metadata; }
+            get { return (ICommandMetadata) base.Metadata; }
         }
 
         public ICommand Command
@@ -12,7 +12,7 @@ namespace Immutably.Messages
             get { return (ICommand) Message; }
         }
 
-        public CommandEnvelope(ICommand message, ICommandMetadata<TId> metadata) : base(message, metadata)
+        public CommandEnvelope(ICommand message, ICommandMetadata metadata) : base(message, metadata)
         {
         }
     }

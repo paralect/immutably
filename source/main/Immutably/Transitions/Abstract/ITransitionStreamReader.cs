@@ -7,9 +7,4 @@ namespace Immutably.Transitions
     {
         IEnumerable<ITransition> Read();
     }
-
-    public interface ITransitionStreamReader<TStreamId> : ITransitionStreamReader
-    {
-        new IEnumerable<ITransition<TStreamId>> Read();
-    }
 }

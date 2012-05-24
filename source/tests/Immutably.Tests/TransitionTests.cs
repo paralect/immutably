@@ -16,7 +16,7 @@ namespace Immutably.Tests
 
             var evnt = new SimpleEvent()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Year = 54545,
                 Name = "Lenin"
             };
@@ -30,7 +30,7 @@ namespace Immutably.Tests
             }
 
             // Reading
-            List<ITransition<Guid>> transitions = null;
+            List<ITransition> transitions = null;
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
                 transitions = reader.Read().ToList();
@@ -56,7 +56,7 @@ namespace Immutably.Tests
 
             var evnt = new SimpleEvent()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Year = 54545,
                 Name = "Lenin"
             };
@@ -100,18 +100,18 @@ namespace Immutably.Tests
         {
             var evnt = new SimpleEvent()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Year = 54545,
                 Name = "Lenin"
             };
 
-            var metadata = new EventMetadata<Guid>()
+            var metadata = new EventMetadata()
             {
                 SenderId = evnt.Id,
                 StreamSequence = 1
             };
 
-            var envelope = new EventEnvelope<Guid>(evnt, metadata);
+            var envelope = new EventEnvelope(evnt, metadata);
 
             //var transition = new Transition(envelope);
 
@@ -138,7 +138,7 @@ namespace Immutably.Tests
 
     public class SimpleEvent : IEvent
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public Int32 Year { get; set; }
         public String Name { get; set; }
     }

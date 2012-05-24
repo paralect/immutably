@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Immutably.Transitions
@@ -5,7 +6,7 @@ namespace Immutably.Transitions
     /// <summary>
     /// Reads transitions stream
     /// </summary>
-    public class InMemoryTransitionStreamReader<TStreamId> : ITransitionStreamReader<TStreamId>
+    public class InMemoryTransitionStreamReader : ITransitionStreamReader
     {
         /// <summary>
         /// Transitions store
@@ -15,12 +16,12 @@ namespace Immutably.Transitions
         /// <summary>
         /// Stream ID
         /// </summary>
-        private readonly TStreamId _streamId;
+        private readonly String _streamId;
 
         /// <summary>
         /// Creates DefaultTransitionStreamReader with default portion size - 1000.
         /// </summary>
-        public InMemoryTransitionStreamReader(InMemoryTransitionStore store, TStreamId streamId)
+        public InMemoryTransitionStreamReader(InMemoryTransitionStore store, String streamId)
         {
             _store = store;
             _streamId = streamId;
@@ -29,10 +30,10 @@ namespace Immutably.Transitions
         /// <summary>
         /// Reads stream by portions (default portion size 1000)
         /// </summary>
-        public IEnumerable<ITransition<TStreamId>> Read()
+        public IEnumerable<ITransition> Read()
         {
-            var transitions = _store.LoadStreamTransitions<TStreamId>(_streamId);
-            return new TransitionStreamOrderValidator<TStreamId>(_streamId, transitions).Read();
+            var transitions = _store.LoadStreamTransitions(_streamId);
+            return new TransitionStreamOrderValidator(_streamId, transitions).Read();
         }
 
         IEnumerable<ITransition> ITransitionStreamReader.Read()

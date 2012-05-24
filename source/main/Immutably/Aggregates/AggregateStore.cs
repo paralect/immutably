@@ -21,27 +21,17 @@ namespace Immutably.Aggregates
             _transitionStore = transitionStore;
         }
 
-        public IAggregateSession<TAggregateId> OpenSession<TAggregateId>(TAggregateId aggregateId)
+        public IAggregateSession OpenSession(String aggregateId)
         {
             // We don't allow null (in case this is a reference type).
             // If this is a value type, this check will be ignored.
             if (aggregateId == null)
                 throw new InvalidAggregateIdException();
 
-            return new AggregateSession<TAggregateId>(this, aggregateId);
+            return new AggregateSession(this, aggregateId);
         }
 
-        public IAggregateSession OpenSession(Object aggregateId)
-        {
-            // We don't allow null (in case this is a reference type).
-            // If this is a value type, this check will be ignored.
-            if (aggregateId == null)
-                throw new InvalidAggregateIdException();
-
-            return CreateAggregateSession(aggregateId.GetType(), aggregateId);
-        }
-
-        public IAggregateSession<TAggregateId> OpenStatelessSession<TAggregateId>(TAggregateId aggregateId) 
+        public IAggregateSession OpenStatelessSession(String aggregateId) 
         {
             throw new NotImplementedException();
         }
@@ -50,11 +40,11 @@ namespace Immutably.Aggregates
         {
             if (aggregateType.BaseType == null 
                 || aggregateType.BaseType.IsGenericType == false
-                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<,>))
+                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<>))
                 throw new Exception(String.Format("We cannot find state type for [{0}] aggregate", aggregateType.FullName));
 
             var genericArgs = aggregateType.BaseType.GetGenericArguments();
-            var stateType = genericArgs[1];
+            var stateType = genericArgs[0];
             return stateType;
         }
 
@@ -76,14 +66,14 @@ namespace Immutably.Aggregates
 
         public IAggregateContext CreateAggregateContext(Type idType, Type stateType, Object aggregateId, Int32 version, Object state, IDataFactory dataFactory)
         {
-            var type = typeof (AggregateContext<,>);
+            var type = typeof (AggregateContext<>);
             var contextType = type.MakeGenericType(idType, stateType);
             return (IAggregateContext) Activator.CreateInstance(contextType, new[] { aggregateId, version, state, dataFactory });
         }        
         
         public IAggregateSession CreateAggregateSession(Type idType, Object aggregateId)
         {
-            var type = typeof (AggregateSession<>);
+            var type = typeof (AggregateSession);
             var sessionType = type.MakeGenericType(idType);
             return (IAggregateSession) Activator.CreateInstance(sessionType, new[] { aggregateId });
         }

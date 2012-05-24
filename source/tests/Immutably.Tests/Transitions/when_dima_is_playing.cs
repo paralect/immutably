@@ -1,3 +1,4 @@
+using System;
 using Machine.Specifications;
 
 namespace Immutably.Tests.Transitions
@@ -7,7 +8,7 @@ namespace Immutably.Tests.Transitions
     {
         private Because of = () =>
         {
-            using (var writer = store.CreateStreamWriter((object) 45))
+            using (var writer = store.CreateStreamWriter(45.ToString()))
             {
                 writer.Write(2, builder => builder
                     .AddEvent(evnt)

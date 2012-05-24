@@ -11,17 +11,17 @@ namespace Immutably.Transitions
     /// for **one** Stream (usually Aggregate Root) in one atomic package, 
     /// that can be either canceled or persisted by Event Store.
     /// </summary>  
-    public class Transition<TStreamId> : ITransition<TStreamId>
+    public class Transition : ITransition
     {
         /// <summary>
         /// Event envelops, in order (by transition sequence)
         /// </summary>
-        private readonly List<IEventEnvelope<TStreamId>> _eventEnvelopes = new List<IEventEnvelope<TStreamId>>();
+        private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
 
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        private readonly TStreamId _streamId;
+        private readonly String _streamId;
 
         /// <summary>
         /// Serial number of this transition inside stream
@@ -37,12 +37,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        public TStreamId StreamId
-        {
-            get { return _streamId; }
-        }
-
-        Object ITransition.StreamId
+        public String StreamId
         {
             get { return _streamId; }
         }
@@ -67,14 +62,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Readonly collection of Event envelopes, in order (by transition sequence)
         /// </summary>
-        public IIndexedEnumerable<IEventEnvelope<TStreamId>> EventsWithMetadata
+        public IIndexedEnumerable<IEventEnvelope> EventsWithMetadata
         {
             get { return _eventEnvelopes.AsIndexedEnumerable(); }
-        }
-
-        IIndexedEnumerable<IEventEnvelope> ITransition.EventsWithMetadata
-        {
-            get { return EventsWithMetadata; }
         }
 
         /// <summary>
@@ -98,7 +88,7 @@ namespace Immutably.Transitions
         /// Specifies, should we validate envelopes that they belongs 
         /// to specified <param name="streamId" /> and they all have specified <param name="streamSequence" />
         /// </param>
-        public Transition(TStreamId streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope<TStreamId>> eventEnvelopes, Boolean validate = true)
+        public Transition(String streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _streamId = streamId;
             _streamSequence = streamSeq;
@@ -117,7 +107,7 @@ namespace Immutably.Transitions
                     if (eventEnvelope.Metadata.TransitionSequence <= _transitionSequence)
                         throw new Exception("Invalid transition sequence. Events aren't in order, or ");
 
-                    if (!EqualityComparer<TStreamId>.Default.Equals(eventEnvelope.Metadata.SenderId, _streamId))
+                    if (eventEnvelope.Metadata.SenderId != _streamId)
                         throw new Exception("Invalid transition, because events are for different streams");
 
                     if (eventEnvelope.Metadata.StreamSequence != _streamSequence)

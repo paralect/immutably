@@ -1,18 +1,14 @@
+using System;
+
 namespace Immutably.Messages
 {
     
-    public class EventMetadata<TId> : MessageMetadata, IEventMetadata<TId>
+    public class EventMetadata : MessageMetadata, IEventMetadata
     {
         /// <summary>
         /// Id of Aggregate Root, Service or Process that emits this events.
         /// </summary>
-        public TId SenderId { get; set; }
-
-        object IEventMetadata.SenderId
-        {
-            get { return SenderId; }
-            set { SenderId = (TId) value; }
-        }
+        public String SenderId { get; set; }
 
         /// <summary>
         /// StreamSequence of Aggregate Root, Service, Saga or Process at the moment event was emitted.

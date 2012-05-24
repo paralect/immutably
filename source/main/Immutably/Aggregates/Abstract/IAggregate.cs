@@ -7,7 +7,7 @@ namespace Immutably.Aggregates
 {
     public interface IAggregate
     {
-        Object Id { get; }
+        String Id { get; }
         IState State { get; }
         Int32 CurrentVersion { get; }
         Int32 InitialVersion { get; }
@@ -19,8 +19,4 @@ namespace Immutably.Aggregates
         void EstablishContext(IAggregateContext context);        
     }
 
-    public interface IAggregate<TId> : IAggregate
-    {
-        new TId Id { get; }
-    }
 }

@@ -6,7 +6,7 @@ using Immutably.StackOverflow.Contexts.Transactions.Events;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Domain
 {
-    public class Site : Aggregate<Guid, Site.SiteState>
+    public class Site : Aggregate<Site.SiteState>
     {
         #region Site State
         /// <summary>

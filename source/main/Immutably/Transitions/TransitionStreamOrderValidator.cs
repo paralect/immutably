@@ -3,31 +3,29 @@ using System.Collections.Generic;
 
 namespace Immutably.Transitions
 {
-    public class TransitionStreamOrderValidator<TStreamId>
+    public class TransitionStreamOrderValidator
     {
-        private readonly IEnumerable<ITransition<TStreamId>> _transitions;
-        private readonly TStreamId _streamId;
+        private readonly IEnumerable<ITransition> _transitions;
+        private readonly String _streamId;
 
-        public TransitionStreamOrderValidator(TStreamId streamId, IEnumerable<ITransition<TStreamId>> transitions)
+        public TransitionStreamOrderValidator(String streamId, IEnumerable<ITransition> transitions)
         {
             _streamId = streamId;
             _transitions = transitions;
         }
 
-        public IEnumerable<ITransition<TStreamId>> Read()
+        public IEnumerable<ITransition> Read()
         {
             var streamSequence = 0;
-
-            var comparer = EqualityComparer<TStreamId>.Default;
 
             foreach (var transition in _transitions)
             {
                 
 
-                if (comparer.Equals(transition.StreamId, default(TStreamId)))
+                if (transition.StreamId == null)
                     throw new NullReferenceException("Id of transition cannot be null for reference types and default(TStreamId) for value type");
 
-                if (!comparer.Equals(transition.StreamId, _streamId))
+                if (transition.StreamId != _streamId)
                     throw new Exception("Invalid transitions stream because of wrong stream ID");
 
                 if (transition.StreamSequence <= streamSequence)
@@ -39,10 +37,10 @@ namespace Immutably.Transitions
                 {
                     var metadata = eventEnvelope.Metadata;
 
-                    if (EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, default(TStreamId)))
+                    if (metadata.SenderId == null)
                         throw new NullReferenceException("SenderId in event metadata cannot be null for reference type, or default(T) for value type");
 
-                    if (!EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, _streamId))
+                    if (metadata.SenderId != _streamId)
                         throw new Exception("Invalid transitions stream because of different stream IDs in the event metadata");
 
                     if (metadata.TransitionSequence <= transitionSequence)

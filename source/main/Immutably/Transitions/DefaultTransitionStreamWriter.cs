@@ -5,22 +5,22 @@ namespace Immutably.Transitions
     /// <summary>
     /// Writes transitions to stream
     /// </summary>
-    public class DefaultTransitionStreamWriter<TStreamId> : ITransitionStreamWriter<TStreamId>
+    public class DefaultTransitionStreamWriter : ITransitionStreamWriter
     {
         /// <summary>
         /// Transition repository
         /// </summary>
-        private readonly ITransitionRepository<TStreamId> _repository;
+        private readonly ITransitionRepository _repository;
 
         /// <summary>
         /// Stream Id
         /// </summary>
-        private readonly TStreamId _streamId;
+        private readonly String _streamId;
 
         /// <summary>
         /// Creates DefaultTransitionStreamWriter
         /// </summary>
-        public DefaultTransitionStreamWriter(ITransitionRepository<TStreamId> repository, TStreamId streamId)
+        public DefaultTransitionStreamWriter(ITransitionRepository repository, String streamId)
         {
             _repository = repository;
             _streamId = streamId;
@@ -29,7 +29,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Writes transition to the end of stream
         /// </summary>
-        public void Write(ITransition<TStreamId> transition)
+        public void Write(ITransition transition)
         {
             _repository.Append(transition);
         }
@@ -37,9 +37,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Writes transition to the end of stream with specified <param name="streamSequence" />
         /// </summary>
-        public void Write(Int32 streamSequence, Action<ITransitionBuilder<TStreamId>> transitionBuilder)
+        public void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder)
         {
-            var transition = new TransitionBuilder<TStreamId>(_streamId, streamSequence, DateTime.UtcNow);
+            var transition = new TransitionBuilder(_streamId, streamSequence, DateTime.UtcNow);
             transitionBuilder(transition);
             _repository.Append(transition.Build());
         }

@@ -5,20 +5,20 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public class Aggregate<TId, TState> : IAggregate<TId>
+    public class Aggregate<TState> : IAggregate
         where TState : IState
     {
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private AggregateContext<TId, TState> _context;
+        private AggregateContext<TState> _context;
 
-        public AggregateContext<TId, TState> Context
+        public AggregateContext<TState> Context
         {
             get
             {
                 if (_context == null)
-                    _context = new AggregateContext<TId, TState>();
+                    _context = new AggregateContext<TState>();
 
                 return _context;
             }
@@ -50,14 +50,9 @@ namespace Immutably.Aggregates
             get { return Context.AggregateInitialVersion; } 
         }
 
-        public TId Id
+        public String Id
         {
             get { return Context.Id; }
-        }
-
-        object IAggregate.Id
-        {
-            get { return Id; }
         }
 
         public IDataFactory DataFactory
@@ -106,10 +101,10 @@ namespace Immutably.Aggregates
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            _context = (AggregateContext<TId, TState>) context;
+            _context = (AggregateContext<TState>) context;
         }
 
-        public void EstablishContext(AggregateContext<TId, TState> context)
+        public void EstablishContext(AggregateContext<TState> context)
         {
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
@@ -117,12 +112,12 @@ namespace Immutably.Aggregates
             _context = context;
         }
 
-        public void EstablishContext(Action<AggregateContextBuilder<TId, TState>> contextBuilder)
+        public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)
         {
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            var builder = new AggregateContextBuilder<TId, TState>();
+            var builder = new AggregateContextBuilder<TState>();
             contextBuilder(builder);
             _context = builder.Build();
         }

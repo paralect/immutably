@@ -8,8 +8,8 @@ namespace Immutably.Aggregates
     public interface IAggregateContext
     {
         Object State { get; }
-        Object Id { get; }
-        int CurrentVersion { get; }
+        String Id { get; }
+        Int32 CurrentVersion { get; }
         IDataFactory DataFactory { get; }
         Boolean Changed { get; }
         IList<IEvent> Changes { get; }

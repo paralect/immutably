@@ -12,13 +12,13 @@ namespace Immutably.Tests.AggregateStore
         public static SimpleEvent evnt;
         public static InMemoryTransitionStore store;
         public static Immutably.Aggregates.AggregateStore AggregateStore;
-        public static List<ITransition<Guid>> transitions;
+        public static List<ITransition> transitions;
 
         Establish context = () =>
         {
             evnt = new SimpleEvent()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Year = 54545,
                 Name = "Lenin"
             };
@@ -40,7 +40,7 @@ namespace Immutably.Tests.AggregateStore
         }
     }
 
-    public class MyAggregate : Aggregate<Guid, MyState>
+    public class MyAggregate : Aggregate<MyState>
     {
         public MyAggregate()
         {

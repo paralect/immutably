@@ -2,9 +2,9 @@
 
 namespace Immutably.Messages
 {
-    public interface IStateMetadata<TId>
+    public interface IStateMetadata
     {
         Int32 Version { get; set; }
-        TId EntityId { get; set; }
+        String EntityId { get; set; }
     }
 }

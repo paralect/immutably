@@ -11,13 +11,13 @@ namespace Immutably.Tests.Transitions
     {
         public static SimpleEvent evnt;
         public static InMemoryTransitionStore store;
-        public static List<ITransition<Guid>> transitions;
+        public static List<ITransition> transitions;
 
         Establish context = () =>
         {
             evnt = new SimpleEvent()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Year = 54545,
                 Name = "Lenin"
             };
@@ -25,7 +25,7 @@ namespace Immutably.Tests.Transitions
             store = new InMemoryTransitionStore();
         };
 
-        public static List<ITransition<Guid>> LoadAllStreamTransitions()
+        public static List<ITransition> LoadAllStreamTransitions()
         {
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
@@ -33,7 +33,7 @@ namespace Immutably.Tests.Transitions
             }
         }
 
-        public static void WriteTransition(Guid streamId, Int32 streamSequence, IEvent newEvent)
+        public static void WriteTransition(String streamId, Int32 streamSequence, IEvent newEvent)
         {
             using (var writer = store.CreateStreamWriter(streamId))
             {

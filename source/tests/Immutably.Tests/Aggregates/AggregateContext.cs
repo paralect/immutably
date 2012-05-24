@@ -10,7 +10,7 @@ namespace Immutably.Tests.Aggregates
          
     }
 
-    public class MyAggregate : Aggregate<Guid, MyState>
+    public class MyAggregate : Aggregate<MyState>
     {
         public void Create(Guid id, String name, Int32 year)
         {

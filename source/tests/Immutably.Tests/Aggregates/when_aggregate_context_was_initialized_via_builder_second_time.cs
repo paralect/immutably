@@ -10,7 +10,7 @@ namespace Immutably.Tests.Aggregates
         {
             aggregate = new MyAggregate();
             aggregate.EstablishContext(context => context
-                .SetId(Guid.NewGuid())
+                .SetId(Guid.NewGuid().ToString())
                 .SetVersion(34)
             );
         };
@@ -18,7 +18,7 @@ namespace Immutably.Tests.Aggregates
         Because of = () =>
             exception = Catch.Exception(() => 
                 aggregate.EstablishContext(context => context
-                    .SetId(Guid.NewGuid())
+                    .SetId(Guid.NewGuid().ToString())
                     .SetVersion(34)
             ));
 

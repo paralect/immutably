@@ -1,11 +1,13 @@
-﻿namespace Immutably.Messages
+﻿using System;
+
+namespace Immutably.Messages
 {
-    public class CommandMetadata<TId> : MessageMetadata, ICommandMetadata<TId>
+    public class CommandMetadata : MessageMetadata, ICommandMetadata
     {
         /// <summary>
         /// Id of Aggregate Root, Service or Process that command addressed to
         /// </summary>
-        public TId ReceiverId { get; set; }
+        public String ReceiverId { get; set; }
 
         /// <summary>
         /// Expected version of receiver (Aggregate Root, Service, Saga or Process). 

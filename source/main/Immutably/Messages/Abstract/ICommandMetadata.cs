@@ -3,12 +3,12 @@ using System;
 
 namespace Immutably.Messages
 {
-    public interface ICommandMetadata<TReceiverId> : IMessageMetadata
+    public interface ICommandMetadata : IMessageMetadata
     {
         /// <summary>
         /// Id of Aggregate Root, Service, Saga or Process this commant addressed to
         /// </summary>
-        TReceiverId ReceiverId { get; set; }
+        String ReceiverId { get; set; }
 
         /// <summary>
         /// Expected version of receiver (Aggregate Root, Service, Saga or Process). 

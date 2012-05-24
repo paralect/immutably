@@ -4,17 +4,17 @@ using Immutably.Messages;
 
 namespace Immutably.Transitions
 {
-    public class TransitionBuilder<TStreamId> : ITransitionBuilder<TStreamId>
+    public class TransitionBuilder : ITransitionBuilder
     {
         /// <summary>
         /// Event envelops, in order (by transition sequence)
         /// </summary>
-        private readonly List<IEventEnvelope<TStreamId>> _eventEnvelopes = new List<IEventEnvelope<TStreamId>>();
+        private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
 
         /// <summary>
         /// ID of stream, this transition belongs to
         /// </summary>
-        private readonly TStreamId _streamId;
+        private readonly String _streamId;
 
         /// <summary>
         /// Serial number of this transition inside stream
@@ -35,7 +35,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Creates transition builder
         /// </summary>
-        public TransitionBuilder(TStreamId streamId, Int32 streamSequence, DateTime timestamp)
+        public TransitionBuilder(String streamId, Int32 streamSequence, DateTime timestamp)
         {
             _streamId = streamId;
             _streamSequence = streamSequence;
@@ -47,16 +47,16 @@ namespace Immutably.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamSequence and next available TransitionSequence)
         /// </summary>
-        public ITransitionBuilder<TStreamId> AddEvent(IEvent evnt)
+        public ITransitionBuilder AddEvent(IEvent evnt)
         {
-            var metadata = new EventMetadata<TStreamId>()
+            var metadata = new EventMetadata()
             {
                 SenderId = _streamId,
                 StreamSequence = _streamSequence,
                 TransitionSequence = _transitionSequence
             };
 
-            _eventEnvelopes.Add(new EventEnvelope<TStreamId>(evnt, metadata));
+            _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
             _transitionSequence++;
             return this;
         }
@@ -65,10 +65,10 @@ namespace Immutably.Transitions
         /// Adds event and corresponding event metadata to this transition
         /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
         /// </summary>
-        public ITransitionBuilder<TStreamId> AddEvent(IEvent evnt, IEventMetadata<TStreamId> metadata)
+        public ITransitionBuilder AddEvent(IEvent evnt, IEventMetadata metadata)
         {
             ValidateEventMetadata(metadata);
-            _eventEnvelopes.Add(new EventEnvelope<TStreamId>(evnt, metadata));
+            _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
             _transitionSequence = metadata.TransitionSequence + 1;
             return this;
         }
@@ -77,7 +77,7 @@ namespace Immutably.Transitions
         /// Adds event envelope to this transition
         /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
         /// </summary>
-        public ITransitionBuilder<TStreamId> AddEvent(IEventEnvelope<TStreamId> envelope)
+        public ITransitionBuilder AddEvent(IEventEnvelope envelope)
         {
             ValidateEventMetadata(envelope.Metadata);
             _eventEnvelopes.Add(envelope);
@@ -88,9 +88,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Build Transition
         /// </summary>
-        public ITransition<TStreamId> Build()
+        public ITransition Build()
         {
-            var transition = new Transition<TStreamId>(_streamId, _streamSequence, _timestamp, _eventEnvelopes, true);
+            var transition = new Transition(_streamId, _streamSequence, _timestamp, _eventEnvelopes, true);
             return transition;
         }
 
@@ -101,12 +101,12 @@ namespace Immutably.Transitions
 
         ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt, IEventMetadata metadata)
         {
-            return AddEvent(evnt, (IEventMetadata<TStreamId>) metadata);
+            return AddEvent(evnt, (IEventMetadata) metadata);
         }
 
         ITransitionBuilder ITransitionBuilder.AddEvent(IEventEnvelope envelope)
         {
-            return AddEvent((IEventEnvelope<TStreamId>) envelope);
+            return AddEvent((IEventEnvelope) envelope);
         }
 
         ITransition ITransitionBuilder.Build()
@@ -117,9 +117,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Performs validation of event metadata
         /// </summary>
-        private void ValidateEventMetadata(IEventMetadata<TStreamId> metadata)
+        private void ValidateEventMetadata(IEventMetadata metadata)
         {
-            if (!EqualityComparer<TStreamId>.Default.Equals(metadata.SenderId, _streamId))
+            if (metadata.SenderId != _streamId)
                 throw new Exception("Invalid stream ID");
 
             if (metadata.StreamSequence != _streamSequence)

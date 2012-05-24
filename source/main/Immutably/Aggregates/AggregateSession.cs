@@ -16,7 +16,7 @@ namespace Immutably.Aggregates
         /// Aggregate ID for this session.
         /// AggregateSession can work only with one Aggregate.
         /// </summary>
-        protected readonly Object _aggregateId;
+        protected readonly String _aggregateId;
 
         /// <summary>
         /// Aggregate Context 
@@ -34,7 +34,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(IAggregateStore store, Object aggregateId)
+        public AggregateSession(IAggregateStore store, String aggregateId)
         {
             _store = store;
             _aggregateId = aggregateId;
@@ -115,41 +115,25 @@ namespace Immutably.Aggregates
         {
             
         }
-    }
-
-    public class AggregateSession<TAggregateId> : IAggregateSession<TAggregateId>
-    {
-        public AggregateSession(IAggregateStore store, TAggregateId aggregateId)// : base(store, aggregateId)
-        {
-        }
 
         public TAggregate CreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
+            where TAggregate : IAggregate
         {
             return (TAggregate)((IAggregateSession)this).CreateAggregate(typeof(TAggregate));
         }
 
         public TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
+            where TAggregate : IAggregate
         {
             //base.LoadAggregate(typeof (TAggregate));
             return (TAggregate)((IAggregateSession)this).LoadAggregate(typeof(TAggregate));
         }
 
         public TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IAggregate<TAggregateId>
+            where TAggregate : IAggregate
         {
             return (TAggregate)((IAggregateSession)this).LoadOrCreateAggregate(typeof(TAggregate));
         }
-
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
     }
+
 }

@@ -1,10 +1,10 @@
 namespace Immutably.Messages
 {
-    public class EventEnvelope<TId> : MessageEnvelope, IEventEnvelope<TId>
+    public class EventEnvelope : MessageEnvelope, IEventEnvelope
     {
-        public new IEventMetadata<TId> Metadata
+        public new IEventMetadata Metadata
         {
-            get { return (IEventMetadata<TId>) base.Metadata; }
+            get { return (IEventMetadata) base.Metadata; }
         }
 
         public IEvent Event
@@ -12,7 +12,7 @@ namespace Immutably.Messages
             get { return (IEvent)Message; }
         }
 
-        public EventEnvelope(IEvent message, IEventMetadata<TId> metadata) : base(message, metadata)
+        public EventEnvelope(IEvent message, IEventMetadata metadata) : base(message, metadata)
         {
         }
     }

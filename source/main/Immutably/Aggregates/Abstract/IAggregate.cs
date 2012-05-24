@@ -19,4 +19,9 @@ namespace Immutably.Aggregates
         void EstablishContext(IAggregateContext context);        
     }
 
+    public interface IStatelessAggregate
+    {
+        
+    }
+
 }

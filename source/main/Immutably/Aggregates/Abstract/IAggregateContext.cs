@@ -17,4 +17,9 @@ namespace Immutably.Aggregates
         void Reply(IEvent evnt);
         void Reply(IEnumerable<IEvent> events);
     }
+
+    public interface IAggregateStatelessContext
+    {
+        
+    }
 }

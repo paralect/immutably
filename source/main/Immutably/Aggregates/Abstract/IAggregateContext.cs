@@ -7,18 +7,28 @@ namespace Immutably.Aggregates
 {
     public interface IAggregateContext
     {
-        Object State { get; }
         String Id { get; }
         Int32 CurrentVersion { get; }
+        Int32 InitialVersion { get; }
         IDataFactory DataFactory { get; }
         Boolean Changed { get; }
         IList<IEvent> Changes { get; }
         void Apply(IEvent evnt);
+
+        void Apply<TEvent>(Action<TEvent> evntBuilder)
+            where TEvent : IEvent;
+
+        TData Create<TData>();
+    }
+
+    public interface IStatefullAggregateContext : IAggregateContext
+    {
+        Object State { get; }
         void Reply(IEvent evnt);
         void Reply(IEnumerable<IEvent> events);
     }
 
-    public interface IAggregateStatelessContext
+    public interface IStatelessAggregateContext : IAggregateContext
     {
         
     }

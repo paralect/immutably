@@ -5,39 +5,22 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public class Aggregate<TState> : IAggregate
-        where TState : IState
+    public class Aggregate : IStatelessAggregate
     {
         /// <summary>
         /// Current aggregate state
         /// </summary>
-        private AggregateContext _context;
+        protected IAggregateContext _context;
 
-        public AggregateContext Context
+        public IAggregateContext Context
         {
             get
             {
                 if (_context == null)
-                    _context = new AggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0);
+                    _context = new StatelessAggregateContext("temporary_id", 0);
 
                 return _context;
             }
-        }
-
-        /// <summary>
-        /// Current aggregate state
-        /// </summary>
-        IState IAggregate.State 
-        {
-            get { return State; }
-        }
-
-        /// <summary>
-        /// Current aggregate state
-        /// </summary>
-        public TState State
-        {
-            get { return (TState) Context.State; }
         }
 
         public int CurrentVersion
@@ -47,7 +30,7 @@ namespace Immutably.Aggregates
 
         public int InitialVersion
         {
-            get { return Context.AggregateInitialVersion; } 
+            get { return Context.InitialVersion; } 
         }
 
         public String Id
@@ -81,6 +64,41 @@ namespace Immutably.Aggregates
             Context.Apply(evntBuilder);
         }
 
+        protected TData Create<TData>()
+        {
+            return Context.Create<TData>();
+        }
+
+        public void EstablishContext(IStatelessAggregateContext context)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            _context = context;
+        }
+
+/*        public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            var builder = new AggregateContextBuilder<TState>();
+            contextBuilder(builder);
+            _context = builder.Build();
+        }*/
+    }
+
+    public class Aggregate<TState> : Aggregate, IStatefullAggregate
+        where TState : IState
+    {
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        IState IStatefullAggregate.State
+        {
+            get { return State; }
+        }
+
         public void Reply(IEvent evnt)
         {
             Context.Reply(evnt);
@@ -91,27 +109,31 @@ namespace Immutably.Aggregates
             Context.Reply(events);
         }
 
-        protected TData Create<TData>()
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        public TState State
         {
-            return Context.Create<TData>();
+            get { return (TState) Context.State; }
         }
 
-        public void EstablishContext(IAggregateContext context)
+        public IStatefullAggregateContext Context
+        {
+            get
+            {
+                if (_context == null)
+                    _context = new StatefullAggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0);
+
+                return (IStatefullAggregateContext)_context;
+            }
+        }
+
+        public void EstablishContext(IStatefullAggregateContext context)
         {
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            _context = (AggregateContext) context;
-        }
-
-        public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)
-        {
-            if (_context != null)
-                throw new AggregateContextModificationForbiddenException(GetType());
-
-            var builder = new AggregateContextBuilder<TState>();
-            contextBuilder(builder);
-            _context = builder.Build();
+            _context = (IStatefullAggregateContext)context;
         }
     }
 }

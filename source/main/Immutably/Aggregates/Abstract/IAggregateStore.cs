@@ -14,7 +14,7 @@ namespace Immutably.Aggregates
         
         Type GetAggregateStateType(Type aggregateType);
         IState CreateState(Type stateType);
-        IAggregate CreateAggregate(Type aggregateType);
+        IStatefullAggregate CreateAggregate(Type aggregateType);
         IAggregateContext CreateAggregateContext(String aggregateId, Int32 version, Object state, IDataFactory dataFactory);
     }
 }

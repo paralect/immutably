@@ -5,13 +5,8 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public class AggregateContext : IAggregateContext
+    public abstract class AggregateContext : IAggregateContext
     {
-        /// <summary>
-        /// Current aggregate state
-        /// </summary>
-        private Object _aggregateState;
-
         /// <summary>
         /// Aggregate id
         /// </summary>
@@ -29,27 +24,27 @@ namespace Immutably.Aggregates
         
         private readonly List<IEvent> _aggregateChanges = new List<IEvent>();
 
-        public AggregateContext(Object state)
+        public AggregateContext()
         {
-            Initialize(state, "temporary_id", 0, null);
+            Initialize("temporary_id", 0, null);
         }
 
-        public AggregateContext(Object state, String aggregateId)
+        public AggregateContext(String aggregateId)
         {
-            Initialize(state, aggregateId, 0, null);
+            Initialize(aggregateId, 0, null);
         }
 
-        public AggregateContext(Object state, String aggregateId, Int32 version)
+        public AggregateContext(String aggregateId, Int32 version)
         {
-            Initialize(state, aggregateId, version, null);
+            Initialize(aggregateId, version, null);
         }
 
-        public AggregateContext(Object state, String aggregateId, Int32 version, IDataFactory dataFactory)
+        public AggregateContext(String aggregateId, Int32 version, IDataFactory dataFactory)
         {
-            Initialize(state, aggregateId, version, dataFactory);
+            Initialize(aggregateId, version, dataFactory);
         }
 
-        private void Initialize(Object state, string aggregateId, int version, IDataFactory dataFactory)
+        private void Initialize(string aggregateId, int version, IDataFactory dataFactory)
         {
             if (version < 0)
                 throw new InvalidAggregateVersionException(version);
@@ -61,19 +56,6 @@ namespace Immutably.Aggregates
                 throw new NullAggregateIdException();
 
             _aggregateId = aggregateId;
-
-            if (state == null)
-                throw new NullAggregateStateException();
-
-            _aggregateState = state;
-        }
-
-        /// <summary>
-        /// Current aggregate state
-        /// </summary>
-        public Object State
-        {
-            get { return _aggregateState; }
         }
 
         public int CurrentVersion
@@ -81,7 +63,7 @@ namespace Immutably.Aggregates
             get { return Changed ? _aggregateInitialVersion + 1 : _aggregateInitialVersion; }
         }
 
-        public int AggregateInitialVersion
+        public int InitialVersion
         {
             get { return _aggregateInitialVersion; } 
         }
@@ -123,21 +105,80 @@ namespace Immutably.Aggregates
             ApplyInternal(evnt);
         }
 
-        public void Reply(IEvent evnt)
-        {
-            ExecuteStateEventHandler(evnt);
-        }
-
-        public void Reply(IEnumerable<IEvent> events)
-        {
-            foreach (var evnt in events)
-                ExecuteStateEventHandler(evnt);
-        }
-
-        private void ApplyInternal(IEvent evnt)
+        protected virtual void ApplyInternal(IEvent evnt)
         {
             _aggregateChanges.Add(evnt);
-            ExecuteStateEventHandler(evnt);
+        }
+
+        public TData Create<TData>()
+        {
+            if (_dataFactory == null)
+                return Activator.CreateInstance<TData>();
+
+            return _dataFactory.Create<TData>();
+        }
+    }
+
+    public class StatelessAggregateContext : AggregateContext, IStatelessAggregateContext
+    {
+        public StatelessAggregateContext() : base()
+        {
+        }
+
+        public StatelessAggregateContext(String aggregateId) : base(aggregateId)
+        {
+        }
+
+        public StatelessAggregateContext(String aggregateId, Int32 version) : base(aggregateId, version)
+        {
+        }
+
+        public StatelessAggregateContext(String aggregateId, Int32 version, IDataFactory dataFactory) : base(aggregateId, version, dataFactory)
+        {
+        }        
+    }
+
+    public class StatefullAggregateContext : AggregateContext, IStatefullAggregateContext
+    {
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        private Object _aggregateState;
+
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        public Object State
+        {
+            get { return _aggregateState; }
+        }
+
+        public StatefullAggregateContext(Object state)
+        {
+            Initialize(state);
+        }
+
+        public StatefullAggregateContext(Object state, String aggregateId) : base(aggregateId)
+        {
+            Initialize(state);
+        }
+
+        public StatefullAggregateContext(Object state, String aggregateId, Int32 version) : base(aggregateId, version)
+        {
+            Initialize(state);
+        }
+
+        public StatefullAggregateContext(Object state, String aggregateId, Int32 version, IDataFactory dataFactory) : base(aggregateId, version, dataFactory)
+        {
+            Initialize(state);
+        }
+
+        private void Initialize(Object state)
+        {
+            if (state == null)
+                throw new NullAggregateStateException();
+
+            _aggregateState = state;
         }
 
         private void ExecuteStateEventHandler(IEvent evnt)
@@ -151,16 +192,25 @@ namespace Immutably.Aggregates
                 return;
 
             methodInfo.Invoke(State, new object[] { evnt });
-//
-//            ((dynamic) State).On((dynamic) evnt);
+            //
+            //            ((dynamic) State).On((dynamic) evnt);
         }
 
-        public TData Create<TData>()
+        public void Reply(IEvent evnt)
         {
-            if (_dataFactory == null)
-                return Activator.CreateInstance<TData>();
+            ExecuteStateEventHandler(evnt);
+        }
 
-            return _dataFactory.Create<TData>();
+        public void Reply(IEnumerable<IEvent> events)
+        {
+            foreach (var evnt in events)
+                ExecuteStateEventHandler(evnt);
+        }
+
+        protected override void ApplyInternal(IEvent evnt)
+        {
+            base.ApplyInternal(evnt);
+            ExecuteStateEventHandler(evnt);
         }
     }
 }

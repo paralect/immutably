@@ -39,7 +39,7 @@ namespace Immutably.Aggregates
             if (_aggregateState == null && _dataFactory == null)
                 _aggregateState = Activator.CreateInstance<TState>();
 
-            return new AggregateContext(_aggregateState, _aggregateId, _aggregateVersion, _dataFactory);
+            return new StatefullAggregateContext(_aggregateState, _aggregateId, _aggregateVersion, _dataFactory);
         }
     }
 }

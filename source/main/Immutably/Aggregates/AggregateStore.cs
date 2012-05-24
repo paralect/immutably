@@ -59,14 +59,14 @@ namespace Immutably.Aggregates
             return Activator.CreateInstance<TAggregate>();
         }
 
-        public IAggregate CreateAggregate(Type aggregateType)
+        public IStatefullAggregate CreateAggregate(Type aggregateType)
         {
-            return (IAggregate) Activator.CreateInstance(aggregateType);
+            return (IStatefullAggregate) Activator.CreateInstance(aggregateType);
         }
 
         public IAggregateContext CreateAggregateContext(String aggregateId, Int32 version, Object state, IDataFactory dataFactory)
         {
-            return new AggregateContext(state, aggregateId, version, dataFactory);
+            return new StatefullAggregateContext(state, aggregateId, version, dataFactory);
         }        
         
         public IAggregateSession CreateAggregateSession(Type idType, Object aggregateId)

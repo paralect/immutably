@@ -40,7 +40,7 @@ namespace Immutably.Aggregates
             _aggregateId = aggregateId;
         }
 
-        public IAggregate LoadAggregate(Type aggregateType)
+        public IStatefullAggregate LoadAggregate(Type aggregateType)
         {
             var stateType = _store.GetAggregateStateType(aggregateType);
 
@@ -58,7 +58,7 @@ namespace Immutably.Aggregates
 //                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
 
             // Create aggregate 
-            IAggregate aggregate = _store.CreateAggregate(aggregateType);
+            IStatefullAggregate aggregate = _store.CreateAggregate(aggregateType);
             /*_context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 _aggregateId,
                 spooler.Version,
@@ -70,19 +70,19 @@ namespace Immutably.Aggregates
             return aggregate;            
         }
 
-        IAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)
+        IStatefullAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)
         {
-            return (IAggregate)(Object)null;
+            return (IStatefullAggregate)(Object)null;
         }
 
-        IAggregate IAggregateSession.CreateAggregate(Type aggregateType)
+        IStatefullAggregate IAggregateSession.CreateAggregate(Type aggregateType)
         {
             var stateType = _store.GetAggregateStateType(aggregateType);
 
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
-            IAggregate aggregate = _store.CreateAggregate(aggregateType);
+            IStatefullAggregate aggregate = _store.CreateAggregate(aggregateType);
 
 /*            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 _aggregateId,
@@ -117,20 +117,20 @@ namespace Immutably.Aggregates
         }
 
         public TAggregate CreateAggregate<TAggregate>()
-            where TAggregate : IAggregate
+            where TAggregate : IStatefullAggregate
         {
             return (TAggregate)((IAggregateSession)this).CreateAggregate(typeof(TAggregate));
         }
 
         public TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IAggregate
+            where TAggregate : IStatefullAggregate
         {
             //base.LoadAggregate(typeof (TAggregate));
             return (TAggregate)((IAggregateSession)this).LoadAggregate(typeof(TAggregate));
         }
 
         public TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IAggregate
+            where TAggregate : IStatefullAggregate
         {
             return (TAggregate)((IAggregateSession)this).LoadOrCreateAggregate(typeof(TAggregate));
         }

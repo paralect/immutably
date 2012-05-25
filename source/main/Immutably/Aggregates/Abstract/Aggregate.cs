@@ -5,54 +5,69 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
-    public class Aggregate : IStatelessAggregate
+    public abstract class AggregateBase : IAggregate
     {
         /// <summary>
-        /// Current aggregate state
+        /// Aggregate context
         /// </summary>
         protected IAggregateContext _context;
 
-        public virtual IAggregateContext Context
-        {
-            get
-            {
-                if (_context == null)
-                    _context = new StatelessAggregateContext("temporary_id", 0);
+        /// <summary>
+        /// Aggregate context
+        /// </summary>
+        public abstract IAggregateContext Context { get; }
 
-                return _context;
-            }
-        }
-
+        /// <summary>
+        /// Current version of aggregate
+        /// </summary>
         public int CurrentVersion
         {
             get { return Context.CurrentVersion; }
         }
 
+        /// <summary>
+        /// Initial version
+        /// </summary>
         public int InitialVersion
         {
             get { return Context.InitialVersion; } 
         }
 
+        /// <summary>
+        /// Aggregate Id
+        /// </summary>
         public String Id
         {
             get { return Context.Id; }
         }
 
+        /// <summary>
+        /// Data factory
+        /// </summary>
         public IDataFactory DataFactory
         {
             get { return Context.DataFactory; }
         }
 
+        /// <summary>
+        /// Was any changes to this aggregates?
+        /// </summary>
         public Boolean Changed
         {
             get { return Context.Changed; }
         }
 
+        /// <summary>
+        /// Changes to this aggregate
+        /// </summary>
         public IList<IEvent> Changes
         {
             get { return Context.Changes; }
         }
 
+        /// <summary>
+        /// Apply event to aggregates
+        /// </summary>
         public void Apply(IEvent evnt)
         {
             Context.Apply(evnt);
@@ -67,6 +82,23 @@ namespace Immutably.Aggregates
         protected TData Create<TData>()
         {
             return Context.Create<TData>();
+        }
+    }
+
+    /// <summary>
+    /// Stateless aggregate
+    /// </summary>
+    public abstract class Aggregate : AggregateBase, IStatelessAggregate
+    {
+        public override IAggregateContext Context
+        {
+            get
+            {
+                if (_context == null)
+                    _context = new StatelessAggregateContext("temporary_id", 0);
+
+                return _context;
+            }
         }
 
         public void EstablishContext(IStatelessAggregateContext context)
@@ -86,9 +118,14 @@ namespace Immutably.Aggregates
             contextBuilder(builder);
             _context = builder.Build();
         }
+
     }
 
-    public class Aggregate<TState> : Aggregate, IStatefullAggregate
+    /// <summary>
+    /// Statefull aggregate
+    /// </summary>
+    /// <typeparam name="TState"></typeparam>
+    public class Aggregate<TState> : AggregateBase, IStatefullAggregate
         where TState : IState
     {
         /// <summary>

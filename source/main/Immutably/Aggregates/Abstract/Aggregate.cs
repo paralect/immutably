@@ -12,7 +12,7 @@ namespace Immutably.Aggregates
         /// </summary>
         protected IAggregateContext _context;
 
-        public IAggregateContext Context
+        public virtual IAggregateContext Context
         {
             get
             {
@@ -77,15 +77,15 @@ namespace Immutably.Aggregates
             _context = context;
         }
 
-/*        public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)
+        public void EstablishContext(Action<AggregateContextBuilder> contextBuilder)
         {
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            var builder = new AggregateContextBuilder<TState>();
+            var builder = new AggregateContextBuilder();
             contextBuilder(builder);
             _context = builder.Build();
-        }*/
+        }
     }
 
     public class Aggregate<TState> : Aggregate, IStatefullAggregate
@@ -101,12 +101,12 @@ namespace Immutably.Aggregates
 
         public void Reply(IEvent evnt)
         {
-            Context.Reply(evnt);
+            ((IStatefullAggregateContext)Context).Reply(evnt);
         }
 
         public void Reply(IEnumerable<IEvent> events)
         {
-            Context.Reply(events);
+            ((IStatefullAggregateContext)Context).Reply(events);
         }
 
         /// <summary>
@@ -114,10 +114,10 @@ namespace Immutably.Aggregates
         /// </summary>
         public TState State
         {
-            get { return (TState) Context.State; }
+            get { return (TState) ((IStatefullAggregateContext)Context).State; }
         }
 
-        public IStatefullAggregateContext Context
+        public override IAggregateContext Context
         {
             get
             {
@@ -134,6 +134,16 @@ namespace Immutably.Aggregates
                 throw new AggregateContextModificationForbiddenException(GetType());
 
             _context = (IStatefullAggregateContext)context;
+        }
+
+        public void EstablishContext(Action<AggregateContextBuilder<TState>> contextBuilder)
+        {
+            if (_context != null)
+                throw new AggregateContextModificationForbiddenException(GetType());
+
+            var builder = new AggregateContextBuilder<TState>();
+            contextBuilder(builder);
+            _context = builder.Build();
         }
     }
 }

@@ -3,13 +3,21 @@ using Immutably.Data;
 
 namespace Immutably.Aggregates
 {
-    public class AggregateContextBuilder<TState>
+    public class AggregateContextBuilder
     {
-        private String _aggregateId = "temporary_id";
-        private TState _aggregateState;
-        private IDataFactory _dataFactory;
-        private Int32 _aggregateVersion = 0;
+        protected String _aggregateId = "temporary_id";
+        protected Object _aggregateState;
+        protected IDataFactory _dataFactory;
+        protected Int32 _aggregateVersion = 0;
 
+        public StatelessAggregateContext Build()
+        {
+            return new StatelessAggregateContext(_aggregateId, _aggregateVersion, _dataFactory);
+        }
+    }
+
+    public class AggregateContextBuilder<TState> : AggregateContextBuilder
+    {
         public AggregateContextBuilder<TState> SetId(String id)
         {
             _aggregateId = id;
@@ -34,12 +42,13 @@ namespace Immutably.Aggregates
             return this;
         }
 
-        public AggregateContext Build()
+        public new StatefullAggregateContext Build()
         {
             if (_aggregateState == null && _dataFactory == null)
                 _aggregateState = Activator.CreateInstance<TState>();
 
             return new StatefullAggregateContext(_aggregateState, _aggregateId, _aggregateVersion, _dataFactory);
         }
+
     }
 }

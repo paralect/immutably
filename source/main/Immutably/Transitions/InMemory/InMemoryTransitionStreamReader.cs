@@ -38,6 +38,7 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Load last transition in the stream
+        /// Returns null, if stream doesn't exists
         /// </summary>
         public ITransition ReadLast()
         {

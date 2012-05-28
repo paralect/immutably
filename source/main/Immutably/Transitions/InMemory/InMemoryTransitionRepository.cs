@@ -47,10 +47,20 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Load last transition in the stream
+        /// Returns null, if stream doesn't exists or empty
         /// </summary>
         public ITransition LoadLastStreamTransition(String streamId)
         {
-            return _indexByStreamId[streamId].Last();
+            List<ITransition> transitions;
+            var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
+
+            if (!exists)
+                return null;
+
+            if (transitions.Count == 0)
+                return null;
+
+            return transitions.Last();
         }
 
         /// <summary>

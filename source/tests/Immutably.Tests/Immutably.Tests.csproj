@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="AggregateSessionTests.cs" />
     <Compile Include="AggregateStore\InMemoryAggregateStore.cs" />
+    <Compile Include="AggregateStore\StatelessAggregateSpecContext\StatelessAggregateSpecContext.cs" />
+    <Compile Include="AggregateStore\StatelessAggregateSpecContext\when_aggregate_saved_and_loaded.cs" />
     <Compile Include="AggregateStore\when_aggregate_saved.cs" />
     <Compile Include="AggregateStore\when_loading_aggregate_from_not_available_stream.cs" />
     <Compile Include="Aggregates\AggregateContext.cs" />

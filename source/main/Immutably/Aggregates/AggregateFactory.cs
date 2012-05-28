@@ -30,7 +30,7 @@ namespace Immutably.Aggregates
 
     public class AggregateFactory
     {
-        private Dictionary<Type, AggregateDefinition> _definitions = new Dictionary<Type, AggregateDefinition>();
+        private readonly Dictionary<Type, AggregateDefinition> _definitions = new Dictionary<Type, AggregateDefinition>();
 
         public AggregateDefinition GetAggregateDefinition(Type aggregateType)
         {

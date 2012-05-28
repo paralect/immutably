@@ -12,13 +12,13 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Create Aggregate of specified type
         /// </summary>
-        IStatefullAggregate CreateAggregate(Type aggregateType);
+        IAggregate CreateAggregate(Type aggregateType);
 
         /// <summary>
         /// If aggregate exists - it will be loaded.
         /// If aggregate doesn't exist - it will be created.
         /// </summary>
-        IStatefullAggregate LoadOrCreateAggregate(Type aggregateType);
+        IAggregate LoadOrCreateAggregate(Type aggregateType);
 
         /// <summary>
         /// Commit your changes (if any) to aggregate Store.
@@ -26,12 +26,12 @@ namespace Immutably.Aggregates
         void SaveChanges();
 
         TAggregate CreateAggregate<TAggregate>()
-            where TAggregate : IStatefullAggregate;
+            where TAggregate : IAggregate;
 
         TAggregate LoadAggregate<TAggregate>()
-            where TAggregate : IStatefullAggregate;
+            where TAggregate : IAggregate;
 
         TAggregate LoadOrCreateAggregate<TAggregate>()
-            where TAggregate : IStatefullAggregate;
+            where TAggregate : IAggregate;
     }
 }

@@ -29,7 +29,7 @@ namespace Immutably.Tests.Transitions
         {
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
-                return reader.Read().ToList();
+                return reader.ReadAll().ToList();
             }
         }
 

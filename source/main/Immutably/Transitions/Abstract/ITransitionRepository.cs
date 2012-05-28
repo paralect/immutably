@@ -8,7 +8,12 @@ namespace Immutably.Transitions
         /// <summary>
         /// Load single transition, uniquely identified by by streamId and streamSequence
         /// </summary>
-        ITransition LoadTransition(String streamId, Int32 streamSequence);
+        ITransition LoadStreamTransition(String streamId, Int32 streamSequence);
+
+        /// <summary>
+        /// Load last transition in the stream
+        /// </summary>
+        ITransition LoadLastStreamTransition(String streamId);
 
         /// <summary>
         /// Load <param name="count" /> transitions for specified stream, 

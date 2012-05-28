@@ -40,9 +40,17 @@ namespace Immutably.Transitions
         /// <summary>
         /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
         /// </summary>
-        public ITransition LoadTransition(String streamId, int streamSequence)
+        public ITransition LoadStreamTransition(String streamId, int streamSequence)
         {
             return _indexByTransactionId[new TransitionId(streamId, streamSequence)];
+        }
+
+        /// <summary>
+        /// Load last transition in the stream
+        /// </summary>
+        public ITransition LoadLastStreamTransition(String streamId)
+        {
+            return _indexByStreamId[streamId].Last();
         }
 
         /// <summary>
@@ -74,7 +82,7 @@ namespace Immutably.Transitions
             if (!exists)
                 throw new TransitionStreamNotExistsException(String.Format("Stream with id [{0}] doesn't exist", streamId));
 
-            return transitions.AsReadOnly();
+            return transitions;
         }
 
         /// <summary>
@@ -95,7 +103,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Returns readonly collection of all transitions in the store in chronological order
         /// </summary>
-        internal IList<ITransition> LoadStoreTransitions()
+        public IList<ITransition> LoadStoreTransitions()
         {
             return _transitions.AsReadOnly();
         }

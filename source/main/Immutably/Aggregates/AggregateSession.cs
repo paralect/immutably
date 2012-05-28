@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Immutably.Data;
 using Immutably.States;
 using Immutably.Transitions;
 
@@ -10,13 +11,15 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Aggregate store, this session is working with
         /// </summary>
-        private readonly IAggregateStore _store;
+        private readonly AggregateStore _store;
 
         /// <summary>
         /// Aggregate ID for this session.
         /// AggregateSession can work only with one Aggregate.
         /// </summary>
         private readonly String _aggregateId;
+
+        private readonly IDataFactory _dataFactory;
 
         /// <summary>
         /// Aggregate Context 
@@ -34,40 +37,55 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(IAggregateStore store, String aggregateId)
+        public AggregateSession(AggregateStore store, String aggregateId, IDataFactory dataFactory)
         {
             _store = store;
             _aggregateId = aggregateId;
+            _dataFactory = dataFactory;
         }
 
-        public IStatefullAggregate LoadAggregate(Type aggregateType)
+        public IAggregate LoadAggregate(Type aggregateType)
         {
-            var stateType = _store.GetAggregateStateType(aggregateType);
-
-            // Here we can load state from snapshot store, but we are starting from initial state.
-            var initialState = _store.CreateState(stateType);
-
-            var spooler = new StateSpooler(initialState);
-            using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
+            if (false /* stateless */)
             {
-                foreach (var transition in reader.Read())
-                    spooler.Spool(transition.Events, transition.StreamSequence);
+                ITransition transition;
+                using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
+                {
+                    transition = reader.ReadLast();
+                }
+
+                if (transition == null)
+                    throw new AggregateDoesntExistException(aggregateType, _aggregateId);
+
+                var context = new StatelessAggregateContext(_aggregateId, transition.StreamSequence, _dataFactory);
+                var aggregate = _store.CreateStatelessAggregate(aggregateType);
+                aggregate.EstablishContext(context);
+                return aggregate;
             }
+            else
+            {
+                var stateType = _store.GetAggregateStateType(aggregateType);
 
-//            if (lastTransition == null)
-//                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
+                // Here we can load state from snapshot store, but we are starting from initial state.
+                var initialState = _store.CreateState(stateType);
 
-            // Create aggregate 
-            IStatefullAggregate aggregate = _store.CreateAggregate(aggregateType);
-            /*_context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
-                _aggregateId,
-                spooler.Version,
-                initialState,
-                null);
+                var spooler = new StateSpooler(initialState);
+                using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
+                {
+                    foreach (var transition in reader.ReadAll())
+                        spooler.Spool(transition.Events, transition.StreamSequence);
+                }
 
-            aggregate.EstablishContext(_context);*/
+                if (spooler.Data == null)
+                    throw new AggregateDoesntExistException(aggregateType, _aggregateId);
 
-            return aggregate;            
+                // Create aggregate 
+                IStatefullAggregate aggregate = _store.CreateStatefullAggregate(aggregateType);
+                var context = new StatefullAggregateContext(spooler.State, _aggregateId, (int) spooler.Data, _dataFactory);
+                aggregate.EstablishContext(context);
+
+                return aggregate;      
+            }
         }
 
         IStatefullAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)
@@ -82,7 +100,7 @@ namespace Immutably.Aggregates
             // Here we can load state from snapshot store, but we are starting from initial state.
             var initialState = _store.CreateState(stateType);
 
-            IStatefullAggregate aggregate = _store.CreateAggregate(aggregateType);
+            IStatefullAggregate aggregate = _store.CreateStatefullAggregate(aggregateType);
 
 /*            _context = _store.CreateAggregateContext(typeof(TAggregateId), stateType,
                 _aggregateId,

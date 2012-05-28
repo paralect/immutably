@@ -7,7 +7,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Load Aggregate of specified type
         /// </summary>
-        IStatefullAggregate LoadAggregate(Type aggregateType);
+        IAggregate LoadAggregate(Type aggregateType);
 
         /// <summary>
         /// Create Aggregate of specified type

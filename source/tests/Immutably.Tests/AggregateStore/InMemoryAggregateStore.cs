@@ -25,7 +25,7 @@ namespace Immutably.Tests.AggregateStore
 
             store = new InMemoryTransitionStore();
 
-            aggregateStore = new Immutably.Aggregates.AggregateStore(new EscolarFactory(), store);
+            aggregateStore = new Immutably.Aggregates.AggregateStore(new EscolarFactory(), null, store);
         };
     }
 

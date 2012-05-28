@@ -8,6 +8,7 @@ namespace Immutably.Aggregates
     public class AggregateStore : IAggregateStore
     {
         private readonly IEscolarFactory _factory;
+        private readonly IDataFactory _dataFactory;
         private readonly ITransitionStore _transitionStore;
 
         public ITransitionStore TransitionStore
@@ -15,9 +16,10 @@ namespace Immutably.Aggregates
             get { return _transitionStore; }
         }
 
-        public AggregateStore(IEscolarFactory factory, ITransitionStore transitionStore)
+        public AggregateStore(IEscolarFactory factory, IDataFactory dataFactory, ITransitionStore transitionStore)
         {
             _factory = factory;
+            _dataFactory = dataFactory;
             _transitionStore = transitionStore;
         }
 
@@ -27,7 +29,7 @@ namespace Immutably.Aggregates
             if (aggregateId == null)
                 throw new NullAggregateIdException();
 
-            return new AggregateSession(this, aggregateId);
+            return new AggregateSession(this, aggregateId, _dataFactory);
         }
 
         public Type GetAggregateStateType(Type aggregateType)
@@ -53,9 +55,14 @@ namespace Immutably.Aggregates
             return Activator.CreateInstance<TAggregate>();
         }
 
-        public IStatefullAggregate CreateAggregate(Type aggregateType)
+        public IStatefullAggregate CreateStatefullAggregate(Type aggregateType)
         {
             return (IStatefullAggregate) Activator.CreateInstance(aggregateType);
+        }
+
+        public IStatelessAggregate CreateStatelessAggregate(Type aggregateType)
+        {
+            return (IStatelessAggregate) Activator.CreateInstance(aggregateType);
         }
     }
 }

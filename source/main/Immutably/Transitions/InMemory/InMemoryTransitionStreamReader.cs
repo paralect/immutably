@@ -30,15 +30,23 @@ namespace Immutably.Transitions
         /// <summary>
         /// Reads stream by portions (default portion size 1000)
         /// </summary>
-        public IEnumerable<ITransition> Read()
+        public IEnumerable<ITransition> ReadAll()
         {
             var transitions = _store.LoadStreamTransitions(_streamId);
             return new TransitionStreamOrderValidator(_streamId, transitions).Read();
         }
 
-        IEnumerable<ITransition> ITransitionStreamReader.Read()
+        /// <summary>
+        /// Load last transition in the stream
+        /// </summary>
+        public ITransition ReadLast()
         {
-            return Read();
+            return _store.LoadLastStreamTransition(_streamId);
+        }
+
+        IEnumerable<ITransition> ITransitionStreamReader.ReadAll()
+        {
+            return ReadAll();
         }
 
         public void Dispose()

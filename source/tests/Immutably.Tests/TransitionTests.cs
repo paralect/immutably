@@ -33,7 +33,7 @@ namespace Immutably.Tests
             List<ITransition> transitions = null;
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
-                transitions = reader.Read().ToList();
+                transitions = reader.ReadAll().ToList();
             }
 
             // Checking
@@ -80,7 +80,7 @@ namespace Immutably.Tests
 
             using (var reader = store.CreateStreamReader(evnt.Id))
             {
-                foreach(var transition in reader.Read())
+                foreach(var transition in reader.ReadAll())
                 {
 
                 }

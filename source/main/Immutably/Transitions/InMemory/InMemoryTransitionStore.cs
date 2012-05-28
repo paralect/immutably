@@ -25,13 +25,30 @@ namespace Immutably.Transitions
         /// <summary>
         /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
         /// </summary>
-        public ITransition LoadTransition(String streamId, int streamSequence)
+        public ITransition LoadStreamTransition(String streamId, int streamSequence)
         {
             _lock.EnterReadLock();
 
             try
             {
-                return _repository.LoadTransition(streamId, streamSequence);
+                return _repository.LoadStreamTransition(streamId, streamSequence);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        /// <summary>
+        /// Load last transition in the stream
+        /// </summary>
+        public ITransition LoadLastStreamTransition(String streamId)
+        {
+            _lock.EnterReadLock();
+
+            try
+            {
+                return _repository.LoadLastStreamTransition(streamId);
             }
             finally
             {
@@ -43,7 +60,7 @@ namespace Immutably.Transitions
         /// LoadAggregate <param name="count" /> transitions for specified stream, 
         /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
         /// </summary>
-        public IList<ITransition> LoadStreamTransitions<TStreamId>(String streamId, int fromStreamSequence, int count)
+        public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamSequence, int count)
         {
             _lock.EnterReadLock();
 
@@ -81,7 +98,7 @@ namespace Immutably.Transitions
         /// <param name="fromTimestamp">
         /// Not inclusively timestamp value
         /// </param>
-        public IList<ITransition> LoadStoreTransitions<TStreamId>(DateTime fromTimestamp, int count)
+        public IList<ITransition> LoadStoreTransitions(DateTime fromTimestamp, int count)
         {
             _lock.EnterReadLock();
 
@@ -98,7 +115,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Returns readonly collection of all transitions in the store in chronological order
         /// </summary>
-        internal IList<ITransition> LoadStoreTransitions()
+        public IList<ITransition> LoadStoreTransitions()
         {
             _lock.EnterReadLock();
 
@@ -115,7 +132,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Append transition
         /// </summary>
-        public void Append<TStreamId>(ITransition transition)
+        public void Append(ITransition transition)
         {
             _lock.EnterWriteLock();
 

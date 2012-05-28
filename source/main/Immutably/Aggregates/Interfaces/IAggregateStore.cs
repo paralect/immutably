@@ -13,6 +13,5 @@ namespace Immutably.Aggregates
         
         Type GetAggregateStateType(Type aggregateType);
         IState CreateState(Type stateType);
-        IStatefullAggregate CreateAggregate(Type aggregateType);
     }
 }

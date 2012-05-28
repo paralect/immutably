@@ -40,7 +40,7 @@ namespace Immutably.Aggregates
         {
             if (aggregateType.BaseType == null 
                 || aggregateType.BaseType.IsGenericType == false
-                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(Aggregate<>))
+                || aggregateType.BaseType.GetGenericTypeDefinition() != typeof(StatefullAggregate<>))
                 throw new Exception(String.Format("We cannot find state type for [{0}] aggregate", aggregateType.FullName));
 
             var genericArgs = aggregateType.BaseType.GetGenericArguments();

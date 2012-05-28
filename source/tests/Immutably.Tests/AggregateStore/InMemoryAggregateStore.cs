@@ -40,7 +40,7 @@ namespace Immutably.Tests.AggregateStore
         }
     }
 
-    public class MyAggregate : Aggregate<MyState>
+    public class MyAggregate : StatefullAggregate<MyState>
     {
         public MyAggregate()
         {

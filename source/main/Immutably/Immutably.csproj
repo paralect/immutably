@@ -40,16 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\Abstract\IAggregate.cs" />
-    <Compile Include="Aggregates\Abstract\IAggregateContext.cs" />
-    <Compile Include="Aggregates\AggregateContext.cs" />
-    <Compile Include="Aggregates\AggregateContextBuilder.cs" />
+    <Compile Include="Aggregates\AggregateBase.cs" />
+    <Compile Include="Aggregates\Interfaces\IAggregate.cs" />
+    <Compile Include="Aggregates\Interfaces\IAggregateContext.cs" />
+    <Compile Include="Aggregates\AggregateContextBase.cs" />
+    <Compile Include="Aggregates\StatefullAggregateContextBuilder.cs" />
     <Compile Include="Aggregates\AggregateSession.cs" />
     <Compile Include="Aggregates\AggregateStore.cs" />
-    <Compile Include="Aggregates\Abstract\Aggregate.cs" />
-    <Compile Include="Aggregates\Abstract\IAggregateStore.cs" />
-    <Compile Include="Aggregates\Abstract\IAggregateSession.cs" />
+    <Compile Include="Aggregates\StatefullAggregate.cs" />
+    <Compile Include="Aggregates\StatelessAggregate.cs" />
+    <Compile Include="Aggregates\Interfaces\IAggregateStore.cs" />
+    <Compile Include="Aggregates\Interfaces\IAggregateSession.cs" />
     <Compile Include="Aggregates\Exceptions\Exceptions.cs" />
+    <Compile Include="Aggregates\StatefullAggregateContext.cs" />
+    <Compile Include="Aggregates\StatelessAggregateContext.cs" />
+    <Compile Include="Aggregates\StatelessAggregateContextBuilder.cs" />
     <Compile Include="Data\Abstract\IDataFactory.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\DataContextBuilder.cs" />

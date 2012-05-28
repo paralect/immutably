@@ -9,12 +9,12 @@ namespace Immutably.Tests.Aggregates
         Establish context = () =>
         {
             aggregate = new MyAggregate();
-            aggregate.EstablishContext(new StatefullAggregateContext(new MyState()));
+            aggregate.EstablishContext(new StatefullAggregateContext(new MyState(), "1", 0, null));
         };
 
         Because of = () =>
             exception = Catch.Exception(() => aggregate.EstablishContext(
-                new StatefullAggregateContext(new MyState(), Guid.NewGuid().ToString())));
+                new StatefullAggregateContext(new MyState(), Guid.NewGuid().ToString(), 0, null)));
 
         It should_throw_exception = () =>
             exception.ShouldBeOfType<AggregateContextModificationForbiddenException>();

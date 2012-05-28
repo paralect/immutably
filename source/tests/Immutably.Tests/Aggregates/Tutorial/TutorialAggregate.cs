@@ -9,7 +9,7 @@ namespace Immutably.Tests.Aggregates.Tutorial
          
     }
 
-    public class User : Aggregate<UserState>
+    public class User : StatefullAggregate<UserState>
     {
         public void CreateUser(String userId, String name, Int32 score)
         {

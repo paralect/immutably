@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Immutably.Data;
 using Immutably.Messages;
+using Immutably.States;
 
 namespace Immutably.Aggregates
 {
@@ -39,7 +40,7 @@ namespace Immutably.Aggregates
         /// Reply event without tracking it in list of changes.
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Reply(IEvent evnt)
+        public void Replay(IEvent evnt)
         {
             ExecuteStateEventHandler(evnt);
         }
@@ -48,7 +49,7 @@ namespace Immutably.Aggregates
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Reply(IEnumerable<IEvent> events)
+        public void Replay(IEnumerable<IEvent> events)
         {
             foreach (var evnt in events)
                 ExecuteStateEventHandler(evnt);
@@ -68,15 +69,7 @@ namespace Immutably.Aggregates
         /// </summary>
         private void ExecuteStateEventHandler(IEvent evnt)
         {
-            if (evnt == null)
-                return;
-
-            var methodInfo = State.GetType().GetMethod("On", new[] { evnt.GetType() });
-
-            if (methodInfo == null)
-                return;
-
-            methodInfo.Invoke(State, new object[] { evnt });
+            new StateSpooler(State).Spool(evnt);
         }
     }
 }

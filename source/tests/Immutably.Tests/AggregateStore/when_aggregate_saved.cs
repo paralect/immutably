@@ -11,7 +11,7 @@ namespace Immutably.Tests.AggregateStore
 
         Because of = () =>
         {
-            using (var session = AggregateStore.OpenSession(Guid.Empty.ToString()))
+            using (var session = aggregateStore.OpenSession(Guid.Empty.ToString()))
             {
                 var agg = session.CreateAggregate<MyAggregate>();
                 agg.ChangeName(default(Guid), "dfdf");

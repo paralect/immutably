@@ -4,49 +4,88 @@ using Immutably.Messages;
 
 namespace Immutably.States
 {
+    /// <summary>
+    /// Replays events to modify state in-place
+    /// </summary>
     public class StateSpooler
     {
         /// <summary>
-        /// State envelope
+        /// State object
         /// </summary>
-        private IState _state;
+        private Object _state;
 
-        private Int32 _version;
+        /// <summary>
+        /// User-defined object that can be assigned by each call to Spool method
+        /// </summary>
+        private Object _data;
 
-        public IState State
+        /// <summary>
+        /// State object
+        /// </summary>
+        public Object State
         {
             get { return _state; }
         }
 
-        public int Version
+        /// <summary>
+        /// User-defined object that can be assigned by each call to Spool method
+        /// </summary>
+        public object Data
         {
-            get { return _version; }
+            get { return _data; }
         }
 
         /// <summary>
         /// Creates StateSpooler initialized with initial state
         /// </summary>
-        public StateSpooler(IState initialState)
+        public StateSpooler(Object initialState)
         {
             _state = initialState;
         }
 
         /// <summary>
-        /// Replay specified events to restore state of IState.
+        /// Replay specified event to restore state.
         /// </summary>
-        public void Spool(Int32 version, IEnumerable<IEvent> events)
+        public void Spool(IEvent evnt)
         {
-            if (version < _version)
-                throw new InvalidOperationException("Version cannot be lower than existing");
+            Spool(evnt, null);
+        }
 
+        /// <summary>
+        /// Replay specified event to restore state and assign user-defined object that 
+        /// can be accessed via Data property of this spooler.
+        /// </summary>
+        public void Spool(IEvent evnt, Object data)
+        {
+            ExecuteStateEventHandler(evnt);
+            _data = data;
+        }
+
+        /// <summary>
+        /// Replay specified events to restore state.
+        /// </summary>
+        public void Spool(IEnumerable<IEvent> events)
+        {
+            Spool(events, null);
+        }
+
+        /// <summary>
+        /// Replay specified events to restore state and assign user-defined object that 
+        /// can be accessed via Data property of this spooler.
+        /// </summary>
+        public void Spool(IEnumerable<IEvent> events, Object data)
+        {
             foreach (var evnt in events)
             {
                 ExecuteStateEventHandler(evnt);
             }
 
-            _version = version;
+            _data = data;
         }
 
+        /// <summary>
+        /// Executes state event handler for specified event
+        /// </summary>
         private void ExecuteStateEventHandler(IEvent evnt)
         {
             if (evnt == null)

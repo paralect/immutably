@@ -32,9 +32,9 @@ namespace Immutably.Aggregates
     {
         Object State { get; }
 
-        void Reply(IEvent evnt);
+        void Replay(IEvent evnt);
         
-        void Reply(IEnumerable<IEvent> events);
+        void Replay(IEnumerable<IEvent> events);
     }
 
     public interface IStatelessAggregateContext : IAggregateContext

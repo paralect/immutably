@@ -40,18 +40,18 @@ namespace Immutably.Aggregates
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Reply(IEvent evnt)
+        public void Replay(IEvent evnt)
         {
-            Context.Reply(evnt);
+            Context.Replay(evnt);
         }
 
         /// <summary>
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Reply(IEnumerable<IEvent> events)
+        public void Replay(IEnumerable<IEvent> events)
         {
-            Context.Reply(events);
+            Context.Replay(events);
         }
 
         /// <summary>

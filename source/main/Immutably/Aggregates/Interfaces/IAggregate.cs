@@ -23,8 +23,8 @@ namespace Immutably.Aggregates
         IState State { get; }
         IStatefullAggregateContext Context { get; }
 
-        void Reply(IEvent evnt);
-        void Reply(IEnumerable<IEvent> events);
+        void Replay(IEvent evnt);
+        void Replay(IEnumerable<IEvent> events);
         void EstablishContext(IStatefullAggregateContext context);
     }
 

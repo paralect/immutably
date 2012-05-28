@@ -8,7 +8,7 @@ namespace Immutably.Tests.AggregateStore
     {
         Because of = () =>
         {
-            using (var session = AggregateStore.OpenSession(Guid.Empty.ToString()))
+            using (var session = aggregateStore.OpenSession(Guid.Empty.ToString()))
             {
                 exception = Catch.Exception(() => session.LoadAggregate<MyAggregate>());
             }

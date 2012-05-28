@@ -10,11 +10,9 @@ namespace Immutably.Aggregates
         ITransitionStore TransitionStore { get; }
 
         IAggregateSession OpenSession(String aggregateId);
-        IAggregateSession OpenStatelessSession(String aggregateId);
         
         Type GetAggregateStateType(Type aggregateType);
         IState CreateState(Type stateType);
         IStatefullAggregate CreateAggregate(Type aggregateType);
-        IAggregateContext CreateAggregateContext(String aggregateId, Int32 version, Object state, IDataFactory dataFactory);
     }
 }

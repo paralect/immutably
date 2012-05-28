@@ -11,7 +11,7 @@ namespace Immutably.Tests.AggregateStore
     {
         public static SimpleEvent evnt;
         public static InMemoryTransitionStore store;
-        public static Immutably.Aggregates.AggregateStore AggregateStore;
+        public static Immutably.Aggregates.AggregateStore aggregateStore;
         public static List<ITransition> transitions;
 
         Establish context = () =>
@@ -25,7 +25,7 @@ namespace Immutably.Tests.AggregateStore
 
             store = new InMemoryTransitionStore();
 
-            AggregateStore = new Immutably.Aggregates.AggregateStore(new EscolarFactory(), store);
+            aggregateStore = new Immutably.Aggregates.AggregateStore(new EscolarFactory(), store);
         };
     }
 

@@ -23,17 +23,11 @@ namespace Immutably.Aggregates
 
         public IAggregateSession OpenSession(String aggregateId)
         {
-            // We don't allow null (in case this is a reference type).
-            // If this is a value type, this check will be ignored.
+            // We don't allow null id 
             if (aggregateId == null)
                 throw new NullAggregateIdException();
 
             return new AggregateSession(this, aggregateId);
-        }
-
-        public IAggregateSession OpenStatelessSession(String aggregateId) 
-        {
-            throw new NotImplementedException();
         }
 
         public Type GetAggregateStateType(Type aggregateType)
@@ -62,18 +56,6 @@ namespace Immutably.Aggregates
         public IStatefullAggregate CreateAggregate(Type aggregateType)
         {
             return (IStatefullAggregate) Activator.CreateInstance(aggregateType);
-        }
-
-        public IAggregateContext CreateAggregateContext(String aggregateId, Int32 version, Object state, IDataFactory dataFactory)
-        {
-            return new StatefullAggregateContext(state, aggregateId, version, dataFactory);
-        }        
-        
-        public IAggregateSession CreateAggregateSession(Type idType, Object aggregateId)
-        {
-            var type = typeof (AggregateSession);
-            var sessionType = type.MakeGenericType(idType);
-            return (IAggregateSession) Activator.CreateInstance(sessionType, new[] { aggregateId });
         }
     }
 }

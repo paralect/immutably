@@ -51,7 +51,7 @@ namespace Immutably.Aggregates
             using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
             {
                 foreach (var transition in reader.Read())
-                    spooler.Spool(transition.StreamSequence, transition.Events);
+                    spooler.Spool(transition.Events, transition.StreamSequence);
             }
 
 //            if (lastTransition == null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Immutably.Data;
 using Immutably.Messages;
+using Immutably.Utilities;
 
 namespace Immutably.Aggregates
 {
@@ -11,26 +12,81 @@ namespace Immutably.Aggregates
     public abstract class AggregateContextBase : IAggregateContext
     {
         /// <summary>
-        /// Aggregate id
+        /// Aggregate ID
         /// </summary>
-        private String _aggregateId;
+        private readonly String _aggregateId;
 
         /// <summary>
         /// DataFactory, used to create data types, such as state and messages (events, commands)
         /// </summary>
-        private IDataFactory _dataFactory;
+        private readonly IDataFactory _dataFactory;
 
         /// <summary>
         /// Initial version of Aggregate before any operation executed 
         /// </summary>
-        private Int32 _aggregateInitialVersion;
+        private readonly Int32 _aggregateInitialVersion;
         
         /// <summary>
         /// List of changes (applied events)
         /// </summary>
         private readonly List<IEvent> _aggregateChanges = new List<IEvent>();
 
-        public AggregateContextBase(String aggregateId, Int32 version, IDataFactory dataFactory)
+        /// <summary>
+        /// Current version of Aggregate
+        /// </summary>
+        public int CurrentVersion
+        {
+            get { return Changed ? _aggregateInitialVersion + 1 : _aggregateInitialVersion; }
+        }
+
+        /// <summary>
+        /// Initial version of aggregate
+        /// </summary>
+        public int InitialVersion
+        {
+            get { return _aggregateInitialVersion; } 
+        }
+
+        /// <summary>
+        /// Aggregate ID
+        /// </summary>
+        public String Id
+        {
+            get { return _aggregateId; }
+        }
+
+        /// <summary>
+        /// DataFactory, used to create data types, such as state and messages (events, commands)
+        /// </summary>
+        public IDataFactory DataFactory
+        {
+            get { return _dataFactory; }
+        }
+
+        /// <summary>
+        /// Returns true, if aggregate was changed (new events was applied)
+        /// </summary>
+        public Boolean Changed
+        {
+            get 
+            {   
+                return _aggregateChanges != null 
+                    && _aggregateChanges.Count > 0; 
+            }
+        }
+
+        /// <summary>
+        /// Gets indexed enumerable of changes (applied events)
+        /// </summary>
+        public IIndexedEnumerable<IEvent> Changes
+        {
+            get { return _aggregateChanges.AsIndexedEnumerable(); }
+        }
+
+        /// <summary>
+        /// Initializes AggregateContextBase
+        /// </summary>
+        protected AggregateContextBase(String aggregateId, Int32 version, IDataFactory dataFactory)
         {
             if (version < 0)
                 throw new InvalidAggregateVersionException(version);
@@ -44,45 +100,20 @@ namespace Immutably.Aggregates
             _aggregateId = aggregateId;
         }
 
-        public int CurrentVersion
-        {
-            get { return Changed ? _aggregateInitialVersion + 1 : _aggregateInitialVersion; }
-        }
-
-        public int InitialVersion
-        {
-            get { return _aggregateInitialVersion; } 
-        }
-
-        public String Id
-        {
-            get { return _aggregateId; }
-        }
-
-        public IDataFactory DataFactory
-        {
-            get { return _dataFactory; }
-        }
-
-        public Boolean Changed
-        {
-            get 
-            {   
-                return _aggregateChanges != null 
-                    && _aggregateChanges.Count > 0; 
-            }
-        }
-
-        public IList<IEvent> Changes
-        {
-            get { return _aggregateChanges.AsReadOnly(); }
-        }
-
+        /// <summary>
+        /// Apply event to list of changes
+        /// </summary>
+        /// <param name="evnt"></param>
         public void Apply(IEvent evnt)
         {
             ApplyInternal(evnt);
         }
 
+        /// <summary>
+        /// Apply event factory to list of changes.
+        /// Event will be created immediately, so you shouldn't worry about possible change of 
+        /// closure members. 
+        /// </summary>
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
             where TEvent : IEvent
         {
@@ -91,11 +122,19 @@ namespace Immutably.Aggregates
             ApplyInternal(evnt);
         }
 
+        /// <summary>
+        /// Can be ovewritten in delivered types if you need special logic that handle
+        /// new applied event.
+        /// </summary>
         protected virtual void ApplyInternal(IEvent evnt)
         {
             _aggregateChanges.Add(evnt);
         }
 
+        /// <summary>
+        /// Creates TData with the help of IDataFactory (if available)
+        /// and via Activator (if data factory not available)
+        /// </summary>
         public TData Create<TData>()
         {
             if (_dataFactory == null)

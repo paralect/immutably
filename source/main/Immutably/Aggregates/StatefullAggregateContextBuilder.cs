@@ -54,6 +54,9 @@ namespace Immutably.Aggregates
                     _stateBuilder(_aggregateState);
             }
 
+            if (_aggregateId == null)
+                _aggregateId = Guid.NewGuid().ToString();
+
             return new StatefullAggregateContext(_aggregateState, _aggregateId, _aggregateVersion, _dataFactory);
         }
 

@@ -29,6 +29,9 @@ namespace Immutably.Aggregates
 
         public IStatelessAggregateContext Build()
         {
+            if (_aggregateId == null)
+                _aggregateId = Guid.NewGuid().ToString();
+
             return new StatelessAggregateContext(_aggregateId, _aggregateVersion, _dataFactory);
         }
     }

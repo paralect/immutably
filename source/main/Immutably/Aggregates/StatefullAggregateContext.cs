@@ -5,12 +5,15 @@ using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
+    /// <summary>
+    /// Represents context for statefull aggregates.
+    /// </summary>
     public class StatefullAggregateContext : AggregateContextBase, IStatefullAggregateContext
     {
         /// <summary>
-        /// Current aggregate state
+        /// Aggregate state
         /// </summary>
-        private Object _aggregateState;
+        private readonly Object _aggregateState;
 
         /// <summary>
         /// Current aggregate state
@@ -20,7 +23,11 @@ namespace Immutably.Aggregates
             get { return _aggregateState; }
         }
 
-        public StatefullAggregateContext(Object state, String aggregateId, Int32 version, IDataFactory dataFactory) : base(aggregateId, version, dataFactory)
+        /// <summary>
+        /// Creates StatefullAggregateContext
+        /// </summary>
+        public StatefullAggregateContext(Object state, String aggregateId, Int32 version, IDataFactory dataFactory) 
+            : base(aggregateId, version, dataFactory)
         {
             if (state == null)
                 throw new NullAggregateStateException();
@@ -28,6 +35,37 @@ namespace Immutably.Aggregates
             _aggregateState = state;
         }
 
+        /// <summary>
+        /// Reply event without tracking it in list of changes.
+        /// After reply aggregate version and id will be the same as before reply.
+        /// </summary>
+        public void Reply(IEvent evnt)
+        {
+            ExecuteStateEventHandler(evnt);
+        }
+
+        /// <summary>
+        /// Reply events without tracking them in list of changes. 
+        /// After reply aggregate version and id will be the same as before reply./// 
+        /// </summary>
+        public void Reply(IEnumerable<IEvent> events)
+        {
+            foreach (var evnt in events)
+                ExecuteStateEventHandler(evnt);
+        }
+
+        /// <summary>
+        /// Override to exececute state event handlers
+        /// </summary>
+        protected override void ApplyInternal(IEvent evnt)
+        {
+            base.ApplyInternal(evnt);
+            ExecuteStateEventHandler(evnt);
+        }
+
+        /// <summary>
+        /// Executes state event handler for specified event
+        /// </summary>
         private void ExecuteStateEventHandler(IEvent evnt)
         {
             if (evnt == null)
@@ -39,25 +77,6 @@ namespace Immutably.Aggregates
                 return;
 
             methodInfo.Invoke(State, new object[] { evnt });
-            //
-            //            ((dynamic) State).On((dynamic) evnt);
-        }
-
-        public void Reply(IEvent evnt)
-        {
-            ExecuteStateEventHandler(evnt);
-        }
-
-        public void Reply(IEnumerable<IEvent> events)
-        {
-            foreach (var evnt in events)
-                ExecuteStateEventHandler(evnt);
-        }
-
-        protected override void ApplyInternal(IEvent evnt)
-        {
-            base.ApplyInternal(evnt);
-            ExecuteStateEventHandler(evnt);
         }
     }
 }

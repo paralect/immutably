@@ -5,9 +5,8 @@ using Immutably.Messages;
 namespace Immutably.Aggregates
 {
     /// <summary>
-    /// Statefull aggregate
+    /// Aggregate with state
     /// </summary>
-    /// <typeparam name="TState"></typeparam>
     public class StatefullAggregate<TState> : AggregateBase, IStatefullAggregate
         where TState : IState
     {
@@ -17,6 +16,14 @@ namespace Immutably.Aggregates
         IState IStatefullAggregate.State
         {
             get { return State; }
+        }
+
+        /// <summary>
+        /// Current aggregate state
+        /// </summary>
+        public TState State
+        {
+            get { return (TState)((IStatefullAggregateContext)Context).State; }
         }
 
         public void Reply(IEvent evnt)
@@ -29,23 +36,17 @@ namespace Immutably.Aggregates
             ((IStatefullAggregateContext)Context).Reply(events);
         }
 
-        /// <summary>
-        /// Current aggregate state
-        /// </summary>
-        public TState State
-        {
-            get { return (TState) ((IStatefullAggregateContext)Context).State; }
-        }
-
-        public override IAggregateContext Context
+        public new IStatefullAggregateContext Context
         {
             get
             {
-                if (_context == null)
-                    _context = new StatefullAggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0, null);
-
-                return (IStatefullAggregateContext)_context;
+                return (IStatefullAggregateContext) base.Context;
             }
+        }
+
+        protected override IAggregateContext CreateAggregateContext()
+        {
+            return new StatefullAggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0, null);
         }
 
         public void EstablishContext(IStatefullAggregateContext context)

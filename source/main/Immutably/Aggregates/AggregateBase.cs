@@ -18,7 +18,18 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Aggregate context
         /// </summary>
-        public abstract IAggregateContext Context { get; }
+        public IAggregateContext Context 
+        {
+            get
+            {
+                if (_context == null)
+                    _context = CreateAggregateContext();
+
+                return _context;
+            } 
+        }
+
+        protected abstract IAggregateContext CreateAggregateContext();
 
         /// <summary>
         /// Current version of aggregate
@@ -29,7 +40,7 @@ namespace Immutably.Aggregates
         }
 
         /// <summary>
-        /// Initial version
+        /// Initial version of aggregate
         /// </summary>
         public int InitialVersion
         {
@@ -45,7 +56,7 @@ namespace Immutably.Aggregates
         }
 
         /// <summary>
-        /// Data factory
+        /// DataFactory, used to create data types, such as state and messages (events, commands)
         /// </summary>
         public IDataFactory DataFactory
         {
@@ -53,7 +64,7 @@ namespace Immutably.Aggregates
         }
 
         /// <summary>
-        /// Was any changes to this aggregates?
+        /// Returns true, if aggregate was changed (new events was applied)
         /// </summary>
         public Boolean Changed
         {
@@ -61,27 +72,36 @@ namespace Immutably.Aggregates
         }
 
         /// <summary>
-        /// Changes to this aggregate
+        /// Gets indexed enumerable of changes (applied events)
         /// </summary>
         public IIndexedEnumerable<IEvent> Changes
         {
-            get { return Context.Changes.AsIndexedEnumerable(); }
+            get { return Context.Changes; }
         }
 
         /// <summary>
-        /// Apply event to aggregates
-        /// </summary>
+        /// Apply event to list of changes and execute state event handler
+        /// </summary>        
         public void Apply(IEvent evnt)
         {
             Context.Apply(evnt);
         }
 
+        /// <summary>
+        /// Apply event factory to list of changes and execute state event handler.
+        /// Event will be created immediately, so you shouldn't worry about 
+        /// possible change of closure members. 
+        /// </summary>
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
             where TEvent : IEvent
         {
             Context.Apply(evntBuilder);
         }
 
+        /// <summary>
+        /// Creates TData with the help of IDataFactory (if available)
+        /// and via Activator (if data factory not available)
+        /// </summary>
         protected TData Create<TData>()
         {
             return Context.Create<TData>();

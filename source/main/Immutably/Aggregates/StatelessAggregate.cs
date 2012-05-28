@@ -7,15 +7,18 @@ namespace Immutably.Aggregates
     /// </summary>
     public abstract class StatelessAggregate : AggregateBase, IStatelessAggregate
     {
-        public override IAggregateContext Context
+
+        public new IStatelessAggregateContext Context
         {
             get
             {
-                if (_context == null)
-                    _context = new StatelessAggregateContext("temporary_id", 0, null);
-
-                return _context;
+                return (IStatelessAggregateContext) base.Context;
             }
+        }
+
+        protected override IAggregateContext CreateAggregateContext()
+        {
+            return new StatelessAggregateContext(Guid.NewGuid().ToString(), 0, null);
         }
 
         public void EstablishContext(IStatelessAggregateContext context)

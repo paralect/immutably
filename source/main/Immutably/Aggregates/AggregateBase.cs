@@ -29,6 +29,9 @@ namespace Immutably.Aggregates
             } 
         }
 
+        /// <summary>
+        /// Template method to create aggregate context
+        /// </summary>
         protected abstract IAggregateContext CreateAggregateContext();
 
         /// <summary>

@@ -3,6 +3,9 @@ using Immutably.Data;
 
 namespace Immutably.Aggregates
 {
+    /// <summary>
+    /// Builds stateless aggregate context
+    /// </summary>
     public class StatelessAggregateContextBuilder
     {
         private String _aggregateId = null;

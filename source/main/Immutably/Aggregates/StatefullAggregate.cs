@@ -13,50 +13,73 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Current aggregate state
         /// </summary>
+        public TState State
+        {
+            get { return (TState)Context.State; }
+        }
+
+
+        /// <summary>
+        /// Current aggregate state 
+        /// (explicit interface implementation)
+        /// </summary>
         IState IStatefullAggregate.State
         {
             get { return State; }
         }
 
         /// <summary>
-        /// Current aggregate state
+        /// Aggregate context
         /// </summary>
-        public TState State
-        {
-            get { return (TState)((IStatefullAggregateContext)Context).State; }
-        }
-
-        public void Reply(IEvent evnt)
-        {
-            ((IStatefullAggregateContext)Context).Reply(evnt);
-        }
-
-        public void Reply(IEnumerable<IEvent> events)
-        {
-            ((IStatefullAggregateContext)Context).Reply(events);
-        }
-
         public new IStatefullAggregateContext Context
         {
-            get
-            {
-                return (IStatefullAggregateContext) base.Context;
-            }
+            get { return (IStatefullAggregateContext)base.Context; }
+        }
+        
+        /// <summary>
+        /// Reply events without tracking them in list of changes. 
+        /// After reply aggregate version and id will be the same as before reply.
+        /// </summary>
+        public void Reply(IEvent evnt)
+        {
+            Context.Reply(evnt);
         }
 
+        /// <summary>
+        /// Reply events without tracking them in list of changes. 
+        /// After reply aggregate version and id will be the same as before reply.
+        /// </summary>
+        public void Reply(IEnumerable<IEvent> events)
+        {
+            Context.Reply(events);
+        }
+
+        /// <summary>
+        /// Template method override to create statefull aggregate context
+        /// </summary>
         protected override IAggregateContext CreateAggregateContext()
         {
             return new StatefullAggregateContext(Activator.CreateInstance<TState>(), "temporary_id", 0, null);
         }
 
+        /// <summary>
+        /// Establish context for this statefull aggregate
+        /// You can establish context only one time. Subsequent calls to this method will 
+        /// lead to AggregateContextModificationForbiddenException exception.
+        /// </summary>
         public void EstablishContext(IStatefullAggregateContext context)
         {
             if (_context != null)
                 throw new AggregateContextModificationForbiddenException(GetType());
 
-            _context = (IStatefullAggregateContext)context;
+            _context = context;
         }
 
+        /// <summary>
+        /// Establish context for this statefull aggregate via context builder
+        /// You can establish context only one time. Subsequent calls to this method will 
+        /// lead to AggregateContextModificationForbiddenException exception.
+        /// </summary>
         public void EstablishContext(Action<StatefullAggregateContextBuilder<TState>> contextBuilder)
         {
             if (_context != null)

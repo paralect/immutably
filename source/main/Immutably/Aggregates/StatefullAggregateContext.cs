@@ -46,7 +46,7 @@ namespace Immutably.Aggregates
 
         /// <summary>
         /// Reply events without tracking them in list of changes. 
-        /// After reply aggregate version and id will be the same as before reply./// 
+        /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
         public void Reply(IEnumerable<IEvent> events)
         {

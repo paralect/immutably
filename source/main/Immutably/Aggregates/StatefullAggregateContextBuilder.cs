@@ -3,6 +3,9 @@ using Immutably.Data;
 
 namespace Immutably.Aggregates
 {
+    /// <summary>
+    /// Builds statefull aggregate context
+    /// </summary>
     public class StatefullAggregateContextBuilder<TState>
     {
         private TState _aggregateState;
@@ -41,7 +44,7 @@ namespace Immutably.Aggregates
             return this;
         }
 
-        public new StatefullAggregateContext Build()
+        public IStatefullAggregateContext Build()
         {
             if (_aggregateState == null)
             {

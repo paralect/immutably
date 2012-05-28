@@ -21,16 +21,16 @@ namespace Immutably.Aggregates
     public interface IStatefullAggregate : IAggregate
     {
         IState State { get; }
+        IStatefullAggregateContext Context { get; }
 
         void Reply(IEvent evnt);
-
         void Reply(IEnumerable<IEvent> events);
-
         void EstablishContext(IStatefullAggregateContext context);
     }
 
     public interface IStatelessAggregate : IAggregate
     {
+        IStatelessAggregateContext Context { get; }
         void EstablishContext(IStatelessAggregateContext context);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Immutably.Data;
 using Immutably.Messages;
+using Immutably.Utilities;
 
 namespace Immutably.Aggregates
 {
@@ -12,6 +13,10 @@ namespace Immutably.Aggregates
         Int32 CurrentVersion { get; }
 
         Int32 InitialVersion { get; }
+
+        Boolean Changed { get; }
+
+        IIndexedEnumerable<IEvent> Changes { get; }
 
         IDataFactory DataFactory { get; }
 

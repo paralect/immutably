@@ -7,14 +7,14 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
     {
         Because of = () =>
         {
-/*            using (var session = aggregateStore.OpenSession())
+            using (var session = aggregateStore.OpenSession())
             {
                 var agg = session.CreateAggregate<MyStatelessAggregate>(id);
                 agg.ChangeName(Guid.Empty, "hello");
                 session.SaveChanges();
             }
 
-            using (var session = aggregateStore.OpenSession())
+/*            using (var session = aggregateStore.OpenSession())
             {
                 var agg = new MyAggregate();
                 agg.ChangeName(Guid.Empty, "hello");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Immutably.Data;
 using Immutably.States;
@@ -13,13 +14,18 @@ namespace Immutably.Aggregates
         /// </summary>
         private readonly AggregateStore _store;
 
+        /// <summary>
+        /// DataFactory, used to create data types, such as state and messages (events, commands)
+        /// </summary>
         private readonly IDataFactory _dataFactory;
+
+
         private readonly AggregateFactory _aggregateFactory;
 
         /// <summary>
-        /// Aggregate Context 
+        /// Aggregates, opened or created in this session. (i.e. Unit of Work)
         /// </summary>
-        private IAggregateContext _context;
+        private readonly List<IAggregate> _aggregates = new List<IAggregate>();
 
         /// <summary>
         /// Creates AggregateSession
@@ -132,34 +138,37 @@ namespace Immutably.Aggregates
         private IStatefullAggregate EstablishStatefullAggregate(Type aggregateType, Object state, String aggregateId, Int32 version, IDataFactory dataFactory)
         {
             var aggregate = _store.CreateStatefullAggregate(aggregateType);
-            _context = new StatefullAggregateContext(state, aggregateId, version, dataFactory);
-            aggregate.EstablishContext((IStatefullAggregateContext) _context);
+            var context = new StatefullAggregateContext(state, aggregateId, version, dataFactory);
+            aggregate.EstablishContext(context);
             return aggregate;
         }
 
         private IStatelessAggregate EstablishStatelessAggregate(Type aggregateType, String aggregateId, Int32 version, IDataFactory dataFactory)
         {
             var aggregate = _store.CreateStatelessAggregate(aggregateType);
-            _context = new StatelessAggregateContext(aggregateId, version, dataFactory);
-            aggregate.EstablishContext((IStatelessAggregateContext) _context);
+            var context = new StatelessAggregateContext(aggregateId, version, dataFactory);
+            aggregate.EstablishContext(context);
             return aggregate;
         }
 
         public void SaveChanges()
         {
-            if (_context == null)
+            if (_aggregates.Count == 0)
                 return;
 
-            if (!_context.Changed)
-                return;
-
-/*            using (var writer = _store.TransitionStore.CreateStreamWriter(aggregateId))
+            foreach (var aggregate in _aggregates)
             {
-                writer.Write(_context.CurrentVersion, builder => builder
-                    .AddEvent(_context.Changes[0])
-                );
+                // Skip aggregates without changes
+                if (aggregate.Changes.Count <= 0)
+                    continue;
+
+                using (var writer = _store.TransitionStore.CreateStreamWriter(aggregate.Id))
+                {
+                    writer.Write(aggregate.CurrentVersion, builder => builder
+                        .AddEvents(aggregate.Changes)
+                    );
+                }
             }
- */
         }
 
         public TAggregate CreateAggregate<TAggregate>(String aggregateId)

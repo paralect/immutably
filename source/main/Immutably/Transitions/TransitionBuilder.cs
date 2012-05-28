@@ -99,6 +99,17 @@ namespace Immutably.Transitions
             return AddEvent(evnt);
         }
 
+        ITransitionBuilder ITransitionBuilder.AddEvents(IEnumerable<IEvent> events)
+        {
+            foreach (var evnt in events)
+            {
+                AddEvent(evnt);
+            }
+
+            return this;
+        }
+
+
         ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt, IEventMetadata metadata)
         {
             return AddEvent(evnt, (IEventMetadata) metadata);

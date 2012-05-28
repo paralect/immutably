@@ -31,55 +31,56 @@ namespace Immutably.Tests.AggregateStore
 
     public class MyState : IState
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public String Name { get; set; }
 
-        public void On(MyAggregateNameChangedEvent evnt)
+        public void On(MyStatefullAggregateNameChangedEvent evnt)
         {
+            Name = evnt.Name;
+        }
+
+        public void On(MyStatefullAggregateCreatedEvent evnt)
+        {
+            Id = evnt.Id;
             Name = evnt.Name;
         }
     }
 
-    public class MyAggregate : StatefullAggregate<MyState>
+    public class MyStatefullAggregate : StatefullAggregate<MyState>
     {
-        public MyAggregate()
-        {
-            //_context = context;
-        }
-
-        public void Create(Guid id, String name, Int32 year)
+        public void Create(String name, Int32 year)
         {
             if (State.Name == null)
                 return;
 
-            Apply<MyAggregateCreatedEvent>(evnt =>
+            Apply<MyStatefullAggregateCreatedEvent>(evnt =>
             {
-                evnt.Id = id;
+                evnt.Id = Id;
                 evnt.Name = name;
                 evnt.Year = year;
             });
         }
 
-        public void ChangeName(Guid id, String newName)
+        public void ChangeName(String newName)
         {
-            Apply<MyAggregateNameChangedEvent>(evnt =>
+            Apply<MyStatefullAggregateNameChangedEvent>(evnt =>
             {
-                evnt.Id = id;
+                evnt.Id = Id;
                 evnt.Name = newName;
             });
         }
     }
 
-    public class MyAggregateCreatedEvent : IEvent
+    public class MyStatefullAggregateCreatedEvent : IEvent
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Year { get; set; }
     }
 
-    public class MyAggregateNameChangedEvent : IEvent
+    public class MyStatefullAggregateNameChangedEvent : IEvent
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public String Name { get; set; }
     }
 

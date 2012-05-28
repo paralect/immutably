@@ -9,65 +9,26 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
         {
             using (var session = aggregateStore.OpenSession())
             {
-                var agg = session.CreateAggregate<MyStatelessAggregate>(id);
-                agg.ChangeName(Guid.Empty, "hello");
+                aggregate = session.CreateAggregate<MyStatelessAggregate>(id);
+                aggregate.Create("John", 67);
+                aggregate.ChangeName("hello");
                 session.SaveChanges();
             }
 
-/*            using (var session = aggregateStore.OpenSession())
+            using (var session = aggregateStore.OpenSession())
             {
-                var agg = new MyAggregate();
-                agg.ChangeName(Guid.Empty, "hello");
-                session.SaveChanges();
-            }
-            
-            using (var session = aggregateStore.OpenSession(id))
-            {
-                var agg = session.LoadAggregate<MyStatelessAggregate>();
-                agg.ChangeName(Guid.Empty, "hello");
-                session.SaveChanges();
+                aggregate = session.LoadAggregate<MyStatelessAggregate>(id);
+                aggregate.ChangeName("hello");
+                aggregate.ChangeName("hello");
+                session.SaveChanges();                
             }
 
-
-            using (var session = aggregateStore.OpenSession(id))
-            {
-                session.LoadAggregate<MyStatelessAggregate>(agg => 
-                {
-                    agg.ChangeName(Guid.Empty, "hello");
-                });
-                
-                session.SaveChanges();
-            }
-
-            using (var session = aggregateStore.OpenSession(id))
-            {
-                session.CreateAggregate<MyStatelessAggregate>(agg =>
-                {
-                    agg.ChangeName(Guid.Empty, "hello");
-                });
-
-                session.SaveChanges();
-            }
-
-            using (var agg = store.CreateAggregate<MyAggregate>(id))
-            {
-                agg.ChangeName(Guid.Empty, "hello");
-                agg.SaveChanges();
-            }
-
-            using (var agg = store.LoadAggregate<MyAggregate>(id))
-            {
-                agg.ChangeName(Guid.Empty, "hello");
-                agg.SaveChanges();
-            }
-
-            using (var session = aggregateStore.CreateAggregateSession(id))
-            {
-                session.Aggregate.ChangeName(Guid.Empty, "hello");
-                session.SaveChanges();
-            }*/
         };
 
-        static String id = Guid.NewGuid().ToString();
+        It should_be_of_version_2 = () =>
+            aggregate.CurrentVersion.ShouldEqual(2);
+
+        static String id = "aggregate/01";
+        static MyStatelessAggregate aggregate;
     }
 }

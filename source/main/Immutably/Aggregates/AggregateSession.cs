@@ -140,6 +140,9 @@ namespace Immutably.Aggregates
             var aggregate = _store.CreateStatefullAggregate(aggregateType);
             var context = new StatefullAggregateContext(state, aggregateId, version, dataFactory);
             aggregate.EstablishContext(context);
+
+            _aggregates.Add(aggregate);
+
             return aggregate;
         }
 
@@ -148,6 +151,9 @@ namespace Immutably.Aggregates
             var aggregate = _store.CreateStatelessAggregate(aggregateType);
             var context = new StatelessAggregateContext(aggregateId, version, dataFactory);
             aggregate.EstablishContext(context);
+
+            _aggregates.Add(aggregate);
+
             return aggregate;
         }
 
@@ -169,6 +175,9 @@ namespace Immutably.Aggregates
                     );
                 }
             }
+
+            // Clear unit of work container
+            _aggregates.Clear();
         }
 
         public TAggregate CreateAggregate<TAggregate>(String aggregateId)

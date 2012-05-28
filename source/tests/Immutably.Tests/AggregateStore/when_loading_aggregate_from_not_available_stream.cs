@@ -10,7 +10,7 @@ namespace Immutably.Tests.AggregateStore
         {
             using (var session = aggregateStore.OpenSession())
             {
-                exception = Catch.Exception(() => session.LoadAggregate<MyAggregate>(Guid.Empty.ToString()));
+                exception = Catch.Exception(() => session.LoadAggregate<MyStatefullAggregate>(Guid.Empty.ToString()));
             }
         };
 

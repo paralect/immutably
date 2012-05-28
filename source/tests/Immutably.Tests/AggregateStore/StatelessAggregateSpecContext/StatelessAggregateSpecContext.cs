@@ -30,17 +30,6 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
         public static List<ITransition> transitions;
     }
 
-    public class MyState : IState
-    {
-        public Guid Id { get; set; }
-        public String Name { get; set; }
-
-        public void On(MyAggregateNameChangedEvent evnt)
-        {
-            Name = evnt.Name;
-        }
-    }
-
     public class MyStatelessAggregate : StatelessAggregate
     {
         public MyStatelessAggregate()
@@ -48,21 +37,21 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
             //_context = context;
         }
 
-        public void Create(Guid id, String name, Int32 year)
+        public void Create(String name, Int32 year)
         {
             Apply<MyStatelessAggregateCreatedEvent>(evnt =>
             {
-                evnt.Id = id;
+                evnt.Id = Id;
                 evnt.Name = name;
                 evnt.Year = year;
             });
         }
 
-        public void ChangeName(Guid id, String newName)
+        public void ChangeName(String newName)
         {
             Apply<MyStatelessAggregateNameChangedEvent>(evnt =>
             {
-                evnt.Id = id;
+                evnt.Id = Id;
                 evnt.Name = newName;
             });
         }
@@ -70,14 +59,14 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
 
     public class MyStatelessAggregateCreatedEvent : IEvent
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Year { get; set; }
     }
 
     public class MyStatelessAggregateNameChangedEvent : IEvent
     {
-        public Guid Id { get; set; }
+        public String Id { get; set; }
         public String Name { get; set; }
     }
 }

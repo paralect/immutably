@@ -17,7 +17,7 @@ namespace Immutably.Tests.Aggregates
             if (State.Name == null)
                 return;
 
-            Apply<AggregateStore.MyAggregateCreatedEvent>(evnt =>
+            Apply<MyAggregateCreatedEvent>(evnt =>
             {
                 evnt.Id = id;
                 evnt.Name = name;
@@ -27,7 +27,7 @@ namespace Immutably.Tests.Aggregates
 
         public void ChangeName(Guid id, String newName)
         {
-            Apply<AggregateStore.MyAggregateNameChangedEvent>(evnt =>
+            Apply<MyAggregateNameChangedEvent>(evnt =>
             {
                 evnt.Id = id;
                 evnt.Name = newName;

@@ -4,6 +4,12 @@ using System.Reflection;
 
 namespace Immutably.Aggregates
 {
+    public enum AggregateKind
+    {
+        Statefull = 0,
+        Stateless = 1
+    }
+
     public class AggregateDefinition
     {
         /// <summary>
@@ -19,7 +25,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Gets if this aggregate is statefull
         /// </summary>
-        public Boolean Statefull { get; set; }
+        public AggregateKind AggregateKind { get; set; }
     }
 
     public class AggregateFactory
@@ -45,7 +51,7 @@ namespace Immutably.Aggregates
             var statefull = aggregateType.GetInterface(typeof(IStatefullAggregate).FullName);
             if (statefull != null)
             {
-                definition.Statefull = true;
+                definition.AggregateKind = AggregateKind.Statefull;
 
                 if (aggregateType.BaseType == null
                     || aggregateType.BaseType.IsGenericType == false
@@ -60,7 +66,7 @@ namespace Immutably.Aggregates
             var stateless = aggregateType.GetInterface(typeof(IStatelessAggregate).FullName);
             if (stateless != null)
             {
-                definition.Statefull = false;
+                definition.AggregateKind = AggregateKind.Stateless;
                 return definition;
             }
 

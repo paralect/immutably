@@ -50,7 +50,7 @@ namespace Immutably.Aggregates
         {
             var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
 
-            if (!definition.Statefull)
+            if (definition.AggregateKind == AggregateKind.Stateless)
             {
                 ITransition transition;
                 using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
@@ -67,7 +67,7 @@ namespace Immutably.Aggregates
                 return aggregate;
             }
             
-            if (definition.Statefull)
+            if (definition.AggregateKind == AggregateKind.Statefull)
             {
                 // Here we can load state from snapshot store, but we are starting from initial state.
                 var initialState = _store.CreateState(definition.StateType);
@@ -90,7 +90,7 @@ namespace Immutably.Aggregates
                 return aggregate;      
             }
 
-            throw new Exception("AggregateType doesn't supported");
+            throw new Exception("AggregateKind doesn't supported");
         }
 
         IStatefullAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)

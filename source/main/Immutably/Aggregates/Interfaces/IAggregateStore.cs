@@ -9,7 +9,7 @@ namespace Immutably.Aggregates
     {
         ITransitionStore TransitionStore { get; }
 
-        IAggregateSession OpenSession(String aggregateId);
+        IAggregateSession OpenSession();
         
         Type GetAggregateStateType(Type aggregateType);
         IState CreateState(Type stateType);

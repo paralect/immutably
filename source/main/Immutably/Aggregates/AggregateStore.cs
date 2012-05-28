@@ -25,13 +25,9 @@ namespace Immutably.Aggregates
             _aggregateFactory = new AggregateFactory();
         }
 
-        public IAggregateSession OpenSession(String aggregateId)
+        public IAggregateSession OpenSession()
         {
-            // We don't allow null id 
-            if (aggregateId == null)
-                throw new NullAggregateIdException();
-
-            return new AggregateSession(this, aggregateId, _dataFactory, _aggregateFactory);
+            return new AggregateSession(this, _dataFactory, _aggregateFactory);
         }
 
         public Type GetAggregateStateType(Type aggregateType)

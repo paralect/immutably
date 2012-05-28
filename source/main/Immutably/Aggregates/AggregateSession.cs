@@ -13,12 +13,6 @@ namespace Immutably.Aggregates
         /// </summary>
         private readonly AggregateStore _store;
 
-        /// <summary>
-        /// Aggregate ID for this session.
-        /// AggregateSession can work only with one Aggregate.
-        /// </summary>
-        private readonly String _aggregateId;
-
         private readonly IDataFactory _dataFactory;
         private readonly AggregateFactory _aggregateFactory;
 
@@ -28,20 +22,11 @@ namespace Immutably.Aggregates
         private IAggregateContext _context;
 
         /// <summary>
-        /// Aggregate ID for this session
-        /// </summary>
-        public String AggregateId
-        {
-            get { return _aggregateId; }
-        }
-
-        /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(AggregateStore store, String aggregateId, IDataFactory dataFactory, AggregateFactory aggregateFactory)
+        public AggregateSession(AggregateStore store, IDataFactory dataFactory, AggregateFactory aggregateFactory)
         {
             _store = store;
-            _aggregateId = aggregateId;
             _dataFactory = dataFactory;
             _aggregateFactory = aggregateFactory;
         }
@@ -49,12 +34,12 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Returns aggregate or throws exception if aggregate wasn't found
         /// </summary>
-        public IAggregate LoadAggregate(Type aggregateType)
+        public IAggregate LoadAggregate(Type aggregateType, String aggregateId)
         {
-            var aggregate = LoadAggregateInternal(aggregateType);
+            var aggregate = LoadAggregateInternal(aggregateType, aggregateId);
 
             if (aggregate == null)
-                throw new AggregateDoesntExistException(aggregateType, _aggregateId);
+                throw new AggregateDoesntExistException(aggregateType, aggregateId);
 
             return aggregate;
         }
@@ -62,15 +47,19 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Returns aggregate or null, if it wasn't find
         /// </summary>
-        private IAggregate LoadAggregateInternal(Type aggregateType)
+        private IAggregate LoadAggregateInternal(Type aggregateType, String aggregateId)
         {
+            // We don't allow null id 
+            if (aggregateId == null)
+                throw new NullAggregateIdException();
+
             var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
 
             // Check, if this is stateless aggregate
             if (definition.AggregateKind == AggregateKind.Stateless)
             {
                 ITransition transition;
-                using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
+                using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
                 {
                     // Read last transition
                     transition = reader.ReadLast();
@@ -80,7 +69,7 @@ namespace Immutably.Aggregates
                 if (transition == null)
                     return null;
 
-                return EstablishStatelessAggregate(aggregateType, _aggregateId, transition.StreamSequence, _dataFactory);
+                return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamSequence, _dataFactory);
             }
 
             // Check, if this is statefull aggregate
@@ -90,7 +79,7 @@ namespace Immutably.Aggregates
                 var initialState = _store.CreateState(definition.StateType);
 
                 var spooler = new StateSpooler(initialState);
-                using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
+                using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
                 {
                     foreach (var transition in reader.ReadAll())
                         spooler.Spool(transition.Events, transition.StreamSequence);
@@ -100,7 +89,7 @@ namespace Immutably.Aggregates
                 if (spooler.Data == null)
                     return null;
 
-                return EstablishStatefullAggregate(aggregateType, spooler.State, _aggregateId, (int)spooler.Data, _dataFactory);
+                return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);
             }
 
             throw new Exception("Specified AggregateKind is not supported");
@@ -109,12 +98,12 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Returns aggregate if it already exists, or creates new.
         /// </summary>
-        public IAggregate LoadOrCreateAggregate(Type aggregateType)
+        public IAggregate LoadOrCreateAggregate(Type aggregateType, String aggregateId)
         {
-            var aggregate = LoadAggregateInternal(aggregateType);
+            var aggregate = LoadAggregateInternal(aggregateType, aggregateId);
 
             if (aggregate == null)
-                aggregate = CreateAggregate(aggregateType);
+                aggregate = CreateAggregate(aggregateType, aggregateId);
 
             return aggregate;
         }
@@ -122,19 +111,19 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates and returns aggregate of specified type
         /// </summary>
-        public IAggregate CreateAggregate(Type aggregateType)
+        public IAggregate CreateAggregate(Type aggregateType, String aggregateId)
         {
             var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
 
             if (definition.AggregateKind == AggregateKind.Statefull)
             {
                 var initialState = _store.CreateState(definition.StateType);
-                return EstablishStatefullAggregate(aggregateType, initialState, _aggregateId, 0, _dataFactory);
+                return EstablishStatefullAggregate(aggregateType, initialState, aggregateId, 0, _dataFactory);
             }
 
             if (definition.AggregateKind == AggregateKind.Stateless)
             {
-                return EstablishStatelessAggregate(aggregateType, _aggregateId, 0, _dataFactory);
+                return EstablishStatelessAggregate(aggregateType, aggregateId, 0, _dataFactory);
             }
 
             throw new Exception(String.Format("Cannot create aggregate of type {0}", aggregateType));
@@ -164,30 +153,31 @@ namespace Immutably.Aggregates
             if (!_context.Changed)
                 return;
 
-            using (var writer = _store.TransitionStore.CreateStreamWriter(_aggregateId))
+/*            using (var writer = _store.TransitionStore.CreateStreamWriter(aggregateId))
             {
                 writer.Write(_context.CurrentVersion, builder => builder
                     .AddEvent(_context.Changes[0])
                 );
             }
+ */
         }
 
-        public TAggregate CreateAggregate<TAggregate>()
+        public TAggregate CreateAggregate<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return (TAggregate)((IAggregateSession)this).CreateAggregate(typeof(TAggregate));
+            return(TAggregate) CreateAggregate(typeof(TAggregate), aggregateId);
         }
 
-        public TAggregate LoadAggregate<TAggregate>()
+        public TAggregate LoadAggregate<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return (TAggregate)((IAggregateSession)this).LoadAggregate(typeof(TAggregate));
+            return (TAggregate) LoadAggregate(typeof(TAggregate), aggregateId);
         }
 
-        public TAggregate LoadOrCreateAggregate<TAggregate>()
+        public TAggregate LoadOrCreateAggregate<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return (TAggregate)((IAggregateSession)this).LoadOrCreateAggregate(typeof(TAggregate));
+            return (TAggregate) LoadOrCreateAggregate(typeof (TAggregate), aggregateId);
         }
 
         public void Dispose()

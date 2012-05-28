@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\AggregateBase.cs" />
+    <Compile Include="Aggregates\AggregateFactory.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregate.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregateContext.cs" />
     <Compile Include="Aggregates\AggregateContextBase.cs" />

@@ -10,6 +10,7 @@ namespace Immutably.Aggregates
         private readonly IEscolarFactory _factory;
         private readonly IDataFactory _dataFactory;
         private readonly ITransitionStore _transitionStore;
+        private AggregateFactory _aggregateFactory;
 
         public ITransitionStore TransitionStore
         {
@@ -21,6 +22,7 @@ namespace Immutably.Aggregates
             _factory = factory;
             _dataFactory = dataFactory;
             _transitionStore = transitionStore;
+            _aggregateFactory = new AggregateFactory();
         }
 
         public IAggregateSession OpenSession(String aggregateId)
@@ -29,7 +31,7 @@ namespace Immutably.Aggregates
             if (aggregateId == null)
                 throw new NullAggregateIdException();
 
-            return new AggregateSession(this, aggregateId, _dataFactory);
+            return new AggregateSession(this, aggregateId, _dataFactory, _aggregateFactory);
         }
 
         public Type GetAggregateStateType(Type aggregateType)

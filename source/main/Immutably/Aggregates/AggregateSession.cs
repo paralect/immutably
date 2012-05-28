@@ -20,6 +20,7 @@ namespace Immutably.Aggregates
         private readonly String _aggregateId;
 
         private readonly IDataFactory _dataFactory;
+        private readonly AggregateFactory _aggregateFactory;
 
         /// <summary>
         /// Aggregate Context 
@@ -37,16 +38,19 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(AggregateStore store, String aggregateId, IDataFactory dataFactory)
+        public AggregateSession(AggregateStore store, String aggregateId, IDataFactory dataFactory, AggregateFactory aggregateFactory)
         {
             _store = store;
             _aggregateId = aggregateId;
             _dataFactory = dataFactory;
+            _aggregateFactory = aggregateFactory;
         }
 
         public IAggregate LoadAggregate(Type aggregateType)
         {
-            if (false /* stateless */)
+            var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
+
+            if (!definition.Statefull)
             {
                 ITransition transition;
                 using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
@@ -62,12 +66,11 @@ namespace Immutably.Aggregates
                 aggregate.EstablishContext(context);
                 return aggregate;
             }
-            else
+            
+            if (definition.Statefull)
             {
-                var stateType = _store.GetAggregateStateType(aggregateType);
-
                 // Here we can load state from snapshot store, but we are starting from initial state.
-                var initialState = _store.CreateState(stateType);
+                var initialState = _store.CreateState(definition.StateType);
 
                 var spooler = new StateSpooler(initialState);
                 using (var reader = _store.TransitionStore.CreateStreamReader(_aggregateId))
@@ -86,6 +89,8 @@ namespace Immutably.Aggregates
 
                 return aggregate;      
             }
+
+            throw new Exception("AggregateType doesn't supported");
         }
 
         IStatefullAggregate IAggregateSession.LoadOrCreateAggregate(Type aggregateType)

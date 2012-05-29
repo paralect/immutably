@@ -76,9 +76,7 @@ namespace Immutably.States
         public void Spool(IEnumerable<IEvent> events, Object data)
         {
             foreach (var evnt in events)
-            {
                 ExecuteStateEventHandler(evnt);
-            }
 
             _data = data;
         }

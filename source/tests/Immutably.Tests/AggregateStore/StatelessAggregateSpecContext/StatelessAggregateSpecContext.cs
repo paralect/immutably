@@ -32,11 +32,6 @@ namespace Immutably.Tests.AggregateStore.StatelessAggregateSpecContext
 
     public class MyStatelessAggregate : StatelessAggregate
     {
-        public MyStatelessAggregate()
-        {
-            //_context = context;
-        }
-
         public void Create(String name, Int32 year)
         {
             Apply<MyStatelessAggregateCreatedEvent>(evnt =>

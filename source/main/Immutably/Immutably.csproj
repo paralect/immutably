@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\AggregateBase.cs" />
-    <Compile Include="Aggregates\AggregateFactory.cs" />
+    <Compile Include="Aggregates\AggregateRegistry.cs" />
     <Compile Include="Aggregates\AggregateRepositoryBase.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregate.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregateContext.cs" />
@@ -50,6 +50,7 @@
     <Compile Include="Aggregates\AggregateSession.cs" />
     <Compile Include="Aggregates\AggregateStore.cs" />
     <Compile Include="Aggregates\StatefullAggregate.cs" />
+    <Compile Include="Aggregates\StatefullAggregateRepository.cs" />
     <Compile Include="Aggregates\StatelessAggregate.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregateStore.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregateSession.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Aggregates\StatefullAggregateContext.cs" />
     <Compile Include="Aggregates\StatelessAggregateContext.cs" />
     <Compile Include="Aggregates\StatelessAggregateContextBuilder.cs" />
+    <Compile Include="Aggregates\StatelessAggregateRepository.cs" />
     <Compile Include="Data\Abstract\IDataFactory.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\DataContextBuilder.cs" />

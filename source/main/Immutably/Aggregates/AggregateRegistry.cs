@@ -28,7 +28,7 @@ namespace Immutably.Aggregates
         public AggregateKind AggregateKind { get; set; }
     }
 
-    public class AggregateFactory
+    public class AggregateRegistry
     {
         private readonly Dictionary<Type, AggregateDefinition> _definitions = new Dictionary<Type, AggregateDefinition>();
 

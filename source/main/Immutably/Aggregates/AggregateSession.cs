@@ -20,7 +20,7 @@ namespace Immutably.Aggregates
         private readonly IDataFactory _dataFactory;
 
 
-        private readonly AggregateFactory _aggregateFactory;
+        private readonly AggregateRegistry _aggregateRegistry;
 
         /// <summary>
         /// Aggregates, opened or created in this session. (i.e. Unit of Work)
@@ -30,11 +30,11 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(AggregateStore store, IDataFactory dataFactory, AggregateFactory aggregateFactory)
+        public AggregateSession(AggregateStore store, IDataFactory dataFactory, AggregateRegistry aggregateRegistry)
         {
             _store = store;
             _dataFactory = dataFactory;
-            _aggregateFactory = aggregateFactory;
+            _aggregateRegistry = aggregateRegistry;
         }
 
         /// <summary>
@@ -42,63 +42,14 @@ namespace Immutably.Aggregates
         /// </summary>
         public IAggregate LoadAggregate(Type aggregateType, String aggregateId)
         {
-            var aggregate = LoadAggregateInternal(aggregateType, aggregateId);
+            var repository = CreateRepository(aggregateType);
+            var aggregate = repository.LoadAggregate(aggregateType, aggregateId);
 
             if (aggregate == null)
                 throw new AggregateDoesntExistException(aggregateType, aggregateId);
 
+            RegisterAggregateInSession(aggregate);
             return aggregate;
-        }
-
-        /// <summary>
-        /// Returns aggregate or null, if it wasn't find
-        /// </summary>
-        private IAggregate LoadAggregateInternal(Type aggregateType, String aggregateId)
-        {
-            // We don't allow null id 
-            if (aggregateId == null)
-                throw new NullAggregateIdException();
-
-            var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
-
-            // Check, if this is stateless aggregate
-            if (definition.AggregateKind == AggregateKind.Stateless)
-            {
-                ITransition transition;
-                using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
-                {
-                    // Read last transition
-                    transition = reader.ReadLast();
-                }
-
-                // Aggregate doesn't exists, if transition == 0
-                if (transition == null)
-                    return null;
-
-                return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamSequence, _dataFactory);
-            }
-
-            // Check, if this is statefull aggregate
-            if (definition.AggregateKind == AggregateKind.Statefull)
-            {
-                // Here we can load state from snapshot store, but we are starting from initial state.
-                var initialState = _store.CreateState(definition.StateType);
-
-                var spooler = new StateSpooler(initialState);
-                using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
-                {
-                    foreach (var transition in reader.ReadAll())
-                        spooler.Spool(transition.Events, transition.StreamSequence);
-                }
-
-                // Aggregate doesn't exists, if spooler.Data is null
-                if (spooler.Data == null)
-                    return null;
-
-                return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);
-            }
-
-            throw new Exception("Specified AggregateKind is not supported");
         }
 
         /// <summary>
@@ -106,11 +57,14 @@ namespace Immutably.Aggregates
         /// </summary>
         public IAggregate LoadOrCreateAggregate(Type aggregateType, String aggregateId)
         {
-            var aggregate = LoadAggregateInternal(aggregateType, aggregateId);
+            var repository = CreateRepository(aggregateType);
+            var aggregate = repository.LoadAggregate(aggregateType, aggregateId);
 
+            // Create aggregate, if aggregate doesn't exists
             if (aggregate == null)
-                aggregate = CreateAggregate(aggregateType, aggregateId);
+                aggregate = repository.CreateAggregate(aggregateType, aggregateId);
 
+            RegisterAggregateInSession(aggregate);
             return aggregate;
         }
 
@@ -119,52 +73,22 @@ namespace Immutably.Aggregates
         /// </summary>
         public IAggregate CreateAggregate(Type aggregateType, String aggregateId)
         {
-            var definition = _aggregateFactory.GetAggregateDefinition(aggregateType);
+            var repository = CreateRepository(aggregateType);
+            var aggregate = repository.CreateAggregate(aggregateType, aggregateId);
 
-            if (definition.AggregateKind == AggregateKind.Statefull)
-            {
-                var initialState = _store.CreateState(definition.StateType);
-                return EstablishStatefullAggregate(aggregateType, initialState, aggregateId, 0, _dataFactory);
-            }
-
-            if (definition.AggregateKind == AggregateKind.Stateless)
-            {
-                return EstablishStatelessAggregate(aggregateType, aggregateId, 0, _dataFactory);
-            }
-
-            throw new Exception(String.Format("Cannot create aggregate of type {0}", aggregateType));
-        }
-
-        private IStatefullAggregate EstablishStatefullAggregate(Type aggregateType, Object state, String aggregateId, Int32 version, IDataFactory dataFactory)
-        {
-            var aggregate = _store.CreateStatefullAggregate(aggregateType);
-            var context = new StatefullAggregateContext(state, aggregateId, version, dataFactory);
-            aggregate.EstablishContext(context);
-
-            _aggregates.Add(aggregate);
-
-            return aggregate;
-        }
-
-        private IStatelessAggregate EstablishStatelessAggregate(Type aggregateType, String aggregateId, Int32 version, IDataFactory dataFactory)
-        {
-            var aggregate = _store.CreateStatelessAggregate(aggregateType);
-            var context = new StatelessAggregateContext(aggregateId, version, dataFactory);
-            aggregate.EstablishContext(context);
-
-            _aggregates.Add(aggregate);
-
+            RegisterAggregateInSession(aggregate);
             return aggregate;
         }
 
         public void SaveChanges()
         {
+            //
             if (_aggregates.Count == 0)
                 return;
 
             foreach (var aggregate in _aggregates)
             {
-                // Skip aggregates without changes
+                // Skip aggregates without changes. Nothing to save here.
                 if (aggregate.Changes.Count <= 0)
                     continue;
 
@@ -176,7 +100,7 @@ namespace Immutably.Aggregates
                 }
             }
 
-            // Clear unit of work container
+            // Clear "unit of work" container
             _aggregates.Clear();
         }
 
@@ -196,6 +120,27 @@ namespace Immutably.Aggregates
             where TAggregate : IAggregate
         {
             return (TAggregate) LoadOrCreateAggregate(typeof (TAggregate), aggregateId);
+        }
+
+        /// <summary>
+        /// Creates registry for aggregate based on AggregateKind.
+        /// </summary>
+        private AggregateRepositoryBase CreateRepository(Type aggregateType)
+        {
+            var definition = _aggregateRegistry.GetAggregateDefinition(aggregateType);
+
+            if (definition.AggregateKind == AggregateKind.Statefull)
+                return new StatefullAggregateRepository(_store, _dataFactory, definition);
+
+            if (definition.AggregateKind == AggregateKind.Stateless)
+                return new StatelessAggregateRepository(_store, _dataFactory, definition);
+
+            throw new Exception("Specified AggregateKind is not supported");
+        }
+
+        private void RegisterAggregateInSession(IAggregate aggregate)
+        {
+            _aggregates.Add(aggregate);
         }
 
         public void Dispose()

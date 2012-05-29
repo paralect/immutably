@@ -1,6 +1,5 @@
 ﻿using System;
 using Immutably.Aggregates;
-using Immutably.Tests.Environments.SimpleStatelessAggregate;
 using Machine.Specifications;
 
 namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store.simplest_possible_aggregates

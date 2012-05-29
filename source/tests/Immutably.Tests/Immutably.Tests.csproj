@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SimpleEvent.cs" />
     <Compile Include="Specs\aggregates\empty_context\simple_aggregates\when_aggregate_context_was_initialized_via_builder_second_time.cs" />
     <Compile Include="Specs\aggregates\empty_context\simple_aggregates\when_aggregate_context_was_modified_second_time.cs" />
     <Compile Include="Specs\aggregates\empty_context\simple_aggregates\when_aggregate_created.cs" />
@@ -72,7 +71,6 @@
     <Compile Include="Specs\data\empty_context\when_data_context_created_with_one_contract_and_one_proxy.cs" />
     <Compile Include="Specs\data\empty_context\when_data_context_created_with_types_from_assembly.cs" />
     <Compile Include="Specs\data\empty_context\_context.cs" />
-    <Compile Include="Units\SimpleStatelessAggregate\SimpleStatelessAggregate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_two_events_are_written.cs" />
     <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_one_transition_with_one_event_is_written.cs" />

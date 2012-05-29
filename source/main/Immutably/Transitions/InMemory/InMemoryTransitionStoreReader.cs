@@ -33,7 +33,7 @@ namespace Immutably.Transitions
             // nothing to dispose
         }
 
-        IEnumerable<ITransition> ITransitionStoreReader.Read()
+        IEnumerable<ITransition> ITransitionStoreReader.ReadAll()
         {
             return _store.LoadStoreTransitions();
         }

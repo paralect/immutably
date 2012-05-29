@@ -5,6 +5,6 @@ namespace Immutably.Transitions
 {
     public interface ITransitionStoreReader : IDisposable
     {
-        IEnumerable<ITransition> Read();
+        IEnumerable<ITransition> ReadAll();
     }
 }

@@ -26,7 +26,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Serial number of this transition inside stream
         /// </summary>
-        private readonly int _streamSequence;
+        private readonly int _streamVersion;
 
         /// <summary>
         /// Timestamp when transition was saved to the Store
@@ -45,9 +45,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Serial number of this transition inside stream
         /// </summary>
-        public int StreamSequence
+        public int StreamVersion
         {
-            get { return _streamSequence; }
+            get { return _streamVersion; }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Immutably.Transitions
         public Transition(String streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _streamId = streamId;
-            _streamSequence = streamSeq;
+            _streamVersion = streamSeq;
             _timestamp = timestamp;
             _eventEnvelopes = eventEnvelopes;
 
@@ -110,7 +110,7 @@ namespace Immutably.Transitions
                     if (eventEnvelope.Metadata.SenderId != _streamId)
                         throw new Exception("Invalid transition, because events are for different streams");
 
-                    if (eventEnvelope.Metadata.StreamSequence != _streamSequence)
+                    if (eventEnvelope.Metadata.StreamSequence != _streamVersion)
                         throw new Exception("Invalid transition, because events have different stream sequence");
 
                     _transitionSequence = eventEnvelope.Metadata.TransitionSequence;

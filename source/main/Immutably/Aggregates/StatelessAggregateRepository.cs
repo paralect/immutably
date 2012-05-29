@@ -34,7 +34,7 @@ namespace Immutably.Aggregates
                 transition = reader.ReadLast();
             }
 
-            return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamSequence, _dataFactory);
+            return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamVersion, _dataFactory);
         }
 
         private IAggregate EstablishStatelessAggregate(Type aggregateType, String aggregateId, Int32 version, IDataFactory dataFactory)

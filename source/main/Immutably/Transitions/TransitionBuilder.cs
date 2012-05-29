@@ -45,7 +45,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Adds event to transition.
         /// Event metadata will be automatically created 
-        /// (based on this transition's StreamId, StreamSequence and next available TransitionSequence)
+        /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
         /// </summary>
         public ITransitionBuilder AddEvent(IEvent evnt)
         {
@@ -63,7 +63,7 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Adds event and corresponding event metadata to this transition
-        /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
+        /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
         public ITransitionBuilder AddEvent(IEvent evnt, IEventMetadata metadata)
         {
@@ -75,7 +75,7 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Adds event envelope to this transition
-        /// Event metadata should has correct StreamId, StreamSequence and TransitionSequence.
+        /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
         public ITransitionBuilder AddEvent(IEventEnvelope envelope)
         {

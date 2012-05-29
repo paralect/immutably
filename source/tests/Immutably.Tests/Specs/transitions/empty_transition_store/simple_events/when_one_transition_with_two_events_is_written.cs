@@ -28,6 +28,6 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store.simple_events
             transitions[0].StreamId.ShouldEqual(evnt.Id);
 
         It should_have_correct_stream_sequence = () =>
-            transitions[0].StreamSequence.ShouldEqual(1);
+            transitions[0].StreamVersion.ShouldEqual(1);
     }
 }

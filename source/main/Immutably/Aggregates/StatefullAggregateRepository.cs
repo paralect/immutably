@@ -27,7 +27,7 @@ namespace Immutably.Aggregates
             using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
             {
                 foreach (var transition in reader.ReadAll())
-                    spooler.Spool(transition.Events, transition.StreamSequence);
+                    spooler.Spool(transition.Events, transition.StreamVersion);
             }
 
             return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);

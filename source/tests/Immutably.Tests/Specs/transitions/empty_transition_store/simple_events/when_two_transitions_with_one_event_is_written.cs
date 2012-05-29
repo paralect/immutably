@@ -41,8 +41,8 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store.simple_events
 
         It should_have_correct_stream_sequence = () =>
         {
-            transitions[0].StreamSequence.ShouldEqual(1);
-            transitions[1].StreamSequence.ShouldEqual(2);
+            transitions[0].StreamVersion.ShouldEqual(1);
+            transitions[1].StreamVersion.ShouldEqual(2);
         };
     }
 }

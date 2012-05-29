@@ -28,7 +28,7 @@ namespace Immutably.Transitions
                 if (transition.StreamId != _streamId)
                     throw new Exception("Invalid transitions stream because of wrong stream ID");
 
-                if (transition.StreamSequence <= streamSequence)
+                if (transition.StreamVersion <= streamSequence)
                     throw new Exception("State restoration failed because of out of order stream sequence.");
 
                 var transitionSequence = 0;
@@ -49,7 +49,7 @@ namespace Immutably.Transitions
                     transitionSequence = metadata.TransitionSequence;
                 }
 
-                streamSequence = transition.StreamSequence;
+                streamSequence = transition.StreamVersion;
                 
                 yield return transition;
             }

@@ -79,7 +79,7 @@ namespace Immutably.Transitions
                 throw new TransitionStreamNotExistsException(streamId);
 
             return transitions
-                .Where(t => t.StreamSequence >= fromStreamSequence)
+                .Where(t => t.StreamVersion >= fromStreamSequence)
                 .Take(count)
                 .ToList();
         }
@@ -125,10 +125,10 @@ namespace Immutably.Transitions
         /// </summary>
         public void Append(ITransition transition)
         {
-            var key = new TransitionId(transition.StreamId, transition.StreamSequence);
+            var key = new TransitionId(transition.StreamId, transition.StreamVersion);
 
             if (_indexByTransactionId.ContainsKey(key))
-                throw new TransitionAlreadyExistsException(transition.StreamId, transition.StreamSequence);
+                throw new TransitionAlreadyExistsException(transition.StreamId, transition.StreamVersion);
 
             List<ITransition> stream;
             if (!_indexByStreamId.TryGetValue(transition.StreamId, out stream))

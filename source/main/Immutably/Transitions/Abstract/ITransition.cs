@@ -20,7 +20,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Serial number of this transition inside stream
         /// </summary>
-        Int32 StreamSequence { get; }
+        Int32 StreamVersion { get; }
 
         /// <summary>
         /// Timestamp when transition was saved to the Store

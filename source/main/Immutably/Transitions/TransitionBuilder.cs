@@ -19,7 +19,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Serial number of this transition inside stream
         /// </summary>
-        private readonly int _streamSequence;
+        private readonly int _streamVersion;
 
         /// <summary>
         /// Timestamp when transition was saved to the Store
@@ -35,10 +35,10 @@ namespace Immutably.Transitions
         /// <summary>
         /// Creates transition builder
         /// </summary>
-        public TransitionBuilder(String streamId, Int32 streamSequence, DateTime timestamp)
+        public TransitionBuilder(String streamId, Int32 streamVersion, DateTime timestamp)
         {
             _streamId = streamId;
-            _streamSequence = streamSequence;
+            _streamVersion = streamVersion;
             _timestamp = timestamp;
         }
 
@@ -52,7 +52,7 @@ namespace Immutably.Transitions
             var metadata = new EventMetadata()
             {
                 SenderId = _streamId,
-                StreamSequence = _streamSequence,
+                StreamVersion = _streamVersion,
                 TransitionSequence = _transitionSequence
             };
 
@@ -86,43 +86,25 @@ namespace Immutably.Transitions
         }
 
         /// <summary>
+        /// Adds events to transition.
+        /// Event metadata will be automatically created 
+        /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
+        /// </summary>
+        public ITransitionBuilder AddEvents(IEnumerable<IEvent> events)
+        {
+            foreach (var evnt in events)
+                AddEvent(evnt);
+
+            return this;            
+        }
+
+        /// <summary>
         /// Build Transition
         /// </summary>
         public ITransition Build()
         {
-            var transition = new Transition(_streamId, _streamSequence, _timestamp, _eventEnvelopes, true);
+            var transition = new Transition(_streamId, _streamVersion, _timestamp, _eventEnvelopes, true);
             return transition;
-        }
-
-        ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt)
-        {
-            return AddEvent(evnt);
-        }
-
-        ITransitionBuilder ITransitionBuilder.AddEvents(IEnumerable<IEvent> events)
-        {
-            foreach (var evnt in events)
-            {
-                AddEvent(evnt);
-            }
-
-            return this;
-        }
-
-
-        ITransitionBuilder ITransitionBuilder.AddEvent(IEvent evnt, IEventMetadata metadata)
-        {
-            return AddEvent(evnt, (IEventMetadata) metadata);
-        }
-
-        ITransitionBuilder ITransitionBuilder.AddEvent(IEventEnvelope envelope)
-        {
-            return AddEvent((IEventEnvelope) envelope);
-        }
-
-        ITransition ITransitionBuilder.Build()
-        {
-            return Build();
         }
 
         /// <summary>
@@ -133,8 +115,8 @@ namespace Immutably.Transitions
             if (metadata.SenderId != _streamId)
                 throw new Exception("Invalid stream ID");
 
-            if (metadata.StreamSequence != _streamSequence)
-                throw new Exception("Invalid stream sequence");
+            if (metadata.StreamVersion != _streamVersion)
+                throw new Exception("Invalid stream version");
 
             if (metadata.TransitionSequence <= _transitionSequence)
                 throw new Exception("Invalid transition sequence");

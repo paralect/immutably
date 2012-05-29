@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Immutably.Messages;
 
 namespace Immutably.Transitions
 {
@@ -42,6 +44,16 @@ namespace Immutably.Transitions
             var transition = new TransitionBuilder(_streamId, streamSequence, DateTime.UtcNow);
             transitionBuilder(transition);
             _repository.Append(transition.Build());
+        }
+
+        /// <summary>
+        /// Writes events as a single transition to the end of stream with specified <param name="streamSequence" />
+        /// </summary>
+        public void Write(int streamSequence, IEnumerable<IEvent> events)
+        {
+            Write(streamSequence, builder => builder
+                .AddEvents(events)
+            );
         }
 
         public void Dispose()

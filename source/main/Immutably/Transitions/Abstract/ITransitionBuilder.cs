@@ -13,13 +13,6 @@ namespace Immutably.Transitions
         ITransitionBuilder AddEvent(IEvent evnt);        
         
         /// <summary>
-        /// Adds events to transition.
-        /// Event metadata will be automatically created 
-        /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
-        /// </summary>
-        ITransitionBuilder AddEvents(IEnumerable<IEvent> events);
-
-        /// <summary>
         /// Adds event and corresponding event metadata to this transition.
         /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
@@ -30,6 +23,13 @@ namespace Immutably.Transitions
         /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
         ITransitionBuilder AddEvent(IEventEnvelope envelope);
+
+        /// <summary>
+        /// Adds events to transition.
+        /// Event metadata will be automatically created 
+        /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
+        /// </summary>
+        ITransitionBuilder AddEvents(IEnumerable<IEvent> events);
 
         /// <summary>
         /// Build Transition

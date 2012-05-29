@@ -52,7 +52,7 @@ namespace Immutably.Aggregates
             }
             catch(TransitionException e)
             {
-                throw new AggregateDoesntExistException(aggregateType, aggregateId);
+                throw new AggregateDoesntExistException(aggregateType, aggregateId, e);
             }
         }
 
@@ -102,9 +102,7 @@ namespace Immutably.Aggregates
 
                 using (var writer = _store.TransitionStore.CreateStreamWriter(aggregate.Id))
                 {
-                    writer.Write(aggregate.CurrentVersion, builder => builder
-                        .AddEvents(aggregate.Changes)
-                    );
+                    writer.Write(aggregate.CurrentVersion, aggregate.Changes);
                 }
             }
 

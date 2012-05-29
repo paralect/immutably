@@ -16,7 +16,7 @@ namespace Immutably.Messages
         /// Can be used to preserve ordering of messages inside Aggregate boundary.
         /// Starts from 1.
         /// </summary>
-        public int StreamSequence { get; set; }
+        public int StreamVersion { get; set; }
 
         /// <summary>
         /// Starts from 1.

@@ -88,10 +88,10 @@ namespace Immutably.Transitions
         /// Specifies, should we validate envelopes that they belongs 
         /// to specified <param name="streamId" /> and they all have specified <param name="streamSequence" />
         /// </param>
-        public Transition(String streamId, Int32 streamSeq, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
+        public Transition(String streamId, Int32 streamVersion, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {
             _streamId = streamId;
-            _streamVersion = streamSeq;
+            _streamVersion = streamVersion;
             _timestamp = timestamp;
             _eventEnvelopes = eventEnvelopes;
 
@@ -110,7 +110,7 @@ namespace Immutably.Transitions
                     if (eventEnvelope.Metadata.SenderId != _streamId)
                         throw new Exception("Invalid transition, because events are for different streams");
 
-                    if (eventEnvelope.Metadata.StreamSequence != _streamVersion)
+                    if (eventEnvelope.Metadata.StreamVersion != _streamVersion)
                         throw new Exception("Invalid transition, because events have different stream sequence");
 
                     _transitionSequence = eventEnvelope.Metadata.TransitionSequence;

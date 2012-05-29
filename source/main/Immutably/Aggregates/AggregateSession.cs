@@ -42,14 +42,18 @@ namespace Immutably.Aggregates
         /// </summary>
         public IAggregate LoadAggregate(Type aggregateType, String aggregateId)
         {
-            var repository = CreateRepository(aggregateType);
-            var aggregate = repository.LoadAggregate(aggregateType, aggregateId);
+            try
+            {
+                var repository = CreateRepository(aggregateType);
+                var aggregate = repository.LoadAggregate(aggregateType, aggregateId);
 
-            if (aggregate == null)
+                RegisterAggregateInSession(aggregate);
+                return aggregate;
+            }
+            catch(TransitionException e)
+            {
                 throw new AggregateDoesntExistException(aggregateType, aggregateId);
-
-            RegisterAggregateInSession(aggregate);
-            return aggregate;
+            }
         }
 
         /// <summary>
@@ -57,12 +61,17 @@ namespace Immutably.Aggregates
         /// </summary>
         public IAggregate LoadOrCreateAggregate(Type aggregateType, String aggregateId)
         {
+            IAggregate aggregate = null;
             var repository = CreateRepository(aggregateType);
-            var aggregate = repository.LoadAggregate(aggregateType, aggregateId);
 
-            // Create aggregate, if aggregate doesn't exists
-            if (aggregate == null)
+            try
+            {
+                aggregate = repository.LoadAggregate(aggregateType, aggregateId);
+            }
+            catch(TransitionStreamNotExistsException e)
+            {
                 aggregate = repository.CreateAggregate(aggregateType, aggregateId);
+            }
 
             RegisterAggregateInSession(aggregate);
             return aggregate;
@@ -82,7 +91,6 @@ namespace Immutably.Aggregates
 
         public void SaveChanges()
         {
-            //
             if (_aggregates.Count == 0)
                 return;
 

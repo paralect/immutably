@@ -39,26 +39,28 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
+        /// Throws TransitionNotExistsException if no such transition found.
         /// </summary>
-        public ITransition LoadStreamTransition(String streamId, int streamSequence)
+        public ITransition LoadStreamTransition(String streamId, int version)
         {
-            return _indexByTransactionId[new TransitionId(streamId, streamSequence)];
+            ITransition transition;
+            if (!_indexByTransactionId.TryGetValue(new TransitionId(streamId, version), out transition))
+                throw new TransitionNotExistsException(streamId, version);
+
+            return transition;
         }
 
         /// <summary>
         /// Load last transition in the stream
-        /// Returns null, if stream doesn't exists or empty
+        /// Throws TransitionStreamNotExistsException if stream not exists.
         /// </summary>
         public ITransition LoadLastStreamTransition(String streamId)
         {
             List<ITransition> transitions;
             var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
 
-            if (!exists)
-                return null;
-
-            if (transitions.Count == 0)
-                return null;
+            if (!exists || transitions.Count == 0)
+                throw new TransitionStreamNotExistsException(streamId);
 
             return transitions.Last();
         }
@@ -66,6 +68,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// LoadAggregate <param name="count" /> transitions for specified stream, 
         /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
+        /// Throws TransitionStreamNotExistsException if stream not exists
         /// </summary>
         public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamSequence, int count)
         {
@@ -73,7 +76,7 @@ namespace Immutably.Transitions
             var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
 
             if (!exists)
-                throw new TransitionStreamNotExistsException(String.Format("Stream with id [{0}] doesn't exist", streamId));
+                throw new TransitionStreamNotExistsException(streamId);
 
             return transitions
                 .Where(t => t.StreamSequence >= fromStreamSequence)
@@ -83,14 +86,13 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Returns all transitions for specified stream in chronological order
+        /// Throws TransitionStreamNotExistsException if stream not exists
         /// </summary>
         public IList<ITransition> LoadStreamTransitions(String streamId)
         {
             List<ITransition> transitions;
-            var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
-
-            if (!exists)
-                throw new TransitionStreamNotExistsException(String.Format("Stream with id [{0}] doesn't exist", streamId));
+            if (!_indexByStreamId.TryGetValue(streamId, out transitions))
+                throw new TransitionStreamNotExistsException(streamId);
 
             return transitions;
         }
@@ -126,7 +128,7 @@ namespace Immutably.Transitions
             var key = new TransitionId(transition.StreamId, transition.StreamSequence);
 
             if (_indexByTransactionId.ContainsKey(key))
-                throw new TransitionAlreadyExistsException(String.Format("Transition with id ({0}, {1}) already exists", transition.StreamId, transition.StreamSequence));
+                throw new TransitionAlreadyExistsException(transition.StreamId, transition.StreamSequence);
 
             List<ITransition> stream;
             if (!_indexByStreamId.TryGetValue(transition.StreamId, out stream))

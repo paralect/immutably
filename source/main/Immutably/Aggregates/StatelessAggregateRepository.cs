@@ -34,10 +34,6 @@ namespace Immutably.Aggregates
                 transition = reader.ReadLast();
             }
 
-            // Aggregate doesn't exists, if transition is null
-            if (transition == null)
-                return null;
-
             return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamSequence, _dataFactory);
         }
 

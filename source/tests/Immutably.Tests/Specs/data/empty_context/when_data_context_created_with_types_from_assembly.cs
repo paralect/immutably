@@ -1,0 +1,28 @@
+using System;
+using Immutably.Data;
+using Machine.Specifications;
+
+namespace Immutably.Tests.Specs.data.empty_context
+{
+    public class when_data_context_created_with_types_from_assembly : _context
+    {
+        Because of = () =>
+        {
+            context = DataContext.Create(builder => builder
+                .AddAssemblyContracts(typeof(_context).Assembly, typeof(_context).Namespace)
+                .AddAssemblyProxies(typeof(_context).Assembly, typeof(_context).Namespace)
+            );
+        };
+
+        It should_correctly_find_proxy_type = () =>
+            context.GetProxy(typeof (User)).ShouldEqual(typeof(User_Bson));
+
+        It should_return_correct_tag_for_contract = () =>
+            context.GetTag(typeof(User)).ShouldEqual(Guid.Parse("{40952BD5-993B-4706-9442-099C9AD8E33F}"));
+
+        It should_return_correct_tag_for_proxy = () =>
+            context.GetTag(typeof(User_Bson)).ShouldEqual(Guid.Parse("{40952BD5-993B-4706-9442-099C9AD8E33F}"));
+
+        private static IDataContext context;
+    }
+}

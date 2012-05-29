@@ -100,8 +100,7 @@
     <Compile Include="Transitions\Abstract\ITransitionStoreReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamReader.cs" />
     <Compile Include="Transitions\Abstract\ITransitionStreamWriter.cs" />
-    <Compile Include="Transitions\Exceptions\TransitionAlreadyExistsException.cs" />
-    <Compile Include="Transitions\Exceptions\TransitionStreamNotExistsException.cs" />
+    <Compile Include="Transitions\Exceptions\Exceptions.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionRepository.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStoreReader.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStreamReader.cs" />

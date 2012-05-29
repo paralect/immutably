@@ -11,7 +11,7 @@ namespace Immutably.Aggregates
         }
 
         /// <summary>
-        /// Returns aggregate or null, if it wasn't find
+        /// Returns aggregate if found or null, if it wasn't found
         /// </summary>
         public override IAggregate LoadAggregate(Type aggregateType, String aggregateId)
         {
@@ -29,10 +29,6 @@ namespace Immutably.Aggregates
                 foreach (var transition in reader.ReadAll())
                     spooler.Spool(transition.Events, transition.StreamSequence);
             }
-
-            // Aggregate doesn't exists, if spooler.Data is null
-            if (spooler.Data == null)
-                return null;
 
             return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);
         }

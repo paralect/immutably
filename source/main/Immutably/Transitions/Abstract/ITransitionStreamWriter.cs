@@ -12,13 +12,13 @@ namespace Immutably.Transitions
         void Write(ITransition transition);
 
         /// <summary>
-        /// Writes events as a single transition to the end of stream with specified <param name="streamSequence" />
+        /// Writes events as a single transition to the end of stream with specified <param name="streamVersion" />
         /// </summary>
-        void Write(Int32 streamSequence, IEnumerable<IEvent> events);
+        void Write(Int32 streamVersion, IEnumerable<IEvent> events);
 
         /// <summary>
-        /// Writes transition to the end of stream with specified <param name="streamSequence" />
+        /// Writes transition to the end of stream with specified <param name="streamVersion" />
         /// </summary>
-        void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder);
+        void Write(Int32 streamVersion, Action<ITransitionBuilder> transitionBuilder);
     }
 }

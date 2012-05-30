@@ -16,7 +16,7 @@ namespace Immutably.Transitions
 
         public IEnumerable<ITransition> Read()
         {
-            var streamSequence = 0;
+            var streamVersion = 0;
 
             foreach (var transition in _transitions)
             {
@@ -28,7 +28,7 @@ namespace Immutably.Transitions
                 if (transition.StreamId != _streamId)
                     throw new Exception("Invalid transitions stream because of wrong stream ID");
 
-                if (transition.StreamVersion <= streamSequence)
+                if (transition.StreamVersion <= streamVersion)
                     throw new Exception("State restoration failed because of out of order stream sequence.");
 
                 var transitionSequence = 0;
@@ -49,7 +49,7 @@ namespace Immutably.Transitions
                     transitionSequence = metadata.TransitionSequence;
                 }
 
-                streamSequence = transition.StreamVersion;
+                streamVersion = transition.StreamVersion;
                 
                 yield return transition;
             }

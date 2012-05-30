@@ -22,10 +22,10 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("bf7ed25d-3bd9-4491-96db-831c99d33c28")]
 
-// StreamSequence information for an assembly consists of the following four values:
+// Version information for an assembly consists of the following four values:
 //
-//      Major StreamSequence
-//      Minor StreamSequence 
+//      Major Version
+//      Minor Version 
 //      Build Number
 //      Revision
 //

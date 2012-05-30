@@ -16,13 +16,13 @@ namespace Immutably.Transitions
         public struct TransitionId
         {
             public String StreamId { get; set; }
-            public Int32 StreamSequence { get; set; }
+            public Int32 StreamVersion { get; set; }
 
-            public TransitionId(String streamId, int streamSequence)
+            public TransitionId(String streamId, int streamVersion)
                 : this()
             {
                 StreamId = streamId;
-                StreamSequence = streamSequence;
+                StreamVersion = streamVersion;
             }
         }
 
@@ -38,14 +38,14 @@ namespace Immutably.Transitions
         private readonly Dictionary<String, List<ITransition>> _indexByStreamId = new Dictionary<String, List<ITransition>>();
 
         /// <summary>
-        /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
+        /// LoadAggregate single transition, uniquely identified by by streamId and streamVersion
         /// Throws TransitionNotExistsException if no such transition found.
         /// </summary>
-        public ITransition LoadStreamTransition(String streamId, int version)
+        public ITransition LoadStreamTransition(String streamId, int streamVersion)
         {
             ITransition transition;
-            if (!_indexByTransactionId.TryGetValue(new TransitionId(streamId, version), out transition))
-                throw new TransitionNotExistsException(streamId, version);
+            if (!_indexByTransactionId.TryGetValue(new TransitionId(streamId, streamVersion), out transition))
+                throw new TransitionNotExistsException(streamId, streamVersion);
 
             return transition;
         }
@@ -67,10 +67,10 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// LoadAggregate <param name="count" /> transitions for specified stream, 
-        /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
+        /// ordered by Stream Sequence, starting from <param name="fromStreamVersion" />
         /// Throws TransitionStreamNotExistsException if stream not exists
         /// </summary>
-        public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamSequence, int count)
+        public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamVersion, int count)
         {
             List<ITransition> transitions;
             var exists = _indexByStreamId.TryGetValue(streamId, out transitions);
@@ -79,7 +79,7 @@ namespace Immutably.Transitions
                 throw new TransitionStreamNotExistsException(streamId);
 
             return transitions
-                .Where(t => t.StreamVersion >= fromStreamSequence)
+                .Where(t => t.StreamVersion >= fromStreamVersion)
                 .Take(count)
                 .ToList();
         }

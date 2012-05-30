@@ -33,11 +33,11 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store
             }
         }
 
-        public static void WriteTransition(String streamId, Int32 streamSequence, IEvent newEvent)
+        public static void WriteTransition(String streamId, Int32 streamVersion, IEvent newEvent)
         {
             using (var writer = store.CreateStreamWriter(streamId))
             {
-                writer.Write(streamSequence, builder => builder
+                writer.Write(streamVersion, builder => builder
                     .AddEvent(newEvent)
                 );
             }            

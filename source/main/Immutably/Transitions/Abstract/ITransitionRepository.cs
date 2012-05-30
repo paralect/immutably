@@ -6,9 +6,9 @@ namespace Immutably.Transitions
     public interface ITransitionRepository
     {
         /// <summary>
-        /// Load single transition, uniquely identified by by streamId and streamSequence
+        /// Load single transition, uniquely identified by by streamId and streamVersion
         /// </summary>
-        ITransition LoadStreamTransition(String streamId, Int32 streamSequence);
+        ITransition LoadStreamTransition(String streamId, Int32 streamVersion);
 
         /// <summary>
         /// Load last transition in the stream
@@ -17,9 +17,9 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// Load <param name="count" /> transitions for specified stream, 
-        /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
+        /// ordered by Stream Sequence, starting from <param name="fromStreamVersion" />
         /// </summary>
-        IList<ITransition> LoadStreamTransitions(String streamId, Int32 fromStreamSequence, Int32 count);
+        IList<ITransition> LoadStreamTransitions(String streamId, Int32 fromStreamVersion, Int32 count);
 
         /// <summary>
         /// Load <param name="count" /> transitions from store, 

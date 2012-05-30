@@ -37,21 +37,21 @@ namespace Immutably.Transitions
         }
 
         /// <summary>
-        /// Writes transition to the end of stream with specified <param name="streamSequence" />
+        /// Writes transition to the end of stream with specified <param name="streamVersion" />
         /// </summary>
-        public void Write(Int32 streamSequence, Action<ITransitionBuilder> transitionBuilder)
+        public void Write(Int32 streamVersion, Action<ITransitionBuilder> transitionBuilder)
         {
-            var transition = new TransitionBuilder(_streamId, streamSequence, DateTime.UtcNow);
+            var transition = new TransitionBuilder(_streamId, streamVersion, DateTime.UtcNow);
             transitionBuilder(transition);
             _repository.Append(transition.Build());
         }
 
         /// <summary>
-        /// Writes events as a single transition to the end of stream with specified <param name="streamSequence" />
+        /// Writes events as a single transition to the end of stream with specified <param name="streamVersion" />
         /// </summary>
-        public void Write(int streamSequence, IEnumerable<IEvent> events)
+        public void Write(int streamVersion, IEnumerable<IEvent> events)
         {
-            Write(streamSequence, builder => builder
+            Write(streamVersion, builder => builder
                 .AddEvents(events)
             );
         }

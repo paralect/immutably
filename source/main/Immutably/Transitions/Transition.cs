@@ -86,7 +86,7 @@ namespace Immutably.Transitions
         /// </summary>
         /// <param name="validate">
         /// Specifies, should we validate envelopes that they belongs 
-        /// to specified <param name="streamId" /> and they all have specified <param name="streamSequence" />
+        /// to specified <param name="streamId" /> and they all have specified <param name="streamVersion" />
         /// </param>
         public Transition(String streamId, Int32 streamVersion, DateTime timestamp, List<IEventEnvelope> eventEnvelopes, Boolean validate = true)
         {

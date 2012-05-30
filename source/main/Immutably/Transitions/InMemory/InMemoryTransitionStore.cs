@@ -23,15 +23,15 @@ namespace Immutably.Transitions
         }
 
         /// <summary>
-        /// LoadAggregate single transition, uniquely identified by by streamId and streamSequence
+        /// LoadAggregate single transition, uniquely identified by by streamId and streamVersion
         /// </summary>
-        public ITransition LoadStreamTransition(String streamId, int streamSequence)
+        public ITransition LoadStreamTransition(String streamId, int streamVersion)
         {
             _lock.EnterReadLock();
 
             try
             {
-                return _repository.LoadStreamTransition(streamId, streamSequence);
+                return _repository.LoadStreamTransition(streamId, streamVersion);
             }
             finally
             {
@@ -58,15 +58,15 @@ namespace Immutably.Transitions
 
         /// <summary>
         /// LoadAggregate <param name="count" /> transitions for specified stream, 
-        /// ordered by Stream Sequence, starting from <param name="fromStreamSequence" />
+        /// ordered by Stream Sequence, starting from <param name="fromStreamVersion" />
         /// </summary>
-        public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamSequence, int count)
+        public IList<ITransition> LoadStreamTransitions(String streamId, int fromStreamVersion, int count)
         {
             _lock.EnterReadLock();
 
             try
             {
-                return _repository.LoadStreamTransitions(streamId, fromStreamSequence, count);
+                return _repository.LoadStreamTransitions(streamId, fromStreamVersion, count);
             }
             finally
             {

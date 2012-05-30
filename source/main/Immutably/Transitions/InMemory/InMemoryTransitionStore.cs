@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Immutably.Data;
 
 namespace Immutably.Transitions
 {
@@ -10,6 +11,7 @@ namespace Immutably.Transitions
     /// </summary>
     public class InMemoryTransitionStore : ITransitionStore
     {
+        private readonly IDataFactory _dataFactory;
         private InMemoryTransitionRepository _repository;
 
         /// <summary>
@@ -17,8 +19,9 @@ namespace Immutably.Transitions
         /// </summary>
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
-        public InMemoryTransitionStore()
+        public InMemoryTransitionStore(IDataFactory dataFactory)
         {
+            _dataFactory = dataFactory;
             _repository = new InMemoryTransitionRepository();
         }
 
@@ -154,7 +157,7 @@ namespace Immutably.Transitions
 
         public ITransitionStreamWriter CreateStreamWriter(String streamId)
         {
-            return new DefaultTransitionStreamWriter(CreateTransitionRepository(), streamId);
+            return new DefaultTransitionStreamWriter(CreateTransitionRepository(), _dataFactory, streamId);
         }
 
         public ITransitionStoreReader CreateStoreReader()

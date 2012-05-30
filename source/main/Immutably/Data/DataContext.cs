@@ -96,5 +96,12 @@ namespace Immutably.Data
             var proxyType = GetProxy(type);
             return Activator.CreateInstance(proxyType);
         }
+
+        public TDataType Create<TDataType>(Action<TDataType> builder)
+        {
+            var obj = Create<TDataType>();
+            builder(obj);
+            return obj;
+        }
     }
 }

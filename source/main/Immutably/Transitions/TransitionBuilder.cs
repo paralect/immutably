@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Immutably.Data;
 using Immutably.Messages;
 
 namespace Immutably.Transitions
@@ -10,6 +11,8 @@ namespace Immutably.Transitions
         /// Event envelops, in order (by transition sequence)
         /// </summary>
         private readonly List<IEventEnvelope> _eventEnvelopes = new List<IEventEnvelope>();
+
+        private readonly IDataFactory _dataFactory;
 
         /// <summary>
         /// ID of stream, this transition belongs to
@@ -35,8 +38,9 @@ namespace Immutably.Transitions
         /// <summary>
         /// Creates transition builder
         /// </summary>
-        public TransitionBuilder(String streamId, Int32 streamVersion, DateTime timestamp)
+        public TransitionBuilder(IDataFactory dataFactory, String streamId, Int32 streamVersion, DateTime timestamp)
         {
+            _dataFactory = dataFactory;
             _streamId = streamId;
             _streamVersion = streamVersion;
             _timestamp = timestamp;
@@ -49,12 +53,12 @@ namespace Immutably.Transitions
         /// </summary>
         public ITransitionBuilder AddEvent(IEvent evnt)
         {
-            var metadata = new EventMetadata()
+            var metadata = _dataFactory.Create<EventMetadata>(m =>
             {
-                SenderId = _streamId,
-                StreamVersion = _streamVersion,
-                TransitionSequence = _transitionSequence
-            };
+                m.SenderId = _streamId;
+                m.StreamVersion = _streamVersion;
+                m.TransitionSequence = _transitionSequence;
+            });
 
             _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
             _transitionSequence++;

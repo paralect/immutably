@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Immutably.Data;
 using Immutably.Messages;
 using Immutably.Transitions;
 using Machine.Specifications;
@@ -22,7 +23,7 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store
                 Name = "Lenin"
             };
 
-            store = new InMemoryTransitionStore();
+            store = new InMemoryTransitionStore(new DefaultDataFactory());
         };
 
         public static List<ITransition> LoadAllStreamTransitions()
@@ -31,16 +32,6 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store
             {
                 return reader.ReadAll().ToList();
             }
-        }
-
-        public static void WriteTransition(String streamId, Int32 streamVersion, IEvent newEvent)
-        {
-            using (var writer = store.CreateStreamWriter(streamId))
-            {
-                writer.Write(streamVersion, builder => builder
-                    .AddEvent(newEvent)
-                );
-            }            
         }
     }
 

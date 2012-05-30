@@ -11,8 +11,23 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store.simple_events
 
         Because of = () =>
         {
-            WriteTransition(evnt.Id, 3, evnt);
-            exception = Catch.Exception(() => WriteTransition(evnt.Id, 3, evnt));
+            using (var writer = store.CreateStreamWriter(evnt.Id))
+            {
+                writer.Write(3, builder => builder
+                    .AddEvent(evnt)
+                );
+            }     
+
+            exception = Catch.Exception(() =>
+            {
+                using (var writer = store.CreateStreamWriter(evnt.Id))
+                {
+                    writer.Write(3, builder => builder
+                        .AddEvent(evnt)
+                    );
+                }
+            });
+
             transitions = LoadAllStreamTransitions();
         };
 

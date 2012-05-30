@@ -64,6 +64,7 @@
     <Compile Include="Data\DataContextBuilder.cs" />
     <Compile Include="Data\DataDefinition.cs" />
     <Compile Include="Data\Abstract\IDataContext.cs" />
+    <Compile Include="Data\DefaultDataFactory.cs" />
     <Compile Include="DefaultFactory.cs" />
     <Compile Include="EscolarFactory.cs" />
     <Compile Include="IEscolarFactory.cs" />

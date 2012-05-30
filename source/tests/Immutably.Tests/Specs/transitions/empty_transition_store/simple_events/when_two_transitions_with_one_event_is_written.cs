@@ -7,8 +7,20 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store.simple_events
     {
         Because of = () =>
         {
-            WriteTransition(evnt.Id, 1, evnt);
-            WriteTransition(evnt.Id, 2, evnt);
+            using (var writer = store.CreateStreamWriter(evnt.Id))
+            {
+                writer.Write(1, builder => builder
+                    .AddEvent(evnt)
+                );
+            }
+
+            using (var writer = store.CreateStreamWriter(evnt.Id))
+            {
+                writer.Write(2, builder => builder
+                    .AddEvent(evnt)
+                );
+            }
+
             transitions = LoadAllStreamTransitions();
         };
 

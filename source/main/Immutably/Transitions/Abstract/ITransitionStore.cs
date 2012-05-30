@@ -14,6 +14,5 @@ namespace Immutably.Transitions
         ITransitionStreamWriter CreateStreamWriter(String streamId);
         ITransitionStoreReader CreateStoreReader();
         ITransitionRepository CreateTransitionRepository();
-
     }
 }

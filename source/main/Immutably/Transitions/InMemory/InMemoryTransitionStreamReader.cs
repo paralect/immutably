@@ -32,7 +32,10 @@ namespace Immutably.Transitions
         /// </summary>
         public IEnumerable<ITransition> ReadAll()
         {
-            var transitions = _store.LoadStreamTransitions(_streamId);
+            var transitions = _store
+                .CreateTransitionRepository()
+                .LoadStreamTransitions(_streamId);
+
             return new TransitionStreamOrderValidator(_streamId, transitions).Read();
         }
 
@@ -42,7 +45,9 @@ namespace Immutably.Transitions
         /// </summary>
         public ITransition ReadLast()
         {
-            return _store.LoadLastStreamTransition(_streamId);
+            return _store
+                .CreateTransitionRepository()
+                .LoadLastStreamTransition(_streamId);
         }
 
         IEnumerable<ITransition> ITransitionStreamReader.ReadAll()

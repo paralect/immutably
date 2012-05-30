@@ -20,22 +20,19 @@ namespace Immutably.Transitions
             _store = store;
         }
 
-        /// <summary>
-        /// Reads stream by portions (default portion size 1000)
-        /// </summary>
-        public IEnumerable<ITransition> Read()
-        {
-            return _store.LoadStoreTransitions();
-        }
-
         public void Dispose()
         {
             // nothing to dispose
         }
 
+        /// <summary>
+        /// Reads stream by portions (default portion size 1000)
+        /// </summary>
         IEnumerable<ITransition> ITransitionStoreReader.ReadAll()
         {
-            return _store.LoadStoreTransitions();
+            return _store
+                .CreateTransitionRepository()
+                .LoadStoreTransitions();
         }
     }
 }

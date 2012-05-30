@@ -31,5 +31,16 @@ namespace Immutably.Transitions
         /// Append transition
         /// </summary>
         void Append(ITransition transition);
+
+        /// <summary>
+        /// Returns all transitions for specified stream in chronological order
+        /// Throws TransitionStreamNotExistsException if stream not exists
+        /// </summary>
+        IList<ITransition> LoadStreamTransitions(String streamId);
+
+        /// <summary>
+        /// Returns readonly collection of all transitions in the store in chronological order
+        /// </summary>
+        IList<ITransition> LoadStoreTransitions();
     }
 }

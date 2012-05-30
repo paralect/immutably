@@ -8,14 +8,12 @@ namespace Immutably.Transitions
     /// <summary>
     /// Writes transitions to stream
     /// </summary>
-    public class DefaultTransitionStreamWriter : ITransitionStreamWriter
+    public class InMemoryTransitionStreamWriter : ITransitionStreamWriter
     {
         /// <summary>
         /// Transition repository
         /// </summary>
-        private readonly ITransitionRepository _repository;
-
-        private readonly IDataFactory _dataFactory;
+        private readonly InMemoryTransitionStore _store;
 
         /// <summary>
         /// Stream Id
@@ -23,12 +21,11 @@ namespace Immutably.Transitions
         private readonly String _streamId;
 
         /// <summary>
-        /// Creates DefaultTransitionStreamWriter
+        /// Creates InMemoryTransitionStreamWriter
         /// </summary>
-        public DefaultTransitionStreamWriter(ITransitionRepository repository, IDataFactory dataFactory, String streamId)
+        public InMemoryTransitionStreamWriter(InMemoryTransitionStore store, String streamId)
         {
-            _repository = repository;
-            _dataFactory = dataFactory;
+            _store = store;
             _streamId = streamId;
         }
 
@@ -37,7 +34,9 @@ namespace Immutably.Transitions
         /// </summary>
         public void Write(ITransition transition)
         {
-            _repository.Append(transition);
+            _store
+                .CreateTransitionRepository()
+                .Append(transition);
         }
 
         /// <summary>
@@ -45,9 +44,12 @@ namespace Immutably.Transitions
         /// </summary>
         public void Write(Int32 streamVersion, Action<ITransitionBuilder> transitionBuilder)
         {
-            var transition = new TransitionBuilder(_dataFactory, _streamId, streamVersion, DateTime.UtcNow);
+            var transition = new TransitionBuilder(_store.DataFactory, _streamId, streamVersion, DateTime.UtcNow);
             transitionBuilder(transition);
-            _repository.Append(transition.Build());
+
+            _store
+                .CreateTransitionRepository()
+                .Append(transition.Build());
         }
 
         /// <summary>

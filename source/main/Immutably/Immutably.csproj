@@ -105,7 +105,7 @@
     <Compile Include="Transitions\InMemory\InMemoryTransitionRepository.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStoreReader.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStreamReader.cs" />
-    <Compile Include="Transitions\DefaultTransitionStreamWriter.cs" />
+    <Compile Include="Transitions\InMemory\InMemoryTransitionStreamWriter.cs" />
     <Compile Include="Transitions\TransitionStreamOrderValidator.cs" />
     <Compile Include="Transitions\Transition.cs" />
     <Compile Include="Transitions\InMemory\InMemoryTransitionStore.cs" />

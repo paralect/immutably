@@ -89,8 +89,8 @@
     <Compile Include="Messages\Metadata\MessageMetadata.cs" />
     <Compile Include="Messages\Metadata\StateMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data\Attributes\DataContract.cs" />
-    <Compile Include="Data\Attributes\DataProxy.cs" />
+    <Compile Include="Data\Attributes\DataContractAttribute.cs" />
+    <Compile Include="Data\Attributes\DataProxyAttribute.cs" />
     <Compile Include="Data\ReflectionHelper.cs" />
     <Compile Include="States\IStateSpooler.cs" />
     <Compile Include="States\StateSpooler.cs" />

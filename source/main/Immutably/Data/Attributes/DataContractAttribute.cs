@@ -3,7 +3,7 @@
 namespace Immutably.Data
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class DataContract : Attribute
+    public class DataContractAttribute : Attribute
     {
         private readonly string _tag;
 
@@ -12,7 +12,7 @@ namespace Immutably.Data
             get { return _tag; }
         }
 
-        public DataContract(String tag)
+        public DataContractAttribute(String tag)
         {
             _tag = tag;
         }

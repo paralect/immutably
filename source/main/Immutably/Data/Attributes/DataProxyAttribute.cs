@@ -3,15 +3,15 @@ using System;
 namespace Immutably.Data
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class DataProxy : Attribute
+    public class DataProxyAttribute : Attribute
     {
         private readonly Type _dataContractType;
 
-        public DataProxy()
+        public DataProxyAttribute()
         {
         }
 
-        public DataProxy(Type dataContractType)
+        public DataProxyAttribute(Type dataContractType)
         {
             _dataContractType = dataContractType;
         }

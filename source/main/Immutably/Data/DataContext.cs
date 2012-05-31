@@ -9,7 +9,7 @@ namespace Immutably.Data
         private readonly Dictionary<Type, DataDefinition> _definitionsByContractType = new Dictionary<Type, DataDefinition>();
         private readonly Dictionary<Type, DataDefinition> _definitionsByProxyType = new Dictionary<Type, DataDefinition>();
 
-        public DataContext(IDictionary<Type, DataContract> contracts, IDictionary<Type, DataProxy> proxies)
+        public DataContext(IDictionary<Type, DataContractAttribute> contracts, IDictionary<Type, DataProxyAttribute> proxies)
         {
             foreach (var pair in contracts)
             {

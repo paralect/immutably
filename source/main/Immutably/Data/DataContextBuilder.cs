@@ -6,12 +6,12 @@ namespace Immutably.Data
 {
     public class DataContextBuilder
     {
-        private readonly Dictionary<Type, DataContract> _contracts = new Dictionary<Type, DataContract>();
-        private readonly Dictionary<Type, DataProxy> _proxies = new Dictionary<Type, DataProxy>();
+        private readonly Dictionary<Type, DataContractAttribute> _contracts = new Dictionary<Type, DataContractAttribute>();
+        private readonly Dictionary<Type, DataProxyAttribute> _proxies = new Dictionary<Type, DataProxyAttribute>();
       
         public DataContextBuilder AddContract(Type contractType)
         {
-            var contractAttribute = ReflectionHelper.GetAttribute<DataContract>(contractType);
+            var contractAttribute = ReflectionHelper.GetAttribute<DataContractAttribute>(contractType);
             _contracts.Add(contractType, contractAttribute);
             return this;
         }
@@ -23,7 +23,7 @@ namespace Immutably.Data
 
         public DataContextBuilder AddProxy(Type proxyType)
         {
-            var proxyAttribute = ReflectionHelper.GetAttribute<DataProxy>(proxyType);
+            var proxyAttribute = ReflectionHelper.GetAttribute<DataProxyAttribute>(proxyType);
             _proxies.Add(proxyType, proxyAttribute);
             return this;
         }
@@ -40,7 +40,7 @@ namespace Immutably.Data
 
         public DataContextBuilder AddAssemblyContracts(Assembly assembly, String namespaceStartsFrom)
         {
-            var tuples = ReflectionHelper.GetTypesWithAttributes<DataContract>(assembly, namespaceStartsFrom);
+            var tuples = ReflectionHelper.GetTypesWithAttributes<DataContractAttribute>(assembly, namespaceStartsFrom);
 
             foreach (var tuple in tuples)
                 _contracts.Add(tuple.Item1, tuple.Item2);
@@ -56,7 +56,7 @@ namespace Immutably.Data
 
         public DataContextBuilder AddAssemblyProxies(Assembly assembly, String namespaceStartsFrom)
         {
-            var tuples = ReflectionHelper.GetTypesWithAttributes<DataProxy>(assembly, namespaceStartsFrom);
+            var tuples = ReflectionHelper.GetTypesWithAttributes<DataProxyAttribute>(assembly, namespaceStartsFrom);
 
             foreach (var tuple in tuples)
                 _proxies.Add(tuple.Item1, tuple.Item2);

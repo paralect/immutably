@@ -9,14 +9,14 @@ namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store.simple_agg
         {
             using (var session = aggregateStore.OpenSession())
             {
-                var aggregate = session.CreateAggregate<SimpleStatefullAggregate>(id);
+                var aggregate = session.Create<SimpleStatefullAggregate>(id);
                 aggregate.Create("Bill", 45);
                 session.SaveChanges();
             }
 
             using (var session = aggregateStore.OpenSession())
             {
-                aggregate = session.LoadAggregate<SimpleStatefullAggregate>(id);
+                aggregate = session.Load<SimpleStatefullAggregate>(id);
             }
         };
 

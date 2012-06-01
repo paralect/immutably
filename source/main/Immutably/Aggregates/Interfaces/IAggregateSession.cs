@@ -7,31 +7,31 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Load Aggregate of specified type
         /// </summary>
-        IAggregate LoadAggregate(Type aggregateType, String aggregateId);
+        IAggregate Load(Type aggregateType, String aggregateId);
 
         /// <summary>
         /// Create Aggregate of specified type
         /// </summary>
-        IAggregate CreateAggregate(Type aggregateType, String aggregateId);
+        IAggregate Create(Type aggregateType, String aggregateId);
 
         /// <summary>
         /// If aggregate exists - it will be loaded.
         /// If aggregate doesn't exist - it will be created.
         /// </summary>
-        IAggregate LoadOrCreateAggregate(Type aggregateType, String aggregateId);
+        IAggregate LoadOrCreate(Type aggregateType, String aggregateId);
 
         /// <summary>
         /// Commit your changes (if any) to aggregate Store.
         /// </summary>
         void SaveChanges();
 
-        TAggregate CreateAggregate<TAggregate>(String aggregateId)
+        TAggregate Create<TAggregate>(String aggregateId)
             where TAggregate : IAggregate;
 
-        TAggregate LoadAggregate<TAggregate>(String aggregateId)
+        TAggregate Load<TAggregate>(String aggregateId)
             where TAggregate : IAggregate;
 
-        TAggregate LoadOrCreateAggregate<TAggregate>(String aggregateId)
+        TAggregate LoadOrCreate<TAggregate>(String aggregateId)
             where TAggregate : IAggregate;
     }
 }

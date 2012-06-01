@@ -40,7 +40,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Returns aggregate or throws exception if aggregate wasn't found
         /// </summary>
-        public IAggregate LoadAggregate(Type aggregateType, String aggregateId)
+        public IAggregate Load(Type aggregateType, String aggregateId)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Returns aggregate if it already exists, or creates new.
         /// </summary>
-        public IAggregate LoadOrCreateAggregate(Type aggregateType, String aggregateId)
+        public IAggregate LoadOrCreate(Type aggregateType, String aggregateId)
         {
             IAggregate aggregate = null;
             var repository = CreateRepository(aggregateType);
@@ -80,7 +80,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates and returns aggregate of specified type
         /// </summary>
-        public IAggregate CreateAggregate(Type aggregateType, String aggregateId)
+        public IAggregate Create(Type aggregateType, String aggregateId)
         {
             var repository = CreateRepository(aggregateType);
             var aggregate = repository.CreateAggregate(aggregateType, aggregateId);
@@ -110,22 +110,22 @@ namespace Immutably.Aggregates
             _aggregates.Clear();
         }
 
-        public TAggregate CreateAggregate<TAggregate>(String aggregateId)
+        public TAggregate Create<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return(TAggregate) CreateAggregate(typeof(TAggregate), aggregateId);
+            return(TAggregate) Create(typeof(TAggregate), aggregateId);
         }
 
-        public TAggregate LoadAggregate<TAggregate>(String aggregateId)
+        public TAggregate Load<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return (TAggregate) LoadAggregate(typeof(TAggregate), aggregateId);
+            return (TAggregate) Load(typeof(TAggregate), aggregateId);
         }
 
-        public TAggregate LoadOrCreateAggregate<TAggregate>(String aggregateId)
+        public TAggregate LoadOrCreate<TAggregate>(String aggregateId)
             where TAggregate : IAggregate
         {
-            return (TAggregate) LoadOrCreateAggregate(typeof (TAggregate), aggregateId);
+            return (TAggregate) LoadOrCreate(typeof (TAggregate), aggregateId);
         }
 
         /// <summary>

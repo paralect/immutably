@@ -12,7 +12,7 @@ namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store.simplest_p
             {
                 exception = Catch.Exception(() =>
                 {
-                    session.LoadAggregate<MyStatefullAggregate>(Guid.Empty.ToString());
+                    session.Load<MyStatefullAggregate>(Guid.Empty.ToString());
                 });
             }
         };

@@ -44,7 +44,7 @@ namespace Immutably.Transitions
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         /// <summary>
-        /// LoadAggregate single transition, uniquely identified by by streamId and streamVersion
+        /// Load single transition, uniquely identified by by streamId and streamVersion
         /// Throws TransitionNotExistsException if no such transition found.
         /// </summary>
         public ITransition LoadStreamTransition(String streamId, int streamVersion)
@@ -90,7 +90,7 @@ namespace Immutably.Transitions
         }
 
         /// <summary>
-        /// LoadAggregate <param name="count" /> transitions for specified stream, 
+        /// Load <param name="count" /> transitions for specified stream, 
         /// ordered by Stream Sequence, starting from <param name="fromStreamVersion" />
         /// Throws TransitionStreamNotExistsException if stream not exists
         /// </summary>
@@ -140,7 +140,7 @@ namespace Immutably.Transitions
         }
 
         /// <summary>
-        /// LoadAggregate <param name="count" /> transitions from store, 
+        /// Load <param name="count" /> transitions from store, 
         /// ordered by transition Timestamp, starting from <param name="fromTimestamp" />
         /// </summary>
         /// <param name="fromTimestamp">

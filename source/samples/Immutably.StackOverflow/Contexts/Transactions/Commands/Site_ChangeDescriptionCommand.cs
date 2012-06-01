@@ -1,9 +1,8 @@
 using System;
-using Immutably.Messages;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Commands
 {
-    public class Site_ChangeDescriptionCommand : ICommand
+    public class Site_ChangeDescriptionCommand
     {
         public Guid SiteId { get; set; }
         public String Description { get; set; }

@@ -1,9 +1,8 @@
 using System;
-using Immutably.Messages;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Commands
 {
-    public class Post_CreateQuestionCommand : ICommand
+    public class Post_CreateQuestionCommand
     {
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }

@@ -1,9 +1,8 @@
 using System;
-using Immutably.Messages;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Commands
 {
-    public class Post_ChangeContentCommand : ICommand
+    public class Post_ChangeContentCommand
     {
         public Guid PostId { get; set; }
         public String Title { get; set; }

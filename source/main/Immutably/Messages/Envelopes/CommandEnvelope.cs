@@ -7,12 +7,12 @@ namespace Immutably.Messages
             get { return (ICommandMetadata) base.Metadata; }
         }
 
-        public ICommand Command
+        public object Command
         {
-            get { return (ICommand) Message; }
+            get { return Message; }
         }
 
-        public CommandEnvelope(ICommand message, ICommandMetadata metadata) : base(message, metadata)
+        public CommandEnvelope(object message, ICommandMetadata metadata) : base(message, metadata)
         {
         }
     }

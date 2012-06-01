@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Utilities;
 
 namespace Immutably.Aggregates
@@ -16,20 +15,20 @@ namespace Immutably.Aggregates
 
         Boolean Changed { get; }
 
-        IIndexedEnumerable<IEvent> Changes { get; }
+        IIndexedEnumerable<Object> Changes { get; }
 
         IDataFactory DataFactory { get; }
 
-        void Apply(IEvent evnt);
+        void Apply(Object evnt);
     }
 
     public interface IStatefullAggregate : IAggregate
     {
-        IState State { get; }
+        Object State { get; }
         IStatefullAggregateContext Context { get; }
 
-        void Replay(IEvent evnt);
-        void Replay(IEnumerable<IEvent> events);
+        void Replay(Object evnt);
+        void Replay(IEnumerable<Object> events);
         void EstablishContext(IStatefullAggregateContext context);
     }
 

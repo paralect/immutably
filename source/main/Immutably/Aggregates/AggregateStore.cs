@@ -1,6 +1,5 @@
 using System;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Transitions;
 
 namespace Immutably.Aggregates
@@ -42,9 +41,9 @@ namespace Immutably.Aggregates
             return stateType;
         }
 
-        public IState CreateState(Type stateType)
+        public Object CreateState(Type stateType)
         {
-            var state = (IState) Activator.CreateInstance(stateType);
+            var state = Activator.CreateInstance(stateType);
             return state;
         }
 

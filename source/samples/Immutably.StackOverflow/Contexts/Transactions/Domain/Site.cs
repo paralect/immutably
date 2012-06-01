@@ -1,6 +1,5 @@
 ﻿using System;
 using Immutably.Aggregates;
-using Immutably.Messages;
 using Immutably.StackOverflow.Contexts.Transactions.Commands;
 using Immutably.StackOverflow.Contexts.Transactions.Events;
 
@@ -12,7 +11,7 @@ namespace Immutably.StackOverflow.Contexts.Transactions.Domain
         /// <summary>
         /// Serialization friendly, inner class for Site state
         /// </summary>
-        public abstract class SiteState : IState
+        public abstract class SiteState
         {
             public abstract Guid Id { get; set; }
             public abstract String Name { get; set; }
@@ -57,7 +56,7 @@ namespace Immutably.StackOverflow.Contexts.Transactions.Domain
         /// <summary>
         /// Create user state
         /// </summary>
-        public Site(SiteState state, Action<IEvent> changes)
+        public Site(SiteState state, Action<Object> changes)
         {
             var json = new JsonImpl();
 

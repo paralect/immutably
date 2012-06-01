@@ -57,7 +57,7 @@ namespace Immutably.Tests.Specs.aggregates.simple_aggregates
     /// <summary>
     /// State
     /// </summary>
-    public class SimpleState : IState
+    public class SimpleState
     {
         public String Id { get; set; }
         public String Name { get; set; }
@@ -80,14 +80,14 @@ namespace Immutably.Tests.Specs.aggregates.simple_aggregates
     /// <summary>
     /// Events
     /// </summary>
-    public class SimpleStatelessAggregateCreated : IEvent
+    public class SimpleStatelessAggregateCreated : IMessage
     {
         public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Year { get; set; }
     }
 
-    public class SimpleStatelessAggregateNameChanged : IEvent
+    public class SimpleStatelessAggregateNameChanged : IMessage
     {
         public String Id { get; set; }
         public String Name { get; set; }

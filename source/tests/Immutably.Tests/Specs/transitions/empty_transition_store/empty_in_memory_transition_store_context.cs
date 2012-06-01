@@ -35,7 +35,7 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store
         }
     }
 
-    public class SimpleEvent : IEvent
+    public class SimpleEvent : IMessage
     {
         public String Id { get; set; }
         public Int32 Year { get; set; }

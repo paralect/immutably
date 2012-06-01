@@ -1,8 +1,10 @@
+using System;
+
 namespace Immutably.Messages
 {
     public interface IEventEnvelope : IMessageEnvelope
     {
-        IEvent Event { get; }
+        Object Event { get; }
         new IEventMetadata Metadata { get; }
     }
 }

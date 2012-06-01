@@ -50,7 +50,7 @@ namespace Immutably.Tests.Specs.aggregates.tutorial_aggregates
         }
     }
 
-    public class UserState : IState
+    public class UserState
     {
         public String Id { get; set; }
         public String Name { get; set; }
@@ -74,20 +74,20 @@ namespace Immutably.Tests.Specs.aggregates.tutorial_aggregates
         }
     }
 
-    public class UserCreated : IEvent
+    public class UserCreated : IMessage
     {
         public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Score { get; set; }
     }
 
-    public class UserNameChanged : IEvent
+    public class UserNameChanged : IMessage
     {
         public String Id { get; set; }
         public String Name { get; set; }
     }
 
-    public class UserScoreChanged : IEvent
+    public class UserScoreChanged : IMessage
     {
         public String Id { get; set; }
         public Int32 Score { get; set; }

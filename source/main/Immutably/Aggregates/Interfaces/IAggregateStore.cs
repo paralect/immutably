@@ -1,6 +1,5 @@
 using System;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Transitions;
 
 namespace Immutably.Aggregates
@@ -12,6 +11,6 @@ namespace Immutably.Aggregates
         IAggregateSession OpenSession();
         
         Type GetAggregateStateType(Type aggregateType);
-        IState CreateState(Type stateType);
+        Object CreateState(Type stateType);
     }
 }

@@ -25,5 +25,16 @@ namespace Immutably.Messages
         /// UTC time of message creation
         /// </summary>
         public DateTime CreatedUtc { get; set; }
+
+        /// <summary>
+        /// Copy message metadata to another object, that implements IMessageMetadata
+        /// </summary>
+        public virtual void Copy(IMessageMetadata to)
+        {
+            to.MessageId = MessageId;
+            to.TriggerMessageId = TriggerMessageId;
+            to.MessageTag = MessageTag;
+            to.CreatedUtc = CreatedUtc;
+        }
     }
 }

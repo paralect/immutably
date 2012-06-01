@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Immutably.Data;
-using Immutably.Messages;
 
 namespace Immutably.Transitions
 {
@@ -55,7 +54,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Writes events as a single transition to the end of stream with specified <param name="streamVersion" />
         /// </summary>
-        public void Write(int streamVersion, IEnumerable<IEvent> events)
+        public void Write(int streamVersion, IEnumerable<Object> events)
         {
             Write(streamVersion, builder => builder
                 .AddEvents(events)

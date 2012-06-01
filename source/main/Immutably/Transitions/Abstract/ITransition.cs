@@ -36,6 +36,6 @@ namespace Immutably.Transitions
         /// <summary>
         /// Readonly collection of Events, in order (by transition sequence)
         /// </summary>
-        IIndexedEnumerable<IEvent> Events { get; }        
+        IIndexedEnumerable<Object> Events { get; }        
     }
 }

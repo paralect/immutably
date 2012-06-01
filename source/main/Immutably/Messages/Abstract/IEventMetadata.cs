@@ -16,6 +16,6 @@ namespace Immutably.Messages
         /// </summary>
         Int32 StreamVersion { get; set; }
 
-        Int32 TransitionSequence { get; set; }        
+        Int32 TransitionSequence { get; set; }
     }
 }

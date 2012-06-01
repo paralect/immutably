@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.States;
 
 namespace Immutably.Aggregates
@@ -40,7 +39,7 @@ namespace Immutably.Aggregates
         /// Reply event without tracking it in list of changes.
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Replay(IEvent evnt)
+        public void Replay(Object evnt)
         {
             ExecuteStateEventHandler(evnt);
         }
@@ -49,7 +48,7 @@ namespace Immutably.Aggregates
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Replay(IEnumerable<IEvent> events)
+        public void Replay(IEnumerable<Object> events)
         {
             foreach (var evnt in events)
                 ExecuteStateEventHandler(evnt);
@@ -58,7 +57,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Override to exececute state event handlers
         /// </summary>
-        protected override void ApplyInternal(IEvent evnt)
+        protected override void ApplyInternal(Object evnt)
         {
             base.ApplyInternal(evnt);
             ExecuteStateEventHandler(evnt);
@@ -67,7 +66,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Executes state event handler for specified event
         /// </summary>
-        private void ExecuteStateEventHandler(IEvent evnt)
+        private void ExecuteStateEventHandler(Object evnt)
         {
             new StateSpooler(State).Spool(evnt);
         }

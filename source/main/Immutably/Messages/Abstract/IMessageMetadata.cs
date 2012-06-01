@@ -25,5 +25,10 @@ namespace Immutably.Messages
         /// UTC time of message creation
         /// </summary>
         DateTime CreatedUtc { get; set; }
+
+        /// <summary>
+        /// Copy message metadata to another object, that implements IMessageMetadata
+        /// </summary>
+        void Copy(IMessageMetadata to);
     }
 }

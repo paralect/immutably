@@ -1,8 +1,10 @@
+using System;
+
 namespace Immutably.Messages
 {
     public interface IStateEnvelope
     {
-        IState State { get; }
+        Object State { get; }
         IStateMetadata Metadata { get; }
     }
 

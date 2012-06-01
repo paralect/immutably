@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Utilities;
 
 namespace Immutably.Aggregates
@@ -29,7 +28,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// List of changes (applied events)
         /// </summary>
-        private readonly List<IEvent> _aggregateChanges = new List<IEvent>();
+        private readonly List<Object> _aggregateChanges = new List<Object>();
 
         /// <summary>
         /// Current version of Aggregate
@@ -78,7 +77,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Gets indexed enumerable of changes (applied events)
         /// </summary>
-        public IIndexedEnumerable<IEvent> Changes
+        public IIndexedEnumerable<Object> Changes
         {
             get { return _aggregateChanges.AsIndexedEnumerable(); }
         }
@@ -104,7 +103,7 @@ namespace Immutably.Aggregates
         /// Apply event to list of changes
         /// </summary>
         /// <param name="evnt"></param>
-        public void Apply(IEvent evnt)
+        public void Apply(Object evnt)
         {
             ApplyInternal(evnt);
         }
@@ -115,7 +114,6 @@ namespace Immutably.Aggregates
         /// closure members. 
         /// </summary>
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
-            where TEvent : IEvent
         {
             var evnt = Create<TEvent>();
             evntBuilder(evnt);
@@ -126,7 +124,7 @@ namespace Immutably.Aggregates
         /// Can be ovewritten in delivered types if you need special logic that handle
         /// new applied event.
         /// </summary>
-        protected virtual void ApplyInternal(IEvent evnt)
+        protected virtual void ApplyInternal(Object evnt)
         {
             _aggregateChanges.Add(evnt);
         }

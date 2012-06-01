@@ -2,7 +2,7 @@
 {
     public interface IMessageEnvelope
     {
-        IMessage Message { get; }
+        object Message { get; }
         IMessageMetadata Metadata { get; }
     }
 }

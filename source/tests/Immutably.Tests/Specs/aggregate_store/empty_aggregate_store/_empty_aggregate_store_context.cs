@@ -1,7 +1,6 @@
 ﻿using System;
 using Immutably.Aggregates;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Transitions;
 using Machine.Specifications;
 
@@ -22,7 +21,8 @@ namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store
     /// <summary>
     /// Statefull aggregate
     /// </summary>
-    public class MyState : IState { }
+    public class MyState
+    { }
     public class MyStatefullAggregate : StatefullAggregate<MyState> { }
 
     /// <summary>

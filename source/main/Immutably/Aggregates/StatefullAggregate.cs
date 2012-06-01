@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Immutably.Messages;
 
 namespace Immutably.Aggregates
 {
@@ -8,7 +7,6 @@ namespace Immutably.Aggregates
     /// Aggregate with state
     /// </summary>
     public class StatefullAggregate<TState> : AggregateBase, IStatefullAggregate
-        where TState : IState
     {
         /// <summary>
         /// Current aggregate state
@@ -23,7 +21,7 @@ namespace Immutably.Aggregates
         /// Current aggregate state 
         /// (explicit interface implementation)
         /// </summary>
-        IState IStatefullAggregate.State
+        Object IStatefullAggregate.State
         {
             get { return State; }
         }
@@ -40,7 +38,7 @@ namespace Immutably.Aggregates
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Replay(IEvent evnt)
+        public void Replay(Object evnt)
         {
             Context.Replay(evnt);
         }
@@ -49,7 +47,7 @@ namespace Immutably.Aggregates
         /// Reply events without tracking them in list of changes. 
         /// After reply aggregate version and id will be the same as before reply.
         /// </summary>
-        public void Replay(IEnumerable<IEvent> events)
+        public void Replay(IEnumerable<Object> events)
         {
             Context.Replay(events);
         }

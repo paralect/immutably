@@ -1,6 +1,5 @@
 using System;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Utilities;
 
 namespace Immutably.Aggregates
@@ -77,7 +76,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Gets indexed enumerable of changes (applied events)
         /// </summary>
-        public IIndexedEnumerable<IEvent> Changes
+        public IIndexedEnumerable<Object> Changes
         {
             get { return Context.Changes; }
         }
@@ -85,7 +84,7 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Apply event to list of changes and execute state event handler
         /// </summary>        
-        public void Apply(IEvent evnt)
+        public void Apply(Object evnt)
         {
             Context.Apply(evnt);
         }
@@ -96,7 +95,6 @@ namespace Immutably.Aggregates
         /// possible change of closure members. 
         /// </summary>
         public void Apply<TEvent>(Action<TEvent> evntBuilder)
-            where TEvent : IEvent
         {
             Context.Apply(evntBuilder);
         }

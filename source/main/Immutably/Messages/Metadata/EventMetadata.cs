@@ -2,7 +2,6 @@ using System;
 
 namespace Immutably.Messages
 {
-    
     public class EventMetadata : MessageMetadata, IEventMetadata
     {
         /// <summary>
@@ -22,5 +21,22 @@ namespace Immutably.Messages
         /// Starts from 1.
         /// </summary>
         public int TransitionSequence { get; set; }
+
+        /// <summary>
+        /// Copy event metadata to another object, that implements IEventMetadata
+        /// </summary>
+        public override void Copy(IMessageMetadata to)
+        {
+            base.Copy(to);
+
+            var eventMetadata = to as IEventMetadata;
+
+            if (eventMetadata == null)
+                return;
+
+            eventMetadata.SenderId = SenderId;
+            eventMetadata.StreamVersion = StreamVersion;
+            eventMetadata.TransitionSequence = TransitionSequence;
+        }
     }
 }

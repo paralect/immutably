@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Immutably.Messages;
 
@@ -10,13 +11,13 @@ namespace Immutably.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
         /// </summary>
-        ITransitionBuilder AddEvent(IEvent evnt);        
+        ITransitionBuilder AddEvent(Object evnt);        
         
         /// <summary>
         /// Adds event and corresponding event metadata to this transition.
         /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
-        ITransitionBuilder AddEvent(IEvent evnt, IEventMetadata metadata);
+        ITransitionBuilder AddEvent(Object evnt, IEventMetadata metadata);
 
         /// <summary>
         /// Adds event envelope to this transition
@@ -29,7 +30,7 @@ namespace Immutably.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
         /// </summary>
-        ITransitionBuilder AddEvents(IEnumerable<IEvent> events);
+        ITransitionBuilder AddEvents(IEnumerable<Object> events);
 
         /// <summary>
         /// Build Transition

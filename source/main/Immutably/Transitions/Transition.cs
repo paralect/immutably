@@ -70,7 +70,7 @@ namespace Immutably.Transitions
         /// <summary>
         /// Readonly collection of Events, in order (by transition sequence)
         /// </summary>
-        public IIndexedEnumerable<IEvent> Events
+        public IIndexedEnumerable<Object> Events
         {
             get 
             { 

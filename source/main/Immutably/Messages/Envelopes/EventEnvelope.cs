@@ -1,3 +1,5 @@
+using System;
+
 namespace Immutably.Messages
 {
     public class EventEnvelope : MessageEnvelope, IEventEnvelope
@@ -7,12 +9,13 @@ namespace Immutably.Messages
             get { return (IEventMetadata) base.Metadata; }
         }
 
-        public IEvent Event
+        public Object Event
         {
-            get { return (IEvent)Message; }
+            get { return (Object)Message; }
         }
 
-        public EventEnvelope(IEvent message, IEventMetadata metadata) : base(message, metadata)
+        public EventEnvelope(Object message, IEventMetadata metadata)
+            : base(message, metadata)
         {
         }
     }

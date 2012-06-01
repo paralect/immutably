@@ -51,7 +51,7 @@ namespace Immutably.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
         /// </summary>
-        public ITransitionBuilder AddEvent(IEvent evnt)
+        public ITransitionBuilder AddEvent(Object evnt)
         {
             var metadata = _dataFactory.Create<EventMetadata>(m =>
             {
@@ -69,7 +69,7 @@ namespace Immutably.Transitions
         /// Adds event and corresponding event metadata to this transition
         /// Event metadata should has correct StreamId, StreamVersion and TransitionSequence.
         /// </summary>
-        public ITransitionBuilder AddEvent(IEvent evnt, IEventMetadata metadata)
+        public ITransitionBuilder AddEvent(Object evnt, IEventMetadata metadata)
         {
             ValidateEventMetadata(metadata);
             _eventEnvelopes.Add(new EventEnvelope(evnt, metadata));
@@ -94,7 +94,7 @@ namespace Immutably.Transitions
         /// Event metadata will be automatically created 
         /// (based on this transition's StreamId, StreamVersion and next available TransitionSequence)
         /// </summary>
-        public ITransitionBuilder AddEvents(IEnumerable<IEvent> events)
+        public ITransitionBuilder AddEvents(IEnumerable<Object> events)
         {
             foreach (var evnt in events)
                 AddEvent(evnt);

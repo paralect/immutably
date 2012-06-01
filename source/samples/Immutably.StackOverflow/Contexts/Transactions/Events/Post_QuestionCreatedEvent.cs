@@ -3,7 +3,7 @@ using Immutably.Messages;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Events
 {
-    public class Post_QuestionCreatedEvent : IEvent
+    public class Post_QuestionCreatedEvent : IMessage
     {
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }

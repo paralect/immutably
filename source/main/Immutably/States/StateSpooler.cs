@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Immutably.Messages;
 
 namespace Immutably.States
 {
@@ -46,7 +45,7 @@ namespace Immutably.States
         /// <summary>
         /// Replay specified event to restore state.
         /// </summary>
-        public void Spool(IEvent evnt)
+        public void Spool(Object evnt)
         {
             Spool(evnt, null);
         }
@@ -55,7 +54,7 @@ namespace Immutably.States
         /// Replay specified event to restore state and assign user-defined object that 
         /// can be accessed via Data property of this spooler.
         /// </summary>
-        public void Spool(IEvent evnt, Object data)
+        public void Spool(Object evnt, Object data)
         {
             ExecuteStateEventHandler(evnt);
             _data = data;
@@ -64,7 +63,7 @@ namespace Immutably.States
         /// <summary>
         /// Replay specified events to restore state.
         /// </summary>
-        public void Spool(IEnumerable<IEvent> events)
+        public void Spool(IEnumerable<Object> events)
         {
             Spool(events, null);
         }
@@ -73,7 +72,7 @@ namespace Immutably.States
         /// Replay specified events to restore state and assign user-defined object that 
         /// can be accessed via Data property of this spooler.
         /// </summary>
-        public void Spool(IEnumerable<IEvent> events, Object data)
+        public void Spool(IEnumerable<Object> events, Object data)
         {
             foreach (var evnt in events)
                 ExecuteStateEventHandler(evnt);
@@ -84,7 +83,7 @@ namespace Immutably.States
         /// <summary>
         /// Executes state event handler for specified event
         /// </summary>
-        private void ExecuteStateEventHandler(IEvent evnt)
+        private void ExecuteStateEventHandler(Object evnt)
         {
             if (evnt == null)
                 return;

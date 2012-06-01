@@ -14,5 +14,21 @@ namespace Immutably.Messages
         /// Receiving party can reject command, if expected version doesn't equals to current version of receiver.
         /// </summary>
         public int ExpectedVersion { get; set; }
+
+        /// <summary>
+        /// Copy event metadata to another object, that implements IEventMetadata
+        /// </summary>
+        public override void Copy(IMessageMetadata to)
+        {
+            base.Copy(to);
+
+            var eventMetadata = to as ICommandMetadata;
+
+            if (eventMetadata == null)
+                return;
+
+            eventMetadata.ReceiverId = ReceiverId;
+            eventMetadata.ExpectedVersion = ExpectedVersion;
+        }
     }
 }

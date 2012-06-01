@@ -1,9 +1,8 @@
 using System;
-using Immutably.Messages;
 
 namespace Immutably.StackOverflow.Contexts.Transactions.Events
 {
-    public class Comment_CreatedEvent : IMessage
+    public class Comment_CreatedEvent
     {
         public Guid CommentId { get; set; }
         public Guid UserId { get; set; }

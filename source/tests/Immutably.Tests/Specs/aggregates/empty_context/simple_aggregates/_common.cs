@@ -80,14 +80,14 @@ namespace Immutably.Tests.Specs.aggregates.simple_aggregates
     /// <summary>
     /// Events
     /// </summary>
-    public class SimpleStatelessAggregateCreated : IMessage
+    public class SimpleStatelessAggregateCreated
     {
         public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Year { get; set; }
     }
 
-    public class SimpleStatelessAggregateNameChanged : IMessage
+    public class SimpleStatelessAggregateNameChanged
     {
         public String Id { get; set; }
         public String Name { get; set; }

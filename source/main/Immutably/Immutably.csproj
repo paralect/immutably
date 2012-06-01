@@ -69,7 +69,6 @@
     <Compile Include="EscolarFactory.cs" />
     <Compile Include="IEscolarFactory.cs" />
     <Compile Include="Messages\Abstract\ICommand.cs" />
-    <Compile Include="Messages\Abstract\IMessage.cs" />
     <Compile Include="Messages\Abstract\ICommandEnvelope.cs" />
     <Compile Include="Messages\Abstract\IEventEnvelope.cs" />
     <Compile Include="Messages\Abstract\IMessageEnvelope.cs" />

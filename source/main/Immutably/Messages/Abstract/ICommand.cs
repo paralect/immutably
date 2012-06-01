@@ -1,6 +1,6 @@
 namespace Immutably.Messages
 {
-    public interface ICommand : IMessage
+    public interface ICommand
     {
     }
 

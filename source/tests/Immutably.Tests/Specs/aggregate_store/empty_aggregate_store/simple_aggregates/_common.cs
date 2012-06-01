@@ -1,6 +1,5 @@
 ﻿using System;
 using Immutably.Aggregates;
-using Immutably.Messages;
 
 namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store.simple_aggregates
 {
@@ -80,14 +79,14 @@ namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store.simple_agg
     /// <summary>
     /// Events
     /// </summary>
-    public class SimpleStatelessAggregateCreated : IMessage
+    public class SimpleStatelessAggregateCreated
     {
         public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Year { get; set; }
     }
 
-    public class SimpleStatelessAggregateNameChanged : IMessage
+    public class SimpleStatelessAggregateNameChanged
     {
         public String Id { get; set; }
         public String Name { get; set; }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Immutably.Aggregates;
-using Immutably.Messages;
 
 namespace Immutably.Tests.Specs.aggregates.tutorial_aggregates
 {
@@ -74,20 +73,20 @@ namespace Immutably.Tests.Specs.aggregates.tutorial_aggregates
         }
     }
 
-    public class UserCreated : IMessage
+    public class UserCreated
     {
         public String Id { get; set; }
         public String Name { get; set; }
         public Int32 Score { get; set; }
     }
 
-    public class UserNameChanged : IMessage
+    public class UserNameChanged
     {
         public String Id { get; set; }
         public String Name { get; set; }
     }
 
-    public class UserScoreChanged : IMessage
+    public class UserScoreChanged
     {
         public String Id { get; set; }
         public Int32 Score { get; set; }

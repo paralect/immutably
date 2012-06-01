@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Immutably.Data;
-using Immutably.Messages;
 using Immutably.Transitions;
 using Machine.Specifications;
 
@@ -35,7 +34,7 @@ namespace Immutably.Tests.Specs.transitions.empty_transition_store
         }
     }
 
-    public class SimpleEvent : IMessage
+    public class SimpleEvent
     {
         public String Id { get; set; }
         public Int32 Year { get; set; }

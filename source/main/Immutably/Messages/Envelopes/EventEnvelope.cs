@@ -11,7 +11,7 @@ namespace Immutably.Messages
 
         public Object Event
         {
-            get { return (Object)Message; }
+            get { return Message; }
         }
 
         public EventEnvelope(Object message, IEventMetadata metadata)

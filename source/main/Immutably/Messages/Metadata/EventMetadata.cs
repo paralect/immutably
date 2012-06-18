@@ -22,6 +22,18 @@ namespace Immutably.Messages
         /// </summary>
         public int TransitionSequence { get; set; }
 
+        public Guid DataContractTag
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public DateTime StoredUtc
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         /// <summary>
         /// Copy event metadata to another object, that implements IEventMetadata
         /// </summary>

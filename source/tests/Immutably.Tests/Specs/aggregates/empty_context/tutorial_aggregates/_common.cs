@@ -1,7 +1,7 @@
 ﻿using System;
 using Immutably.Aggregates;
 
-namespace Immutably.Tests.Specs.aggregates.tutorial_aggregates
+namespace Immutably.Tests.Specs.aggregates.empty_context.tutorial_aggregates
 {
     public class User : StatefullAggregate<UserState>
     {

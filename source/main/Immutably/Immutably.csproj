@@ -73,7 +73,6 @@
     <Compile Include="Messages\Abstract\IMessageEnvelope.cs" />
     <Compile Include="Messages\Abstract\IStateEnvelope.cs" />
     <Compile Include="Messages\Abstract\IStateMetadata.cs" />
-    <Compile Include="Messages\Envelopes\CommandEnvelope.cs" />
     <Compile Include="Messages\Envelopes\EventEnvelope.cs" />
     <Compile Include="Messages\Envelopes\MessageEnvelope.cs" />
     <Compile Include="Messages\Abstract\ICommandMetadata.cs" />

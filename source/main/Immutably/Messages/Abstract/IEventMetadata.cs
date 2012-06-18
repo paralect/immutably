@@ -16,6 +16,19 @@ namespace Immutably.Messages
         /// </summary>
         Int32 StreamVersion { get; set; }
 
+        /// <summary>
+        /// Event order number inside one transition
+        /// </summary>
         Int32 TransitionSequence { get; set; }
+
+        /// <summary>
+        /// Data contract tag identifies contract type.
+        /// </summary>
+        Guid DataContractTag { get; set; }
+
+        /// <summary>
+        /// Time when event was stored inside transition store
+        /// </summary>
+        DateTime StoredUtc { get; set; }
     }
 }

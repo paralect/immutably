@@ -9,7 +9,7 @@ namespace Immutably.Aggregates
         private readonly IEscolarFactory _factory;
         private readonly IDataFactory _dataFactory;
         private readonly ITransitionStore _transitionStore;
-        private AggregateRegistry _aggregateRegistry;
+        private readonly AggregateRegistry _aggregateRegistry;
 
         public ITransitionStore TransitionStore
         {

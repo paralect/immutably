@@ -1,7 +1,6 @@
 ﻿using System;
 using Immutably.Aggregates;
 using Immutably.Data;
-using Immutably.Transitions;
 using Machine.Specifications;
 
 namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store
@@ -10,11 +9,11 @@ namespace Immutably.Tests.Specs.aggregate_store.empty_aggregate_store
     {
         Establish context = () =>
         {
-            transitionStore = new InMemoryTransitionStore(new DefaultDataFactory());
-            aggregateStore = new AggregateStore(new EscolarFactory(), null, transitionStore);
+            //transitionStore = new InMemoryTransitionStore(new DefaultDataFactory());
+            aggregateStore = new AggregateStore(new EscolarFactory(), null);
         };
 
-        public static InMemoryTransitionStore transitionStore;
+        //public static InMemoryTransitionStore transitionStore;
         public static AggregateStore aggregateStore;
     }
 

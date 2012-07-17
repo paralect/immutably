@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Immutably.Data;
 using Immutably.States;
-using Immutably.Transitions;
 
 namespace Immutably.Aggregates
 {
@@ -50,7 +49,7 @@ namespace Immutably.Aggregates
                 RegisterAggregateInSession(aggregate);
                 return aggregate;
             }
-            catch(TransitionException e)
+            catch(/*TransitionException*/ Exception e)
             {
                 throw new AggregateDoesntExistException(aggregateType, aggregateId, e);
             }
@@ -68,7 +67,7 @@ namespace Immutably.Aggregates
             {
                 aggregate = repository.LoadAggregate(aggregateType, aggregateId);
             }
-            catch(TransitionStreamNotExistsException e)
+            catch(/*TransitionStreamNotExistsException*/ Exception e)
             {
                 aggregate = repository.CreateAggregate(aggregateType, aggregateId);
             }
@@ -100,10 +99,11 @@ namespace Immutably.Aggregates
                 if (aggregate.Changes.Count <= 0)
                     continue;
 
-                using (var writer = _store.TransitionStore.CreateStreamWriter(aggregate.Id))
+/*                using (var writer = _store.TransitionStore.CreateStreamWriter(aggregate.Id))
                 {
                     writer.Write(aggregate.CurrentVersion, aggregate.Changes);
                 }
+ * */
             }
 
             // Clear "unit of work" container

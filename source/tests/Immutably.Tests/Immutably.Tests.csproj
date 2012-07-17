@@ -72,12 +72,6 @@
     <Compile Include="Specs\data\empty_context\when_data_context_created_with_types_from_assembly.cs" />
     <Compile Include="Specs\data\empty_context\_context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_two_events_are_written.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_one_transition_with_one_event_is_written.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_one_transition_with_two_events_is_written.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\empty_in_memory_transition_store_context.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_two_transitions_with_duplicate_stream_sequence_are_written.cs" />
-    <Compile Include="Specs\transitions\empty_transition_store\simple_events\when_two_transitions_with_one_event_is_written.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\main\Immutably\Immutably.csproj">

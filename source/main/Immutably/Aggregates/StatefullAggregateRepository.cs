@@ -24,11 +24,12 @@ namespace Immutably.Aggregates
 
             // Read all transitions and "spool" events in order to build state
             var spooler = new StateSpooler(initialState);
-            using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
+
+/*            using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
             {
                 foreach (var transition in reader.ReadAll())
                     spooler.Spool(transition.Events, transition.StreamVersion);
-            }
+            }*/
 
             return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);
         }

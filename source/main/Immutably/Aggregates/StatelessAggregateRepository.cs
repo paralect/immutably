@@ -1,6 +1,5 @@
 using System;
 using Immutably.Data;
-using Immutably.Transitions;
 
 namespace Immutably.Aggregates
 {
@@ -27,14 +26,14 @@ namespace Immutably.Aggregates
             if (aggregateId == null)
                 throw new NullAggregateIdException();
 
-            ITransition transition;
+/*            ITransition transition;
             using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
             {
                 // Read last transition
                 transition = reader.ReadLast();
-            }
+            }*/
 
-            return EstablishStatelessAggregate(aggregateType, aggregateId, transition.StreamVersion, _dataFactory);
+            return EstablishStatelessAggregate(aggregateType, aggregateId, /*transition.StreamVersion*/ 0, _dataFactory);
         }
 
         private IAggregate EstablishStatelessAggregate(Type aggregateType, String aggregateId, Int32 version, IDataFactory dataFactory)

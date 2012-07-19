@@ -1,13 +1,23 @@
 using System;
 using Immutably.Data;
+using Immutably.Serialization.Abstract;
 using Immutably.States;
+using Lokad.Cqrs.TapeStorage;
 
 namespace Immutably.Aggregates
 {
     public class StatefullAggregateRepository : AggregateRepositoryBase
     {
-        public StatefullAggregateRepository(AggregateStore store, IDataFactory dataFactory, AggregateDefinition definition) : base(store, dataFactory, definition)
+        private readonly ISerializer _serializer;
+        private readonly AggregateRegistry _aggregateRegistry;
+        private readonly ITransitionStore _transitionStore;
+
+        public StatefullAggregateRepository(AggregateStore store, IDataFactory dataFactory, ISerializer serializer, AggregateRegistry aggregateRegistry, ITransitionStore transitionStore, AggregateDefinition definition)
+            : base(store, dataFactory, definition)
         {
+            _serializer = serializer;
+            _aggregateRegistry = aggregateRegistry;
+            _transitionStore = transitionStore;
         }
 
         /// <summary>
@@ -25,12 +35,17 @@ namespace Immutably.Aggregates
             // Read all transitions and "spool" events in order to build state
             var spooler = new StateSpooler(initialState);
 
-/*            using (var reader = _store.TransitionStore.CreateStreamReader(aggregateId))
-            {
-                foreach (var transition in reader.ReadAll())
-                    spooler.Spool(transition.Events, transition.StreamVersion);
-            }*/
+            var definition = _aggregateRegistry.GetAggregateDefinition(aggregateType);
+            var container = _transitionStore.GetContainer(definition.AggregateName);
+            var stream = container.GetOrCreateStream(aggregateId);
+            var transitions = stream.ReadRecords(0, int.MaxValue);
 
+            foreach (var transition in transitions)
+            {
+                var events = _serializer.Deserialize(transition.Data);
+                spooler.Spool(events, transition.Version);
+            }
+            
             return EstablishStatefullAggregate(aggregateType, spooler.State, aggregateId, (int)spooler.Data, _dataFactory);
         }
 

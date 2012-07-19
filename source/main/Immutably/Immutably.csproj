@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\libs\Protobuf.net\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +46,7 @@
     <Compile Include="Aggregates\AggregateBase.cs" />
     <Compile Include="Aggregates\AggregateRegistry.cs" />
     <Compile Include="Aggregates\AggregateRepositoryBase.cs" />
+    <Compile Include="Aggregates\Attributes\AggregateAttribute.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregate.cs" />
     <Compile Include="Aggregates\Interfaces\IAggregateContext.cs" />
     <Compile Include="Aggregates\AggregateContextBase.cs" />
@@ -87,9 +91,25 @@
     <Compile Include="Data\Attributes\DataContractAttribute.cs" />
     <Compile Include="Data\Attributes\DataProxyAttribute.cs" />
     <Compile Include="Data\ReflectionHelper.cs" />
+    <Compile Include="Serialization\Abstract\ISerializer.cs" />
+    <Compile Include="Serialization\Protobuf.cs" />
     <Compile Include="States\IStateSpooler.cs" />
     <Compile Include="States\StateSpooler.cs" />
+    <Compile Include="Transitions\Abstract\ITransitionStore.cs" />
+    <Compile Include="Transitions\File\FileTapeContainer.cs" />
+    <Compile Include="Transitions\File\FileTapeStream.cs" />
+    <Compile Include="Transitions\Abstract\ITapeContainer.cs" />
+    <Compile Include="Transitions\Abstract\ITapeStream.cs" />
+    <Compile Include="Transitions\File\FileTransitionStore.cs" />
+    <Compile Include="Transitions\InMemory\MemoryTapeContainer.cs" />
+    <Compile Include="Transitions\InMemory\MemoryTapeStream.cs" />
+    <Compile Include="Transitions\TapeAppendCondition.cs" />
+    <Compile Include="Transitions\Exceptions\TapeAppendConditionException.cs" />
+    <Compile Include="Transitions\TapeRecord.cs" />
+    <Compile Include="Transitions\TapeStorageInitilization.cs" />
+    <Compile Include="Transitions\TapeStreamSerializer.cs" />
     <Compile Include="Utilities\IndexedEnumerable.cs" />
+    <Compile Include="Utilities\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

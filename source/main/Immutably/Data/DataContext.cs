@@ -74,16 +74,16 @@ namespace Immutably.Data
             DataDefinition definitionByContractType;
             _definitionsByContractType.TryGetValue(contractOrProxyType, out definitionByContractType);
 
-            DataDefinition definitionByProxyType;
-            _definitionsByProxyType.TryGetValue(contractOrProxyType, out definitionByProxyType);
-
             if (definitionByContractType != null)
                 return definitionByContractType.ContractTag;
+
+            DataDefinition definitionByProxyType;
+            _definitionsByProxyType.TryGetValue(contractOrProxyType, out definitionByProxyType);
 
             if (definitionByProxyType != null)
                 return definitionByProxyType.ContractTag;
 
-            throw new Exception(String.Format("Contract or proxy [{0}] are not registered"));
+            throw new Exception(String.Format("Contract or proxy [{0}] are not registered", contractOrProxyType));
         }
 
         public TDataType Create<TDataType>()

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Immutably.Data;
+using Immutably.Serialization.Abstract;
 using Immutably.States;
+using Lokad.Cqrs.TapeStorage;
 
 namespace Immutably.Aggregates
 {
@@ -13,10 +15,14 @@ namespace Immutably.Aggregates
         /// </summary>
         private readonly AggregateStore _store;
 
+        private readonly ITransitionStore _transitionStore;
+
         /// <summary>
         /// DataFactory, used to create data types, such as state and messages (events, commands)
         /// </summary>
         private readonly IDataFactory _dataFactory;
+
+        private readonly ISerializer _serializer;
 
 
         private readonly AggregateRegistry _aggregateRegistry;
@@ -29,10 +35,12 @@ namespace Immutably.Aggregates
         /// <summary>
         /// Creates AggregateSession
         /// </summary>
-        public AggregateSession(AggregateStore store, IDataFactory dataFactory, AggregateRegistry aggregateRegistry)
+        public AggregateSession(AggregateStore store, ITransitionStore transitionStore, IDataFactory dataFactory, ISerializer serializer, AggregateRegistry aggregateRegistry)
         {
             _store = store;
+            _transitionStore = transitionStore;
             _dataFactory = dataFactory;
+            _serializer = serializer;
             _aggregateRegistry = aggregateRegistry;
         }
 
@@ -99,6 +107,13 @@ namespace Immutably.Aggregates
                 if (aggregate.Changes.Count <= 0)
                     continue;
 
+                var definition = _aggregateRegistry.GetAggregateDefinition(aggregate.GetType());
+                var bytes = _serializer.Serialize(aggregate.Changes);
+
+                var container = _transitionStore.GetContainer(definition.AggregateName);
+                var stream = container.GetOrCreateStream(aggregate.Id);
+                stream.TryAppend(bytes, TapeAppendCondition.VersionIs(aggregate.InitialVersion));
+
 /*                using (var writer = _store.TransitionStore.CreateStreamWriter(aggregate.Id))
                 {
                     writer.Write(aggregate.CurrentVersion, aggregate.Changes);
@@ -136,7 +151,7 @@ namespace Immutably.Aggregates
             var definition = _aggregateRegistry.GetAggregateDefinition(aggregateType);
 
             if (definition.AggregateKind == AggregateKind.Statefull)
-                return new StatefullAggregateRepository(_store, _dataFactory, definition);
+                return new StatefullAggregateRepository(_store, _dataFactory, _serializer, _aggregateRegistry, _transitionStore, definition);
 
             if (definition.AggregateKind == AggregateKind.Stateless)
                 return new StatelessAggregateRepository(_store, _dataFactory, definition);

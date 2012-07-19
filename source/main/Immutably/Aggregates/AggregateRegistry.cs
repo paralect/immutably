@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Immutably.Utilities;
 
 namespace Immutably.Aggregates
 {
@@ -16,6 +17,11 @@ namespace Immutably.Aggregates
         /// Type of aggregate
         /// </summary>
         public Type AggregateType { get; set; }
+
+        /// <summary>
+        /// Unique aggregate name of aggregate
+        /// </summary>
+        public String AggregateName { get; set; }
 
         /// <summary>
         /// Null if this is stateless aggregate
@@ -47,6 +53,11 @@ namespace Immutably.Aggregates
         {
             AggregateDefinition definition = new AggregateDefinition();
             definition.AggregateType = aggregateType;
+
+            var aggregateAttribute = ReflectionUtils.GetSingleAttribute<AggregateAttribute>(aggregateType);
+            definition.AggregateName = aggregateAttribute != null 
+                ? aggregateAttribute.AggregateName 
+                : aggregateType.FullName;
 
             var statefull = aggregateType.GetInterface(typeof(IStatefullAggregate).FullName);
             if (statefull != null)
